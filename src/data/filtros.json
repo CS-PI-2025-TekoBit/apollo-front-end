@@ -1,0 +1,137 @@
+{
+    "marks": [
+        "Mercedes-Benz",
+        "audi",
+        "bmw",
+        "mc laren",
+        "ferrari",
+        "porsche",
+        "Volvo"
+    ],
+    "models": [
+        {
+            "mark": "Mercedes-Benz",
+            "models": [
+                "Todos",
+                "classe a",
+                "C 63 AMG",
+                "S 450"
+            ]
+        }
+    ],
+    "motors": [
+        "1.0",
+        "1.4",
+        "1.6",
+        "2.0",
+        "3.0",
+        "4.0",
+        "V6",
+        "V8"
+    ],
+    "colors": [
+        "Preto",
+        "Branco",
+        "Cinza",
+        "Prata",
+        "Vermelho",
+        "Azul",
+        "Verde",
+        "Amarelo",
+        "Rosa",
+        "Laranja",
+        "Marrom"
+    ],
+    "transmission": [
+        {
+            "id": "1",
+            "name": "Manual"
+        },
+        {
+            "id": "2",
+            "name": "Automático"
+        },
+        {
+            "id": "3",
+            "name": "Semi-automático"
+        },
+        {
+            "id": "4",
+            "name": "Automatizado"
+        }
+    ],
+    "direction": [
+        {
+            "id": "1",
+            "name": "Hidráulica"
+        },
+        {
+            "id": "2",
+            "name": "Elétrica"
+        },
+        {
+            "id": "3",
+            "name": "Mecânica"
+        },
+        {
+            "id": "4",
+            "name": "Eletro-hidráulica"
+        }
+    ],
+    "fuel": [
+        {
+            "id": "1",
+            "name": "Gasolina"
+        },
+        {
+            "id": "2",
+            "name": "Álcool"
+        },
+        {
+            "id": "3",
+            "name": "Diesel"
+        },
+        {
+            "id": "4",
+            "name": "Flex"
+        },
+        {
+            "id": "5",
+            "name": "Elétrico"
+        },
+        {
+            "id": "6",
+            "name": "Híbrido"
+        }
+    ],
+    "bodywork": [
+        {
+            "id": "1",
+            "name": "Bugy"
+        },
+        {
+            "id": "2",
+            "name": "Perua"
+        },
+        {
+            "id": "3",
+            "name": "SUV"
+        },
+        {
+            "id": "4",
+            "name": "Sedã"
+        },
+        {
+            "id": "5",
+            "name": "Hatch"
+        },
+        {
+            "id": "6",
+            "name": "Coupé"
+        },
+        {
+            "id": "7",
+            "name": "Pick-up"
+        }
+    ]
+}

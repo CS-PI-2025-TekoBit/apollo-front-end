@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+:root {
+  --cor-fundo: #FBFBFF;
+  --cor-filtro: #E2E2E2;
+  --cor-filtro-checked: #029A11;
+  --cor-header: #002411;
+  --cor-cards: #E2E2E2;
+  --cor-cards-detalhes: #666464;
+  --cor-footer: #002411;
+
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: "Alexandria", sans-serif;
+  font-weight: 400;
+  background-color: var(--cor-fundo);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
