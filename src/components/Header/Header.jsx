@@ -1,8 +1,11 @@
 import React from 'react'
 import './Header.css'
 import logo from '../../assets/imgs/logomarca.png'
-import { Clock, MagnifyingGlass, Phone, WhatsappLogo } from '@phosphor-icons/react'
+import { Clock, MagnifyingGlass, Phone, UserCircle, UserCircleGear, WhatsappLogo } from '@phosphor-icons/react'
+import { useAuth } from '../../hooks/useAuth'
+import { Link } from 'react-router'
 export default function Header() {
+    const { user, logout } = useAuth()
     return (
         <>
             <header>
@@ -38,8 +41,25 @@ export default function Header() {
                     />
                 </div>
                 <div className="buttons-right">
-
-                    {/* fazer o resto */}
+                    {
+                        user ? (
+                            <div className='dropdown'>
+                                <span className="dropdown-texto">
+                                    <UserCircleGear size={32} weight="duotone" />
+                                    <p>{user.name}</p>
+                                </span>
+                                <div className="dropdown-conteudo">
+                                    <Link to={'/user'} className='dropdown-item'>Minha conta</Link>
+                                    <button onClick={logout}>Sair</button>
+                                </div>
+                            </div>
+                        ) : (
+                            <Link to='/' className='btn-login'>
+                                <UserCircle size={32} weight="duotone" />
+                                <p>Login</p>
+                            </Link>
+                        )
+                    }
                 </div>
             </header>
             <div className="footer-header">

@@ -107,8 +107,99 @@ header {
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    background-color: red;
+    /* background-color: red; */
     width: 35%;
+}
+
+.btn-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    color: #FFF;
+    font-family: Alexandria;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-sair {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    color: #FFF;
+    font-family: Alexandria;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    width: 8rem;
+}
+
+.dropdown-texto {
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dropdown-conteudo {
+    display: none;
+    position: absolute;
+    background-color: var(--cor-header);
+    min-width: 150px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+.dropdown-item {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 15px;
+    border: none;
+    font-family: Arial, sans-serif;
+}
+
+.dropdown-conteudo button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 15px;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    text-align: left;
+}
+
+.dropdown-item:hover,
+.dropdown-conteudo button:hover {
+    background-color: #3a3a3a;
+}
+
+.dropdown:hover .dropdown-conteudo {
+    display: block;
 }
 
 .footer-header {

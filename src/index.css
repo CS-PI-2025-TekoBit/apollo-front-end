@@ -9,7 +9,7 @@
   --cor-cards: #E2E2E2;
   --cor-cards-detalhes: #666464;
   --cor-footer: #002411;
-
+  --cor-login: #1D1D1D;
 }
 
 * {
@@ -26,9 +26,4 @@ html {
   font-family: "Alexandria", sans-serif;
   font-weight: 400;
   background-color: var(--cor-fundo);
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
