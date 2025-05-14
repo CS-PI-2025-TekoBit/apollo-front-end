@@ -1,0 +1,24 @@
+.card-cars {
+    border: 5px solid green;
+    margin: 2%;
+    width: 15vw;
+    height: 40vh;
+    background-color: black;
+}
+
+.card-cars img{
+    width: 100%;
+}
+
+.txt-card-cars {
+    padding: 2%;
+    text-align: left;
+}
+
+.txt-card-cars h1 {
+    color: white;
+}
+
+.txt-card-cars p{
+    color: rgb(211, 211, 211);
+}
