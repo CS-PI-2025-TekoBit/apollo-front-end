@@ -1,12 +1,33 @@
 {
     "marks": [
-        "Mercedes-Benz",
-        "audi",
-        "bmw",
-        "mc laren",
-        "ferrari",
-        "porsche",
-        "Volvo"
+        {
+            "id": "1",
+            "name": "Mercedes-Benz"
+        },
+        {
+            "id": "2",
+            "name": "audi"
+        },
+        {
+            "id": "3",
+            "name": "bmw"
+        },
+        {
+            "id": "4",
+            "name": "mc laren"
+        },
+        {
+            "id": "5",
+            "name": "ferrari"
+        },
+        {
+            "id": "6",
+            "name": "porsche"
+        },
+        {
+            "id": "7",
+            "name": "Volvo"
+        }
     ],
     "models": [
         {
@@ -20,27 +41,84 @@
         }
     ],
     "motors": [
-        "1.0",
-        "1.4",
-        "1.6",
-        "2.0",
-        "3.0",
-        "4.0",
-        "V6",
-        "V8"
+        {
+            "id": "1",
+            "name": "1.0"
+        },
+        {
+            "id": "2",
+            "name": "1.4"
+        },
+        {
+            "id": "3",
+            "name": "1.6"
+        },
+        {
+            "id": "4",
+            "name": "2.0"
+        },
+        {
+            "id": "5",
+            "name": "3.0"
+        },
+        {
+            "id": "6",
+            "name": "4.0"
+        },
+        {
+            "id": "7",
+            "name": "V6"
+        },
+        {
+            "id": "8",
+            "name": "V8"
+        }
     ],
     "colors": [
-        "Preto",
-        "Branco",
-        "Cinza",
-        "Prata",
-        "Vermelho",
-        "Azul",
-        "Verde",
-        "Amarelo",
-        "Rosa",
-        "Laranja",
-        "Marrom"
+        {
+            "id": "1",
+            "name": "Preto"
+        },
+        {
+            "id": "2",
+            "name": "Branco"
+        },
+        {
+            "id": "3",
+            "name": "Cinza"
+        },
+        {
+            "id": "4",
+            "name": "Prata"
+        },
+        {
+            "id": "5",
+            "name": "Vermelho"
+        },
+        {
+            "id": "6",
+            "name": "Azul"
+        },
+        {
+            "id": "7",
+            "name": "Verde"
+        },
+        {
+            "id": "8",
+            "name": "Amarelo"
+        },
+        {
+            "id": "9",
+            "name": "Rosa"
+        },
+        {
+            "id": "10",
+            "name": "Laranja"
+        },
+        {
+            "id": "11",
+            "name": "Marrom"
+        }
     ],
     "transmission": [
         {

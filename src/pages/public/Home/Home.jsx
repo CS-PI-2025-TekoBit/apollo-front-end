@@ -15,6 +15,7 @@ export default function Home() {
     return (
         <>
             <Header />
+            {console.log("carros", cars)}
             <main>
                 <div className="container-stock ">
                     <div className={`left-side-stock`} >
