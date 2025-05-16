@@ -4,7 +4,11 @@ export default function Card(
     {
         name = "",
         imgs = "",
-        model = "" 
+        mark = "",
+        price = "",
+        traction = "",
+        year = "",
+        kilometers = ""
     }
 ) {
    return (
@@ -15,14 +19,15 @@ export default function Card(
             </div>
             <div className="txt-card-cars">
                    <h1 className="titulo-card-cars">{name}</h1>
-                   <p className="valor-card-cars"><span>Preço:</span>R$119.000,00</p>
-                   <p className="marca-card-cars"><span>Marca:</span>{model}</p>
-                   <p className="tracao-card-cars"><span>Tração:</span>Tração nas 4 rodas</p>
-                   <p className="ano-card-cars"><span>Ano:</span>2022</p>
-                   <p className="km-card-cars"><span>KM:</span>35.000 km</p>
+                   <p className="valor-card-cars"><span>Preço: </span>{price}</p>
+                   <p className="marca-card-cars"><span>Marca: </span>{mark}</p>
+                   <p className="tracao-card-cars"><span>Tração: </span>{traction}</p>
+                   <p className="ano-card-cars"><span>Ano: </span>{year}</p>
+                   <p className="km-card-cars"><span>KM: </span>{kilometers}</p>
+                
+                <button className="botao-card-cars">Ver Detalhes</button>
             </div>
 
-               <button className="botao-card-cars">Ver Detalhes</button>
         </div>
     </>
    )

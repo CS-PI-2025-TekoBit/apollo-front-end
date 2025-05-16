@@ -2,7 +2,7 @@
   "data": [
     {
       "id_car": "1",
-      "model": "Mercedes-Benz A 200",
+      "model": "Mercedes-Benz A 360",
       "mark": "Mercedes-Benz",
       "year": 2020,
       "kilometers": 20000,
@@ -18,12 +18,8 @@
       "final_plate": "ABC1D23",
       "trade": "Não",
       "blindage": "Não",
-      "imgs": [
-        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739129797/ikjjdlcasl9vwna65wzl.jpg",
-        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739130002/iq5riwpbdufubqpjpcvp.jpg",
-        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739130007/pumbya2zy2chfeds7l7h.jpg"
-      ],
-      "items": [
+      "imgs":  "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739129797/ikjjdlcasl9vwna65wzl.jpg",
+       "items": [
         "Airbag",
         "Alarme",
         "Ar quente",
@@ -88,11 +84,8 @@
         "Volante com regulagem de altura",
         "Ar condicionado"
       ],
-      "imgs": [
-        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739129797/ikjjdlcasl9vwna65wzl.jpg",
-        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739130002/iq5riwpbdufubqpjpcvp.jpg",
-        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739130007/pumbya2zy2chfeds7l7h.jpg"
-      ]
+      "imgs":"https://res.cloudinary.com/dmlfcxheq/image/upload/v1739129797/ikjjdlcasl9vwna65wzl.jpg"
+        
     },
     {
       "id_car": "3",
@@ -135,11 +128,8 @@
         "Volante com regulagem de altura",
         "Ar condicionado"
       ],
-      "imgs": [
-        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739129797/ikjjdlcasl9vwna65wzl.jpg",
-        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739130002/iq5riwpbdufubqpjpcvp.jpg",
-        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739130007/pumbya2zy2chfeds7l7h.jpg"
-      ]
+      "imgs": 
+        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739129797/ikjjdlcasl9vwna65wzl.jpg"
     }
   ]
 }
