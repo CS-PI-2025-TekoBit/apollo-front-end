@@ -2,5 +2,32 @@ footer {
     background-color: var(--cor-footer);
     color: white;
     padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     text-align: center;
+}
+
+.footer-content {
+    width: 100%;
+    max-width: 1200px;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 25px;
+}
+
+.footer-address p {
+    margin: 5px 0;
+    font-weight: 300;
+}
+
+.footer-copyright {
+    margin-top: 15px;
+    font-size: 14px;
+    font-weight: 300;
 }
