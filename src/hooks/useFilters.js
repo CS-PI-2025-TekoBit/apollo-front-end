@@ -5,9 +5,8 @@ const fetchData = async () => {
     const response = await new Promise((resolve) => {
         setTimeout(() => {
             resolve({ data: filtros });
-        }, 1000);
+        }, 100);
     });
-    console.log('response', response);
     return response.data;
 };
 
