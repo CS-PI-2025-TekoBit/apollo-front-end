@@ -1,7 +1,7 @@
 import React from 'react'
 import './Header.css'
 import logo from '../../assets/imgs/logomarca.png'
-import { Clock, MagnifyingGlass, Phone, UserCircle, UserCircleGear, WhatsappLogo } from '@phosphor-icons/react'
+import { Clock, MagnifyingGlass, Phone, UserCircle, UserCircleGear, WhatsappLogo, Star, Chat } from '@phosphor-icons/react'
 import { useAuth } from '../../hooks/useAuth'
 import { Link } from 'react-router'
 export default function Header() {
@@ -41,6 +41,15 @@ export default function Header() {
                     />
                 </div>
                 <div className="buttons-right">
+                    <Link to='/' className='btn-favorito-mensagem ' >
+                        <Star size={32} weight="regular" />
+                        <p>Favoritos</p>
+                    </Link>
+                    <Link to='/' className='btn-favorito-mensagem '>
+                        <Chat size={32} weight="regular" />
+                        <p>Mensagens</p>
+                    </Link>
+
                     {
                         user ? (
                             <div className='dropdown'>
