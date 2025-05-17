@@ -6,11 +6,17 @@ import './Home.css'
 import { useAllCars } from '../../../hooks/useAllCar'
 import { useFilters } from '../../../hooks/useFilters'
 import { useAuth } from '../../../hooks/useAuth';
+import GenericInput from '../../../components/GenericInput/GenericInput';
+import { useState } from 'react';
+
+
 
 export default function Home() {
     const { cars } = useAllCars()
     const { filtros } = useFilters()
     const { user } = useAuth()
+
+    const [price, setPrice] = useState('');
 
     return (
         <>
@@ -22,7 +28,22 @@ export default function Home() {
                         <h1 className={`title-filters`}>
                             Filtros
                             <div className="filters">
-                                <h1>FILTROS AQUI</h1>
+                                <GenericInput
+                                    label="Preço"
+                                    value={price}
+                                    onChange={(e) => setPrice(e.target.value)}
+                                    placeholder="Digite o valor"
+                                    mask={true}
+                                />
+
+                                <GenericInput
+                                    label="Preço 2"
+                                    value={price}
+                                    onChange={(e) => setPrice(e.target.value)}
+                                    placeholder="Digite o valor"
+                                    mask={false}
+                                />
+
                             </div>
                         </h1>
                     </div>
