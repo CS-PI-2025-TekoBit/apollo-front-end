@@ -59,6 +59,9 @@ export default function Header() {
                                 </span>
                                 <div className="dropdown-conteudo">
                                     <Link to={'/user'} className='dropdown-item'>Minha conta</Link>
+                                    <Link to={'/'} className='dropdown-item'>Favoritos</Link>
+                                    <Link to={'/'} className='dropdown-item'>Mensagens</Link>
+
                                     <button onClick={logout}>Sair</button>
                                 </div>
                             </div>

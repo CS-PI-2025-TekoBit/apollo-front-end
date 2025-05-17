@@ -1,7 +1,6 @@
 import React from 'react'
 import Header from '../../../components/Header/Header'
 import Footer from '../../../components/Footer/Footer'
-import Contato from '../../../components/Contato/Contato'
 import Maps from '../../../components/Maps/Maps'
 import './Home.css'
 import { useAllCars } from '../../../hooks/useAllCar'
@@ -40,7 +39,6 @@ export default function Home() {
             </main>
             <Maps />
             <Footer />
-            <Contato />
         </>
     )
 }
