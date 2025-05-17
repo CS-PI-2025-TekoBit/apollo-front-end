@@ -6,11 +6,11 @@ export default function GenericChoice({ label, onChange, value }) {
             <h6 className="generic-label">{label}</h6>
             <div className="container-buttons">
 
-                <button className={value === true ? "button-true" : "button_default"} onClick={() => onChange(true)}>
+                <button className={value === true ? "button-true" : "button-default-left"} onClick={() => onChange(true)}>
                     Sim
                 </button>
 
-                <button className={value === false ? "button-false" : "button_default"} onClick={() => onChange(false)}>
+                <button className={value === false ? "button-false" : "button-default-rigth"} onClick={() => onChange(false)}>
                     Não
                 </button>
 
