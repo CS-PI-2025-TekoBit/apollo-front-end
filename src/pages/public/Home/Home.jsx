@@ -1,4 +1,5 @@
 import React from 'react'
+import GenericCheckbox from '../../../components/CheckBox/GenericCheckbox'
 import Header from '../../../components/Header/Header'
 import Footer from '../../../components/Footer/Footer'
 import Maps from '../../../components/Maps/Maps'
@@ -23,6 +24,10 @@ export default function Home() {
                             Filtros
                             <div className="filters">
                                 <h1>FILTROS AQUI</h1>
+                                <GenericCheckbox options={filtros?.transmission} label={"Câmbio"} />
+                                <GenericCheckbox options={filtros?.direction} label={"Direção"} />
+                                <GenericCheckbox options={filtros?.fuel} label={"Combustível "} />
+                                <GenericCheckbox options={filtros?.bodywork} label={"Carroceria"} />
                             </div>
                         </h1>
                     </div>
