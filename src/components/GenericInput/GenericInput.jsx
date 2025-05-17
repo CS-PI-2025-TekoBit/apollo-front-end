@@ -22,12 +22,7 @@ export default function GenericInput({
         val = val.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         return `R$ ${val}`;
     };
-
-    function formatOnlyNumbers(val) {
-        if (!val) return '';
-        return val.toString().replace(/\D/g, '');
-    }
-
+    
     const handleInputChange = (e) => {
         if (mask) {
             let val = e.target.value.replace(/\D/g, '');

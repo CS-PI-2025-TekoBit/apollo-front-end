@@ -7,7 +7,7 @@ import { useAllCars } from '../../../hooks/useAllCar'
 import { useFilters } from '../../../hooks/useFilters'
 import { useAuth } from '../../../hooks/useAuth';
 import GenericInput from '../../../components/GenericInput/GenericInput';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
 
@@ -16,12 +16,39 @@ export default function Home() {
     const { filtros } = useFilters()
     const { user } = useAuth()
 
-    const [price, setPrice] = useState('');
+    const [minYear, setMinYear] = useState('');
+    const [maxYear, setMaxYear] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const [minKm, setMinKm] = useState('');
+    const [maxKm, setMaxKm] = useState('');
+
+    function aplicarFiltros() {
+        const filtrosFinal = {
+            year: {
+                min: minYear,
+                max: maxYear > minYear ? maxYear : null,
+            },
+            price: {
+                min: minPrice,
+                max: maxPrice > minPrice ? maxPrice : null,
+            },
+            km: {
+                min: minKm,
+                max: maxKm > minKm ? maxKm : null,
+            },
+        };
+
+        console.log(filtrosFinal);
+    };
+
+    useEffect(() => {
+        aplicarFiltros();
+    }, [minYear, maxYear, minPrice, maxPrice, minKm, maxKm]);
 
     return (
         <>
             <Header />
-            {console.log("carros", cars)}
             <main>
                 <div className="container-stock ">
                     <div className={`left-side-stock`} >
@@ -29,21 +56,51 @@ export default function Home() {
                             Filtros
                             <div className="filters">
                                 <GenericInput
+                                    label="Ano"
+                                    type="number"
+                                    value={minYear}
+                                    onChange={(e) => setMinYear(e.target.value)}
+                                    placeholder="De..."
+                                />
+
+                                <GenericInput
+                                    type="number"
+                                    value={maxYear}
+                                    onChange={(e) => setMaxYear(e.target.value)}
+                                    placeholder="Até..."
+                                />
+
+                                <button onClick={aplicarFiltros}>Aplicar Filtros</button>
+
+                                <GenericInput
                                     label="Preço"
-                                    value={price}
-                                    onChange={(e) => setPrice(e.target.value)}
-                                    placeholder="Digite o valor"
+                                    value={minPrice}
+                                    onChange={(e) => setMinPrice(e.target.value)}
+                                    placeholder="De..."
                                     mask={true}
                                 />
 
                                 <GenericInput
-                                    label="Preço 2"
-                                    value={price}
-                                    onChange={(e) => setPrice(e.target.value)}
-                                    placeholder="Digite o valor"
-                                    mask={false}
+                                    value={maxPrice}
+                                    onChange={(e) => setMaxPrice(e.target.value)}
+                                    placeholder="Até..."
+                                    mask={true}
                                 />
 
+                                <GenericInput
+                                    label="Kilometragem"
+                                    type="number"
+                                    value={minKm}
+                                    onChange={(e) => setMinKm(e.target.value)}
+                                    placeholder="De..."
+                                />
+
+                                <GenericInput
+                                    type="number"
+                                    value={maxKm}
+                                    onChange={(e) => setMaxKm(e.target.value)}
+                                    placeholder="Até..."
+                                />
                             </div>
                         </h1>
                     </div>
