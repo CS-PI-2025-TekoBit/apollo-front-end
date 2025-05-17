@@ -1,0 +1,41 @@
+.container-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 15px
+}
+
+.button_default {
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    border: 2px solid #303030;
+    color: #fff;
+    background-color: #303030;
+}
+
+.button-true {
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    border: 2px solid #17F54B;
+    color: #fff;
+    background-color: #09750173;
+}
+
+.button-false {
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    border: 2px solid #9D0505;
+    color: #fff;
+    background-color: #63020447;
+}

@@ -1,4 +1,6 @@
 import React from 'react'
+import { useState } from 'react';
+import GenericChoice from '../../../components/Choice/GenericChoice'
 import Header from '../../../components/Header/Header'
 import Footer from '../../../components/Footer/Footer'
 import Maps from '../../../components/Maps/Maps'
@@ -11,11 +13,13 @@ export default function Home() {
     const { cars } = useAllCars()
     const { filtros } = useFilters()
     const { user } = useAuth()
+    const [acceptsTrade, setAcceptsTrade] = useState(null);
+    const [hasArmor, setHasArmor] = useState(null);
 
     return (
         <>
             <Header />
-            {console.log("carros", cars)}
+
             <main>
                 <div className="container-stock ">
                     <div className={`left-side-stock`} >
@@ -23,6 +27,16 @@ export default function Home() {
                             Filtros
                             <div className="filters">
                                 <h1>FILTROS AQUI</h1>
+                                <GenericChoice
+                                    label="Aceita troca ?"
+                                    onChange={setAcceptsTrade}
+                                    value={acceptsTrade}
+                                />
+                                <GenericChoice
+                                    label="Blindagem ?"
+                                    onChange={setHasArmor}
+                                    value={hasArmor}
+                                />
                             </div>
                         </h1>
                     </div>
