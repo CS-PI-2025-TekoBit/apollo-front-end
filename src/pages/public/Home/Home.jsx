@@ -2,6 +2,7 @@ import React from 'react'
 import Header from '../../../components/Header/Header'
 import Footer from '../../../components/Footer/Footer'
 import Maps from '../../../components/Maps/Maps'
+import BotaoWhatsApp from '../../../components/BotaoWhatsApp/BotaoWhatsApp'
 import './Home.css'
 import { useAllCars } from '../../../hooks/useAllCar'
 import { useFilters } from '../../../hooks/useFilters'
@@ -40,6 +41,7 @@ export default function Home() {
             </main>
             <Maps />
             <Footer />
+            <BotaoWhatsApp />
         </>
     )
 }
