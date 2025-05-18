@@ -189,7 +189,7 @@ export default function CarDetail() {
                                             </section>
                                         </section>
                                         <hr className="car-detail-divider" />
-                                        <section>
+                                        <section className="car-detail-description-section">
                                             <h1>Descrição</h1>
                                             <p className="car-detail-description">
                                                 {car?.description}
