@@ -53,7 +53,7 @@ export default function GenericInput({
                 </>
             ) : (
                 <>
-                    <label htmlFor="input" className='label-input'>{label}</label>
+                    <label htmlFor="input" className='label-input'>{label || '\u00A0'}</label>
                     <input
                         id="input"
                         type={type}

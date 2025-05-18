@@ -35,17 +35,17 @@ export default function Home() {
 
         const filtrosFinal = {
             year: {
-                min: yearMin,
-                max: yearMax >= yearMin ? yearMax : null,
-            },
-            price: {
-                min: priceMin,
-                max: priceMax >= priceMin ? priceMax : null,
-            },
-            km: {
-                min: kmMin,
-                max: kmMax >= kmMin ? kmMax : null,
-            },
+            min: yearMin >= 0 ? yearMin : null,
+            max: yearMax >= yearMin && yearMax >= 0 ? yearMax : null,
+        },
+        price: {
+            min: priceMin >= 0 ? priceMin : null,
+            max: priceMax >= priceMin && priceMax >= 0 ? priceMax : null,
+        },
+        km: {
+            min: kmMin >= 0 ? kmMin : null,
+            max: kmMax >= kmMin && kmMax >= 0 ? kmMax : null,
+        },
         };
         console.log(filtrosFinal);
     };
@@ -64,7 +64,7 @@ export default function Home() {
                             Filtros
                         </h1>
                         <div className="filters">
-                            <div className="filter-inputs">
+                            <div>
                                 <GenericInput
                                     label="Ano"
                                     type="number"
@@ -81,7 +81,7 @@ export default function Home() {
                                 />
                             </div>
 
-                            <div className="filter-inputs">
+                            <div>
                                 <GenericInput
                                     label="Preço"
                                     value={minPrice}
@@ -98,7 +98,7 @@ export default function Home() {
                                 />
                             </div>
 
-                            <div className="filter-inputs">
+                            <div>
                                 <GenericInput
                                     label="Kilometragem"
                                     type="number"
