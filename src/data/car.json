@@ -2,7 +2,7 @@
   "data": [
     {
       "id_car": "1",
-      "model": "Mercedes-Benz A 200",
+      "model": "A 200",
       "mark": "Mercedes-Benz",
       "year": 2020,
       "kilometers": 20000,
@@ -45,7 +45,8 @@
         "Vidros elétricos",
         "Volante com regulagem de altura",
         "Ar condicionado"
-      ]
+      ],
+      "direction": "Direção elétrica"
     },
     {
       "id_car": "2",
