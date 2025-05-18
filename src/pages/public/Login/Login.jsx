@@ -66,8 +66,8 @@ function Login() {
   return (
     <main className="login">
       <div className="container-login">
-        <div className="login-esquerda"></div>
-        <div className="login-direita">
+        <div className="login-left"></div>
+        <div className="login-right">
           <h1>Olá <br />Seja bem vindo(a)</h1>
           <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <p>faça o login para acessar o sistema</p>
@@ -97,17 +97,17 @@ function Login() {
               />
             </div>
             {erros.password && <span className="error">{erros.password}</span>}
-            <Link to="/forgot-password" className="esqueci-senha">
+            <Link to="/forgot-password" className="forget-password">
               Esqueceu a senha?
             </Link>
-            <button type="submit" className="btn-entrar" disabled={enviando}>
+            <button type="submit" className="btn-enter" disabled={enviando}>
               <span>Entrar</span>
             </button>
-            <p className="text-registro">
+            <p className="text-register">
               Não tem conta ainda? <Link to="/register">clique aqui para se cadastrar</Link>
             </p>
           </form>
-          <span className="versao">Versão {VERSION_APP}</span>
+          <span className="version">Versão {VERSION_APP}</span>
         </div>
       </div>
     </main>
