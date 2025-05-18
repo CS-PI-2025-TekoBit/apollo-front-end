@@ -23,33 +23,6 @@ export default function Home() {
     const [minKm, setMinKm] = useState('');
     const [maxKm, setMaxKm] = useState('');
 
-    function aplicarFiltros() {
-        const yearMin = Number(minYear);
-        const yearMax = Number(maxYear);
-
-        const priceMin = Number(minPrice);
-        const priceMax = Number(maxPrice);
-
-        const kmMin = Number(minKm);
-        const kmMax = Number(maxKm);
-
-        const filtrosFinal = {
-            year: {
-            min: yearMin >= 0 ? yearMin : null,
-            max: yearMax >= yearMin && yearMax >= 0 ? yearMax : null,
-        },
-        price: {
-            min: priceMin >= 0 ? priceMin : null,
-            max: priceMax >= priceMin && priceMax >= 0 ? priceMax : null,
-        },
-        km: {
-            min: kmMin >= 0 ? kmMin : null,
-            max: kmMax >= kmMin && kmMax >= 0 ? kmMax : null,
-        },
-        };
-        console.log(filtrosFinal);
-    };
-
     useEffect(() => {
         aplicarFiltros();
     }, [minYear, maxYear, minPrice, maxPrice, minKm, maxKm]);

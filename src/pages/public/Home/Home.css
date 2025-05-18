@@ -61,11 +61,11 @@
 
 .filters > div {
   display: flex;
-  gap: 10px;  /* espaço entre inputs do par */
+  gap: 10px;
   margin-bottom: 0px;
 }
 
 .filters > div > * {
-  flex: 1;  /* faz cada input ocupar o mesmo espaço */
-  min-width: 0; /* evita que inputs quebrem a linha por causa de overflow */
+  flex: 1;
+  min-width: 0;
 }
