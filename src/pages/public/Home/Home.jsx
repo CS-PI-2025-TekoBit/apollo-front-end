@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
+import GenericChoice from '../../../components/Choice/GenericChoice'
 import GenericCheckbox from '../../../components/CheckBox/GenericCheckbox'
 import Header from '../../../components/Header/Header'
 import Footer from '../../../components/Footer/Footer'
@@ -13,6 +14,8 @@ export default function Home() {
     const { cars } = useAllCars()
     const { filtros, isLoading } = useFilters()
     const { user } = useAuth()
+    const [acceptsTrade, setAcceptsTrade] = useState(null);
+    const [hasArmor, setHasArmor] = useState(null);
     const [checkboxStates, setCheckboxStates] = useState({
         "Câmbio": [],
         "Direção": [],
@@ -53,6 +56,11 @@ export default function Home() {
                                     Filtros
                                     <div className="filters">
                                         <h1>FILTROS AQUI</h1>
+                                <GenericChoice
+                                    label="Aceita troca ?"
+                                    onChange={setAcceptsTrade}
+                                    value={acceptsTrade}
+                                />
                                         <GenericCheckbox
                                             options={filtros?.transmission}
                                             label={"Câmbio"}
@@ -77,6 +85,11 @@ export default function Home() {
                                             onChange={handleCheckboxChange}
                                             checkedValues={checkboxStates["Carroceria"]}
                                         />
+                             <GenericChoice
+                                    label="Blindagem ?"
+                                    onChange={setHasArmor}
+                                    value={hasArmor}
+                                />
                                     </div>
                                 </h1>
                             </div>
