@@ -16,6 +16,10 @@
 .generic-label-checkbox {
     margin-top: 15px;
     margin-bottom: 8px;
+    font-family: 'Alexandria', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
 }
 
 input[type="checkbox"] {
@@ -27,7 +31,7 @@ input[type="checkbox"] {
     height: 15px;
     border: 2px solid #111111;
     border-radius: 3px;
-    background-color: --cor-filtro;
+    background-color: var(--cor-filtro);
     margin-right: 8px;
     display: inline-flex;
     align-items: center;
