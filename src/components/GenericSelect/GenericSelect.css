@@ -5,7 +5,7 @@
     flex-direction: column;
     gap: 6px;
     margin: 16px 0;
-    font-family: 'Alexandria';
+    font-family: 'Alexandria', sans-serif;
 }
 
 .div-label {

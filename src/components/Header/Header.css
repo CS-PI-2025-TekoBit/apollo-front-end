@@ -72,7 +72,7 @@ header {
     background: #FFF;
 }
 
-.input-container {
+.input-container-header {
     position: relative;
     display: flex;
     align-items: center;
