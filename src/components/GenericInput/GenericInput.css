@@ -14,7 +14,10 @@
     font-weight: 600;
     color: #333;
     margin-bottom: 2px;
-    text-align: left; /* Garante alinhamento à esquerda */
+    display: block;
+    width: 100%;
+    text-align: left;
+
 }
 
 .input-container input,
@@ -42,17 +45,3 @@
     min-height: 100px;
 }
 
-/* Responsivo */
-@media (max-width: 600px) {
-    .input-container input,
-    .input-container textarea {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
-
-    .label-input,
-    .label-text-area,
-    .label-text-deactivate {
-        font-size: 15px;
-    }
-}

@@ -24,21 +24,29 @@ export default function Home() {
     const [maxKm, setMaxKm] = useState('');
 
     function aplicarFiltros() {
+        const yearMin = Number(minYear);
+        const yearMax = Number(maxYear);
+
+        const priceMin = Number(minPrice);
+        const priceMax = Number(maxPrice);
+
+        const kmMin = Number(minKm);
+        const kmMax = Number(maxKm);
+
         const filtrosFinal = {
             year: {
-                min: minYear,
-                max: maxYear > minYear ? maxYear : null,
+                min: yearMin,
+                max: yearMax >= yearMin ? yearMax : null,
             },
             price: {
-                min: minPrice,
-                max: maxPrice > minPrice ? maxPrice : null,
+                min: priceMin,
+                max: priceMax >= priceMin ? priceMax : null,
             },
             km: {
-                min: minKm,
-                max: maxKm > minKm ? maxKm : null,
+                min: kmMin,
+                max: kmMax >= kmMin ? kmMax : null,
             },
         };
-
         console.log(filtrosFinal);
     };
 
@@ -54,7 +62,9 @@ export default function Home() {
                     <div className={`left-side-stock`} >
                         <h1 className={`title-filters`}>
                             Filtros
-                            <div className="filters">
+                        </h1>
+                        <div className="filters">
+                            <div className="filter-inputs">
                                 <GenericInput
                                     label="Ano"
                                     type="number"
@@ -69,9 +79,9 @@ export default function Home() {
                                     onChange={(e) => setMaxYear(e.target.value)}
                                     placeholder="Até..."
                                 />
+                            </div>
 
-                                <button onClick={aplicarFiltros}>Aplicar Filtros</button>
-
+                            <div className="filter-inputs">
                                 <GenericInput
                                     label="Preço"
                                     value={minPrice}
@@ -86,7 +96,9 @@ export default function Home() {
                                     placeholder="Até..."
                                     mask={true}
                                 />
+                            </div>
 
+                            <div className="filter-inputs">
                                 <GenericInput
                                     label="Kilometragem"
                                     type="number"
@@ -102,7 +114,8 @@ export default function Home() {
                                     placeholder="Até..."
                                 />
                             </div>
-                        </h1>
+                        </div>
+
                     </div>
                     <div className="right-side-stock">
                         {user && (
