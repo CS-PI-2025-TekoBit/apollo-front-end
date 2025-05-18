@@ -58,3 +58,14 @@
 .filters::-webkit-scrollbar-track {
     background-color: #1E1E1E;
 }
+
+.filters > div {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 0px;
+}
+
+.filters > div > * {
+  flex: 1;
+  min-width: 0;
+}
