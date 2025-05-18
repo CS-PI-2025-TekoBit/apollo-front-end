@@ -22,7 +22,7 @@ export default function GenericInput({
         val = val.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         return `R$ ${val}`;
     };
-    
+
     const handleInputChange = (e) => {
         if (mask) {
             let val = e.target.value.replace(/\D/g, '');
@@ -34,34 +34,6 @@ export default function GenericInput({
             onChange(e);
         }
     };
-
-    function aplicarFiltros() {
-        const yearMin = Number(minYear);
-        const yearMax = Number(maxYear);
-
-        const priceMin = Number(minPrice);
-        const priceMax = Number(maxPrice);
-
-        const kmMin = Number(minKm);
-        const kmMax = Number(maxKm);
-
-        const filtrosFinal = {
-            year: {
-            min: yearMin >= 0 ? yearMin : null,
-            max: yearMax >= yearMin ? yearMax : null,
-        },
-        price: {
-            min: priceMin >= 0 ? priceMin : null,
-            max: priceMax >= priceMin ? priceMax : null,
-        },
-        km: {
-            min: kmMin >= 0 ? kmMin : null,
-            max: kmMax >= kmMin ? kmMax : null,
-        },
-        };
-        console.log(filtrosFinal);
-    };
-
     return (
         <div className="input-container">
             {type === 'textarea' ? (

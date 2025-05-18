@@ -25,6 +25,13 @@
     transition: background-color 0.5s;
 }
 
+.generic-label {
+    font-size: 20px;
+    color: #333;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .button-default-rigth {
     font-size: 14px;
     padding-top: 5px;

@@ -32,7 +32,7 @@ export default function Header() {
                         </p>
                     </div>
                 </section>
-                <div className="input-container">
+                <div className="input-container-header">
                     <MagnifyingGlass size={20} color="#000" weight="regular" className="search-icon" />
                     <input
                         type="text"
