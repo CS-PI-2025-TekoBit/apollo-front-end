@@ -1,6 +1,6 @@
 .card-cars {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin: 2%;
     min-width: 15vw;
     max-width: 18vw;
@@ -9,7 +9,7 @@
     box-shadow: 0px 0px rgba(0, 0, 0, 0.315);
 }
 
-.img-card-container img{
+.card-cars img{
     width: 100%;
 }
 
@@ -28,13 +28,14 @@
 .txt-card-cars p{
     color: rgb(211, 211, 211);
     font-size: 0.8em;
+    margin-bottom: 1%;
 }
 
 .botao-card-cars {
-    padding: 0.5em 1em;
+    padding: 0.9em 1.1em;
     background-color: gray;
     color: white;
     border-style: none;
     border-radius: 0.5em;
-    margin-top: 3%;
+    margin-top: 2%;
 }

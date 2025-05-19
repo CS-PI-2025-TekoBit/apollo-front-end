@@ -14,11 +14,10 @@ export default function Card(
    return (
     <>
         <div className="card-cars">
-            <div className="img-card-container">
                 <img src={imgs} alt="" className="img-card" />
-            </div>
+            
             <div className="txt-card-cars">
-                   <h1 className="titulo-card-cars">{name}</h1>
+                   <h1 className="titulo-card-cars">{mark} {name}</h1>
                    <p className="valor-card-cars"><span>Preço: </span>{price}</p>
                    <p className="marca-card-cars"><span>Marca: </span>{mark}</p>
                    <p className="tracao-card-cars"><span>Tração: </span>{traction}</p>
