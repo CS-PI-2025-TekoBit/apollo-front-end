@@ -2,7 +2,7 @@
   "data": [
     {
       "id_car": "1",
-      "model": "Mercedes-Benz A 360",
+      "model": "A 360",
       "mark": "Mercedes-Benz",
       "year": 2020,
       "kilometers": 20000,
@@ -45,7 +45,7 @@
     },
     {
       "id_car": "2",
-      "model": "Mercedes-Benz A 200",
+      "model": "A 200",
       "mark": "Mercedes-Benz",
       "year": 2020,
       "kilometers": 20000,
@@ -89,7 +89,7 @@
     },
     {
       "id_car": "3",
-      "model": "Mercedes-Benz A 200",
+      "model": "A 200",
       "mark": "Mercedes-Benz",
       "year": 2020,
       "kilometers": 20000,
