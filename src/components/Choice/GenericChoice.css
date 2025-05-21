@@ -1,0 +1,80 @@
+.container-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-bottom: 5px;
+
+}
+
+.button-default-left {
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    border: 1px solid #0A301C;
+    color: #fff;
+    background-color: #09750173;
+    cursor: pointer;
+    transition: background-color 0.5s;
+}
+
+.button-default-left:hover {
+    background-color: #0A301C;
+    transition: background-color 0.5s;
+}
+
+.generic-label {
+    font-size: 20px;
+    color: #333;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.button-default-rigth {
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    border: 1px solid #9D0505;
+    color: #fff;
+    background-color: #63020447;
+    cursor: pointer;
+    transition: background-color 0.5s;
+}
+
+.button-default-rigth:hover {
+    background-color: #9D0505;
+    transition: background-color 0.5s;
+}
+
+.button-true {
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    border: 2px solid #0A301C;
+    color: #fff;
+    background-color: #0A301C;
+    cursor: pointer;
+    transition: background-color 0.5s;
+}
+
+.button-false {
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    border: 2px solid #9D0505;
+    color: #fff;
+    background-color: #9D0505;
+    cursor: pointer;
+    transition: background-color 0.5s;
+}
