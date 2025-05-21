@@ -19,7 +19,9 @@
 .right-side-stock {
     width: 80%;
     padding-left: 1vh;
-    /* background-color: red; */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .title-filters {
