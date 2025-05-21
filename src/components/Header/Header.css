@@ -127,6 +127,34 @@ header {
     text-decoration: none;
 }
 
+.btn-favorito-mensagem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    color: #FFF;
+    font-family: Alexandria;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+
+.btn-favorito-mensagem p {
+    color: #FFF;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    margin-left: 10px;
+}
+
+
 .btn-sair {
     display: flex;
     align-items: center;
@@ -232,4 +260,11 @@ header {
 
 .btn-veiculos:hover {
     background-color: #0A301C;
+}
+
+
+@media (max-width: 768px) {
+    .info, .input-container-header, .footer-header, .btn-favorito-mensagem {
+        display: none;
+    }
 }

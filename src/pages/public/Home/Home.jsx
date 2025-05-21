@@ -8,9 +8,9 @@ import './Home.css'
 import { useAllCars } from '../../../hooks/useAllCar'
 import { useFilters } from '../../../hooks/useFilters'
 import { useAuth } from '../../../hooks/useAuth';
+import Card from '../../../components/Card/CardCars'
 import GenericInput from '../../../components/GenericInput/GenericInput';
 import GenericSelect from '../../../components/GenericSelect/GenericSelect'
-
 
 export default function Home() {
     const { cars } = useAllCars()
@@ -237,14 +237,17 @@ export default function Home() {
 
                             </div>
                             <div className="right-side-stock">
-                                {user && (
-                                    <div className="container-user">
-                                        <h1>Olá, {user.id}</h1>
-                                        <h1>Seja bem-vindo(a)!</h1>
-                                        <h1>Você está logado como {user.role}</h1>
-                                    </div>
-                                )}
-                                <h1> Carros aqui</h1>
+                                     {cars?.map((car)=>(
+                        <Card 
+                            name={car.model}
+                            imgs={car.imgs}
+                            mark={car.mark}
+                            price={car.price}
+                            traction={car.traction}
+                            year={car.year}
+                            kilometers={car.kilometers}
+                        />
+                      ))}
                             </div>
                         </div>
                     </main>
