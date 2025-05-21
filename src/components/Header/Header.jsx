@@ -1,7 +1,7 @@
 import React from 'react'
 import './Header.css'
 import logo from '../../assets/imgs/logomarca.png'
-import { Clock, MagnifyingGlass, Phone, UserCircle, UserCircleGear, WhatsappLogo } from '@phosphor-icons/react'
+import { Clock, MagnifyingGlass, Phone, UserCircle, UserCircleGear, WhatsappLogo, Star, Chat } from '@phosphor-icons/react'
 import { useAuth } from '../../hooks/useAuth'
 import { Link } from 'react-router'
 export default function Header() {
@@ -32,7 +32,7 @@ export default function Header() {
                         </p>
                     </div>
                 </section>
-                <div className="input-container">
+                <div className="input-container-header">
                     <MagnifyingGlass size={20} color="#000" weight="regular" className="search-icon" />
                     <input
                         type="text"
@@ -41,6 +41,15 @@ export default function Header() {
                     />
                 </div>
                 <div className="buttons-right">
+                    <Link to='/' className='btn-favorito-mensagem ' >
+                        <Star size={32} weight="regular" />
+                        <p>Favoritos</p>
+                    </Link>
+                    <Link to='/' className='btn-favorito-mensagem '>
+                        <Chat size={32} weight="regular" />
+                        <p>Mensagens</p>
+                    </Link>
+
                     {
                         user ? (
                             <div className='dropdown'>
@@ -50,6 +59,9 @@ export default function Header() {
                                 </span>
                                 <div className="dropdown-conteudo">
                                     <Link to={'/user'} className='dropdown-item'>Minha conta</Link>
+                                    <Link to={'/'} className='dropdown-item'>Favoritos</Link>
+                                    <Link to={'/'} className='dropdown-item'>Mensagens</Link>
+
                                     <button onClick={logout}>Sair</button>
                                 </div>
                             </div>

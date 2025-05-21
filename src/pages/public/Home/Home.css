@@ -60,3 +60,9 @@
 .filters::-webkit-scrollbar-track {
     background-color: #1E1E1E;
 }
+
+.container-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0px;
+}
