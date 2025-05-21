@@ -72,7 +72,7 @@ header {
     background: #FFF;
 }
 
-.input-container {
+.input-container-header {
     position: relative;
     display: flex;
     align-items: center;
@@ -264,7 +264,7 @@ header {
 
 
 @media (max-width: 768px) {
-    .info, .input-container, .footer-header, .btn-favorito-mensagem {
+    .info, .input-container-header, .footer-header, .btn-favorito-mensagem {
         display: none;
     }
 }
