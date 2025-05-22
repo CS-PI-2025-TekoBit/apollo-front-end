@@ -4,9 +4,27 @@ import logo from '../../assets/imgs/logomarca.png'
 import { Clock, MagnifyingGlass, Phone, UserCircle, UserCircleGear, WhatsappLogo, Star, Chat } from '@phosphor-icons/react'
 import { useAuth } from '../../hooks/useAuth'
 import { Link } from 'react-router'
+import Swal from 'sweetalert2'
 export default function Header() {
     const { user, logout } = useAuth()
     const ViewportHeight = window.innerHeight;
+
+    const handleLogout = () => {
+        Swal.fire({
+            title: 'Sair da conta',
+            text: 'Tem certeza que deseja sair?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sair',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logout()
+            }
+        })
+    }
     return (
         <>
             <header>
@@ -66,7 +84,7 @@ export default function Header() {
                                             <Link to={'/'} className='dropdown-item'>Mensagens</Link>
                                         </>
                                     )}
-                                    <button onClick={logout}>Sair</button>
+                                    <button onClick={handleLogout}>Sair</button>
                                 </div>
                             </div>
                         ) : (
