@@ -6,15 +6,18 @@ import './CarDetail.css';
 import IMG from "../../../assets/imgs/Whats.png";
 import { useState } from "react";
 import GenericInput from "../../../components/GenericInput/GenericInput";
-// import Generic_card from "../../components/Generic-card/Generic-card";
 import leftArrow from "../../../assets/left-arrow.svg";
 import { useCarDetail } from "../../../hooks/useCarDetail";
 import { useEffect } from "react";
 import { useAllCars } from '../../../hooks/useAllCar'
-import Generic_Loader from "../../../components/GenericLoader/GenericLoader";
+import { useCarsFiltered } from '../../../hooks/useCarsFiltered'
+
+import GenericLoader from "../../../components/GenericLoader/GenericLoader";
+import Card from "../../../components/Card/CardCars";
 export default function CarDetail() {
     const { id } = useParams();
-    const { car, isLoading, onError } = useCarDetail(id);
+    const { car, isLoading } = useCarDetail(id);
+    const { others_cars } = useCarsFiltered(car?.mark);
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [message, setMessage] = useState("")
@@ -40,11 +43,11 @@ export default function CarDetail() {
     const settings_others_cars = {
         infinite: false,
         speed: 500,
-        slidesToShow: all_cars?.length > 10 ? 4 : all_cars?.length,
+        slidesToShow: others_cars?.length > 10 ? 4 : others_cars?.length,
         slidesToScroll: 1,
         arrows: ViewportHeight <= 800 ? false : true,
         dots: true,
-        autoplay: true,
+        autoplay: false,
         autoplaySpeed: 5000,
         responsive: [
             {
@@ -65,7 +68,7 @@ export default function CarDetail() {
         if (isLoading === false) {
             setMessage(`Olá, gostaria de saber se o veículo ${car?.model} na cor ${car?.color} continua disponível ?`)
         }
-        console.log(car)
+
     }, [isLoading, car])
 
     const validation = () => {
@@ -76,13 +79,13 @@ export default function CarDetail() {
             newErros.email = "E-mail inválido.";
         if (!message.trim())
             newErros.message = "Mensagem é obrigatória.";
-        console.log(newErros);
+
 
         return newErros;
     };
 
     const sendMessage = (e) => {
-        console.log('dentro dos guri')
+
         e.preventDefault()
         const errors = validation();
         if (Object.keys(errors).length) {
@@ -104,11 +107,12 @@ export default function CarDetail() {
             < Header />
             {ViewportHeight > 800 ? (
                 <div className="content">
+
                     {isLoading ? (
-                        <Generic_Loader />
+                        <GenericLoader />
                     ) : (
                         <>
-                            <NavLink to="/" className="back-to-stock">
+                            <NavLink to="/home" className="back-to-stock">
                                 <img src={leftArrow} alt="Voltar" />
                                 <p>Voltar para o estoque</p>
                             </NavLink>
@@ -264,11 +268,13 @@ export default function CarDetail() {
                                     Outros veículos
                                 </h1>
                                 <div className="configure-others-cars" >
-                                    {/* <Slider {...settings_others_cars}>
-                                        {all_cars.map((carro, index) => (
-                                            <Generic_card isStock={true} ml={true} disableSlideImgs={true} key={carro.id_car} id={carro.id_car} model={carro.model} imgs={carro.images_url} mark={carro.mark} price={carro.price} bodywork={carro.bodywork} traction={carro.traction} year={carro.year} kilometers={carro.kilometers} />
+                                    <Slider {...settings_others_cars}>
+                                        {others_cars?.map((car, index) => (
+                                            <div key={car.id} className="configure-others-cars" >
+                                                <Card disableSlideImgs={true} key={car.id_car} id={car.id_car} model={car.model} imgs={car.imgs} mark={car.mark} price={car.price} bodywork={car.bodywork} traction={car.traction} year={car.year} kilometers={car.kilometers} />
+                                            </div>
                                         ))}
-                                    </Slider> */}
+                                    </Slider>
                                 </div>
                             </div>
                         </>
@@ -276,10 +282,10 @@ export default function CarDetail() {
                 </div >
             ) : (
                 isLoading ? (
-                    <Generic_Loader />
+                    <GenericLoader />
                 ) : (
                     <div className="content-mobile">
-                        <NavLink to="/estoque" className="back-to-stock">
+                        <NavLink to="/home" className="back-to-stock">
                             <img src={leftArrow} alt="Voltar" />
                             <p>Voltar para o estoque</p>
                         </NavLink>
@@ -421,13 +427,13 @@ export default function CarDetail() {
                                     <h1>
                                         Outros veículos
                                     </h1>
-                                    {/* <Slider {...settings_others_cars}>
-                                        {all_cars.map((carro, index) => (
-                                            <div key={carro.id} className="configure-others-cars" >
-                                                <Generic_card disableSlideImgs={true} key={carro.id} id={carro.id} model={carro.model} imgs={carro.images_url} mark={carro.mark} price={carro.price} bodywork={carro.bodywork} traction={carro.traction} year={carro.year} kilometers={carro.kilometers} />
+                                    <Slider {...settings_others_cars}>
+                                        {others_cars?.map((car, index) => (
+                                            <div key={car.id} className="configure-others-cars" >
+                                                <Card disableSlideImgs={true} key={car.id_car} id={car.id_car} model={car.model} imgs={car.imgs} mark={car.mark} price={car.price} bodywork={car.bodywork} traction={car.traction} year={car.year} kilometers={car.kilometers} />
                                             </div>
                                         ))}
-                                    </Slider> */}
+                                    </Slider>
                                 </div>
                             </section>
                         </div>

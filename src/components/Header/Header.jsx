@@ -6,6 +6,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { Link } from 'react-router'
 export default function Header() {
     const { user, logout } = useAuth()
+    const ViewportHeight = window.innerHeight;
     return (
         <>
             <header>
@@ -59,9 +60,12 @@ export default function Header() {
                                 </span>
                                 <div className="dropdown-conteudo">
                                     <Link to={'/user'} className='dropdown-item'>Minha conta</Link>
-                                    <Link to={'/'} className='dropdown-item'>Favoritos</Link>
-                                    <Link to={'/'} className='dropdown-item'>Mensagens</Link>
-
+                                    {ViewportHeight < 800 && (
+                                        <>
+                                            <Link to={'/'} className='dropdown-item'>Favoritos</Link>
+                                            <Link to={'/'} className='dropdown-item'>Mensagens</Link>
+                                        </>
+                                    )}
                                     <button onClick={logout}>Sair</button>
                                 </div>
                             </div>

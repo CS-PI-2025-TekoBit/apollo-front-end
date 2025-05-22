@@ -14,6 +14,7 @@ import Home from './pages/public/Home/Home';
 import CarDetail from './pages/public/CarDetail/CarDetail';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import ScrollToTop from './utils/ScrollToTop';
 
 const client = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -21,6 +22,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthContextProvider>
+        <ScrollToTop />
         <QueryClientProvider client={client}>
           <Routes>
             {/* <Route path="/" element={<Home />} />

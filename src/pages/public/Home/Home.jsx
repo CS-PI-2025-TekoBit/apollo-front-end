@@ -5,6 +5,8 @@ import Header from '../../../components/Header/Header'
 import Footer from '../../../components/Footer/Footer'
 import Maps from '../../../components/Maps/Maps'
 import './Home.css'
+import filter_active from '../../../assets/filter_1.svg';
+import filter_deactivate from '../../../assets/filter_2.svg';
 import { useAllCars } from '../../../hooks/useAllCar'
 import { useFilters } from '../../../hooks/useFilters'
 import { useAuth } from '../../../hooks/useAuth';
@@ -16,6 +18,7 @@ export default function Home() {
     const { cars } = useAllCars()
     const { filtros, isLoading } = useFilters()
     const { user } = useAuth()
+    const [filterActive, setFilterActive] = useState(false);
     const [acceptsTrade, setAcceptsTrade] = useState(null);
     const [hasArmor, setHasArmor] = useState(null);
     const [checkboxStates, setCheckboxStates] = useState({
@@ -98,7 +101,7 @@ export default function Home() {
                 max: kmMax >= kmMin && kmMax >= 0 ? kmMax : null,
             },
         };
-        console.log(filtrosFinal);
+
     };
 
     useEffect(() => {
@@ -115,7 +118,25 @@ export default function Home() {
                     <Header />
                     <main>
                         <div className="container-stock ">
-                            <div className={`left-side-stock`} >
+                            <div className="filter-opening-mobile">
+                                <button className='filter-button' onClick={() => setFilterActive(!filterActive)}>
+                                    {filterActive ?
+                                        <>
+                                            <img src={filter_deactivate} alt="" className='filter-icon' />
+                                            <span>
+                                                Desativar os filtros
+                                            </span>
+                                        </>
+                                        : <>
+                                            <img src={filter_active} alt="" className='filter-icon' />
+                                            <span>
+                                                Ativar Filtros
+                                            </span>
+                                        </>
+                                    }
+                                </button>
+                            </div>
+                            <div className={`left-side-stock  ${!filterActive ? 'deactivate-filter' : ''}`} >
                                 <h1 className={`title-filters`}>
                                     Filtros
                                 </h1>
@@ -237,17 +258,19 @@ export default function Home() {
 
                             </div>
                             <div className="right-side-stock">
-                                     {cars?.map((car)=>(
-                        <Card 
-                            name={car.model}
-                            imgs={car.imgs}
-                            mark={car.mark}
-                            price={car.price}
-                            traction={car.traction}
-                            year={car.year}
-                            kilometers={car.kilometers}
-                        />
-                      ))}
+                                {cars?.map((car) => (
+                                    <Card
+                                        key={car.id_car}
+                                        id={car.id_car}
+                                        name={car.model}
+                                        imgs={car.imgs}
+                                        mark={car.mark}
+                                        price={car.price}
+                                        traction={car.traction}
+                                        year={car.year}
+                                        kilometers={car.kilometers}
+                                    />
+                                ))}
                             </div>
                         </div>
                     </main>

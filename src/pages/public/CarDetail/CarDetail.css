@@ -425,8 +425,10 @@ a {
 
 @media (max-width: 768px) {
     .back-to-stock {
-        width: 30vh;
+        width: 42vh;
         height: 6vh;
+        font-style: normal;
+        font-weight: 300;
     }
 
     .car-detail-img {
@@ -470,6 +472,11 @@ a {
 
     .divider-2 {
         margin-top: 1vh;
+    }
+
+    .others-cars {
+        margin: 0;
+        margin-top: 2vh;
     }
 }
 
@@ -527,4 +534,124 @@ p {
 .optional-item {
     font-size: 18px;
     text-align: center;
+}
+
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .container-car-detail {
+        height: auto;
+        padding: 3vh;
+    }
+
+    .car-detail-img {
+        width: 50vh;
+        height: 35vh;
+    }
+
+    .car-detail-info {
+        top: 55%;
+        left: 15vh;
+        flex-direction: row;
+    }
+
+    .left-side-car-detail {
+        width: 80vh;
+        padding: 3vh;
+    }
+
+    .right-side-car-detail {
+        width: 40vh;
+        height: 65vh;
+        margin-left: 1.5vh;
+        padding: 1.5vh;
+    }
+
+    .car-title {
+        font-size: 36px;
+    }
+
+    .title-color {
+        font-size: 36px;
+    }
+
+    .car-description {
+        font-size: 14px;
+        margin-left: 2vh;
+    }
+
+    .car-details-info-2 div p {
+        font-size: 14px;
+    }
+
+    .car-details-info-2 div h1 {
+        font-size: 14px;
+    }
+
+    .car-details-table th {
+        font-size: 14px;
+    }
+
+    .car-details-table td {
+        font-size: 14px;
+    }
+
+    .car-detail-divider {
+        width: 600px;
+    }
+
+    .car-detail-price {
+        font-size: 36px;
+    }
+
+    .car-detail-price-description {
+        font-size: 14px;
+    }
+
+    .car-detail-vendor {
+        font-size: 18px;
+    }
+
+    .button-whats {
+        width: 35vh;
+        height: 5%;
+    }
+
+    .button-send-message {
+        width: 35vh;
+        height: 6vh;
+        font-size: 20px;
+    }
+
+    .optional-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 1.5vh;
+    }
+
+    .others-cars {
+        margin: 3vh;
+        margin-top: 25vh;
+    }
+
+    .back-to-stock {
+        width: 20vh;
+        height: 3.5vh;
+        font-size: 14px;
+    }
+
+    .back-to-stock img {
+        width: 1.2vh;
+        height: 1.2vh;
+    }
+
+    .slick-prev {
+        left: 8px;
+    }
+
+    .slick-next {
+        right: 4vh;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+        font-size: 30px;
+    }
 }
