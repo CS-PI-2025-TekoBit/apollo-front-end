@@ -38,6 +38,7 @@ export default function GenericInput({
         <div className="input-container">
             {type === 'textarea' ? (
                 <>
+                    <label htmlFor="input-textarea" className={`${value.length > 0 ? 'label-text-area' : 'label-text-deactivate'}`}>{label}</label>
                     <textarea
                         id='input-textarea'
                         value={value}
@@ -47,7 +48,6 @@ export default function GenericInput({
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(value.length > 0)}
                     />
-                    <label htmlFor="input-textarea" className={`${value.length > 0 ? 'label-text-area' : 'label-text-deactivate'}`}>{label}</label>
                 </>
             ) : (
                 <>
