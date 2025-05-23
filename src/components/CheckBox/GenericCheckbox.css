@@ -1,3 +1,12 @@
+.generic-label-checkbox {
+    margin-top: 15px;
+    margin-bottom: 8px;
+    font-family: 'Alexandria', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
 .container-checkbox {
     display: flex;
     width: 80%;
@@ -9,18 +18,19 @@
     padding: 5px 0;
 }
 
-.container-checkbox:hover {
+.checkbox-name:hover {
     color: #029A11;
+
 }
 
-.generic-label-checkbox {
-    margin-top: 15px;
-    margin-bottom: 8px;
-    font-family: 'Alexandria', sans-serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
-}
+/* .container-checkbox:hover {
+    color: #029A11;
+} */
+
+/* .container-checkbox .checkmark:hover {
+    color: #029A11;
+    border: 2px solid #029A11;
+} */
 
 input[type="checkbox"] {
     display: none;
