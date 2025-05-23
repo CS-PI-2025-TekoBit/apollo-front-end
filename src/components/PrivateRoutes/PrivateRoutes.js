@@ -1,5 +1,5 @@
 // src/components/PrivateRoute.js
-import { Navigate, Outlet, useNavigate } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
 
 export function PrivateRoute({ allowedRoles }) {

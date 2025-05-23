@@ -2,7 +2,7 @@
   "data": [
     {
       "id_car": "1",
-      "model": "Mercedes-Benz A 200",
+      "model": "A 200",
       "mark": "Mercedes-Benz",
       "year": 2020,
       "kilometers": 20000,
@@ -45,11 +45,12 @@
         "Vidros elétricos",
         "Volante com regulagem de altura",
         "Ar condicionado"
-      ]
+      ],
+      "direction": "Direção elétrica"
     },
     {
       "id_car": "2",
-      "model": "Mercedes-Benz A 200",
+      "model": "A 200",
       "mark": "Mercedes-Benz",
       "year": 2020,
       "kilometers": 20000,
@@ -96,7 +97,7 @@
     },
     {
       "id_car": "3",
-      "model": "Mercedes-Benz A 200",
+      "model": "A 200",
       "mark": "Mercedes-Benz",
       "year": 2020,
       "kilometers": 20000,
@@ -139,6 +140,53 @@
         "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739129797/ikjjdlcasl9vwna65wzl.jpg",
         "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739130002/iq5riwpbdufubqpjpcvp.jpg",
         "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739130007/pumbya2zy2chfeds7l7h.jpg"
+      ]
+    },
+    {
+      "id_car": "4",
+      "model": "S 200",
+      "mark": "Mercedes-Benz",
+      "year": 2020,
+      "kilometers": 20000,
+      "condition": "Novo",
+      "transmission": "Automático",
+      "color": "Preto",
+      "price": 150000,
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vel magna molestie, interdum nunc non, dignissim metus. Cras convallis tincidunt cursus. Sed commodo tellus id ipsum iaculis, ac consectetur leo pharetra. Etiam fermentum volutpat est, sit amet dictum elit pellentesque nec. Nunc ullamcorper, turpis eget sagittis aliquam, tortor nulla molestie, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vel magna molestie, interdum nunc non, dignissim metus. Cras convallis tincidunt cursus. Sed commodo tellus id ipsum iaculis, ac consectetur leo pharetra. Etiam fermentum volutpat est, sit amet dictum elit pellentesque nec. Nunc ullamcorper, turpis eget sagittis aliquam, tortor nulla molestie.",
+      "motors": "2.0 Turbo",
+      "bodywork": "Hatch",
+      "fuel": "Gasolina",
+      "traction": "Dianteira",
+      "final_plate": "ABC1D23",
+      "trade": "Não",
+      "blindage": "Não",
+      "items": [
+        "Airbag",
+        "Alarme",
+        "Ar quente",
+        "Banco com regulagem de altura",
+        "Bancos em couro",
+        "Computador de bordo",
+        "Controle automático de velocidade",
+        "Controle de tração",
+        "Desembaçador traseiro",
+        "Encosto de cabeça traseiro",
+        "Freio ABS",
+        "GPS",
+        "Limpador traseiro",
+        "Retrovisor fotocromático",
+        "Retrovisores elétricos",
+        "Rodas de liga leve",
+        "Sensor de estacionamento",
+        "Travas elétricas",
+        "Vidros elétricos",
+        "Volante com regulagem de altura",
+        "Ar condicionado"
+      ],
+      "imgs": [
+        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739130762/jgtaqp5t9bwlpvcksnvp.jpg",
+        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1739130770/qkgu3kxajv6mkfslz3d4.jpg",
+        "https://res.cloudinary.com/dmlfcxheq/image/upload/v1740315317/okdwykpbe6c9skjueffn.jpg"
       ]
     }
   ]

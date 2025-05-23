@@ -19,7 +19,9 @@
 .right-side-stock {
     width: 80%;
     padding-left: 1vh;
-    /* background-color: red; */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .title-filters {
@@ -57,4 +59,102 @@
 
 .filters::-webkit-scrollbar-track {
     background-color: #1E1E1E;
+}
+
+.container-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0px;
+}
+
+@media (max-width: 768px) {
+    .container-stock {
+        flex-direction: column;
+        height: auto;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .left-side-stock {
+        width: 100%;
+    }
+
+    .right-side-stock {
+        width: 100%;
+    }
+
+    .input-search {
+        width: 100%;
+    }
+
+    .left-side-stock {
+        width: 93%;
+    }
+
+    .filters {
+        max-height: 80vh;
+        max-height: auto;
+        overflow-x: none;
+    }
+
+    .filters::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .filters::-webkit-scrollbar-thumb {
+        background-color: #303030;
+        border-radius: 4px;
+    }
+
+    .filters::-webkit-scrollbar-track {
+        background-color: #1E1E1E;
+    }
+
+    .container-stock {
+        overflow: hidden;
+    }
+
+    .filter-opening-mobile {
+        display: flex;
+        align-items: center;
+    }
+
+    .filter-icon {
+        width: 2vh;
+        height: 2vh;
+    }
+
+    .filter-button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        justify-content: center;
+        width: 40vh;
+        height: 5vh;
+        border: none;
+        background-color: #002E5D;
+        margin-bottom: 1vh;
+        color: #ffff;
+        margin: 1.5vh;
+        font-family: 'Alexandria', sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        border-radius: 1vh;
+    }
+
+    .filter-button span {
+        margin-left: 12px;
+        color: #FFF;
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+
+    .deactivate-filter {
+        display: none;
+    }
 }
