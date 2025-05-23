@@ -1,11 +1,30 @@
 import React from 'react'
 import './Header.css'
 import logo from '../../assets/imgs/logomarca.png'
-import { Clock, MagnifyingGlass, Phone, UserCircle, UserCircleGear, WhatsappLogo } from '@phosphor-icons/react'
+import { Clock, MagnifyingGlass, Phone, UserCircle, UserCircleGear, WhatsappLogo, Star, Chat } from '@phosphor-icons/react'
 import { useAuth } from '../../hooks/useAuth'
 import { Link } from 'react-router'
+import Swal from 'sweetalert2'
 export default function Header() {
     const { user, logout } = useAuth()
+    const ViewportHeight = window.innerHeight;
+
+    const handleLogout = () => {
+        Swal.fire({
+            title: 'Sair da conta',
+            text: 'Tem certeza que deseja sair?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sair',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logout()
+            }
+        })
+    }
     return (
         <>
             <header>
@@ -41,6 +60,15 @@ export default function Header() {
                     />
                 </div>
                 <div className="buttons-right">
+                    <Link to='/' className='btn-favorito-mensagem ' >
+                        <Star size={32} weight="regular" />
+                        <p>Favoritos</p>
+                    </Link>
+                    <Link to='/' className='btn-favorito-mensagem '>
+                        <Chat size={32} weight="regular" />
+                        <p>Mensagens</p>
+                    </Link>
+
                     {
                         user ? (
                             <div className='dropdown'>
@@ -50,7 +78,13 @@ export default function Header() {
                                 </span>
                                 <div className="dropdown-conteudo">
                                     <Link to={'/user'} className='dropdown-item'>Minha conta</Link>
-                                    <button onClick={logout}>Sair</button>
+                                    {ViewportHeight < 800 && (
+                                        <>
+                                            <Link to={'/'} className='dropdown-item'>Favoritos</Link>
+                                            <Link to={'/'} className='dropdown-item'>Mensagens</Link>
+                                        </>
+                                    )}
+                                    <button onClick={handleLogout}>Sair</button>
                                 </div>
                             </div>
                         ) : (
