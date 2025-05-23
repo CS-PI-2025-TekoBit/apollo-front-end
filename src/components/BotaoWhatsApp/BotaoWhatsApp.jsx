@@ -14,9 +14,9 @@ export default function BotaoWhatsApp() {
                 <p>Wagner</p>
                 <p>(44) 9 99153-5404</p>
             </div>
-            <div className="contato" onClick={() => abrirWhatsApp('5544991535404')}>
+            <div className="contato" onClick={() => abrirWhatsApp('55449999202840')}>
                 <p>José Luiz</p>
-                <p>(44) 9 99153-5404</p>
+                <p>(44) 9 9920-2840</p>
             </div>
             <div className="container">
                 <WhatsappLogo size={60} color="#fff" weight="duotone" />

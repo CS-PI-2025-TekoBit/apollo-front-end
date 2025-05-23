@@ -14,6 +14,7 @@ import { useCarsFiltered } from '../../../hooks/useCarsFiltered'
 import BotaoWhatsApp from "../../../components/BotaoWhatsApp/BotaoWhatsApp";
 import GenericLoader from "../../../components/GenericLoader/GenericLoader";
 import Card from "../../../components/Card/CardCars";
+import Maps from "../../../components/Maps/Maps";
 export default function CarDetail() {
     const { id } = useParams();
     const { car, isLoading } = useCarDetail(id);
@@ -277,7 +278,8 @@ export default function CarDetail() {
                                     </Slider>
                                 </div>
                             </div>
-                             <BotaoWhatsApp />
+                            <Maps />
+                            <BotaoWhatsApp />
                         </>
                     )}
                 </div >

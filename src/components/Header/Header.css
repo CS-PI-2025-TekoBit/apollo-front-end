@@ -46,12 +46,13 @@ header {
 }
 
 .li-horarios {
+    justify-content: center;
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-left: .9rem;
+    margin-left: .2rem;
     margin-top: 0.5rem;
-    gap: 0.5rem;
+    gap: 0.1rem;
 }
 
 .li-horarios p {
@@ -262,9 +263,19 @@ header {
     background-color: #0A301C;
 }
 
+.hover {
+    &:hover {
+        cursor: pointer;
+        background-color: #0A301C;
+    }
+}
 
 @media (max-width: 768px) {
-    .info, .input-container-header, .footer-header, .btn-favorito-mensagem {
+
+    .info,
+    .input-container-header,
+    .footer-header,
+    .btn-favorito-mensagem {
         display: none;
     }
 }
