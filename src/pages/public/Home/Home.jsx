@@ -26,8 +26,18 @@ export default function Home() {
         "Câmbio": [],
         "Direção": [],
         "Combustível": [],
-        "Carroceria": []
+        "Carroceria": [],
+        "Carros": [] //novos e usados
     });
+
+    const novoUsado = [{
+        "id": "1",
+        "name": "Novos"
+    },
+    {
+        "id": "2",
+        "name": "Usados"
+    }]
 
     const handleCheckboxChange = (label, optionId) => {
         setCheckboxStates((prev) => {
@@ -42,7 +52,7 @@ export default function Home() {
                 ...prev,
                 [label]: newSelections
             };
-            // console.log('Checkbox States:', updatedStates);
+            console.log('Checkbox States:', updatedStates);
             return updatedStates;
         });
     };
@@ -118,7 +128,7 @@ export default function Home() {
                 <>
                     <Header />
                     <main>
-                        <div className="container-stock ">
+                        <div className="container-stock " style={{ display: 'flex', flexDirection: 'row' }}>
                             <div className="filter-opening-mobile">
                                 <button className='filter-button' onClick={() => setFilterActive(!filterActive)}>
                                     {filterActive ?
@@ -171,6 +181,29 @@ export default function Home() {
                                         onChange={setAcceptsTrade}
                                         value={acceptsTrade}
                                     />
+
+                                    <h6 className='generic-label-checkbox'>Carros</h6>
+                                    <div className='container-checkbox'>
+                                        {novoUsado.map((option) => (
+                                            <label
+                                                key={option.id}
+                                                className="container-checkbox"
+                                            >
+                                                <span className="checkbox-name">{option.name}</span>
+                                                <input
+                                                    type="checkbox"
+                                                    name={`condition-${option.id}`}
+                                                    id={`condition-${option.id}`}
+                                                    value={option.value}
+                                                    checked={checkboxStates["Carros"]?.includes(option.id) || false}
+                                                    onChange={() => handleCheckboxChange("Carros", option.id)}
+                                                    className="checkbox"
+                                                />
+                                                <span className="checkmark"></span>
+                                            </label>
+                                        ))}
+                                    </div>
+
                                     <div className='container-inputs'>
                                         <GenericInput
                                             label="Ano"

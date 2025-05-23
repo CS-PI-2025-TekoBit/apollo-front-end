@@ -13,7 +13,7 @@ export default function GenericCheckbox({
                     key={option.id}
                     className="container-checkbox"
                 >
-                    {option.name}
+                    <span className="checkbox-name">{option.name}</span>
                     <input
                         type="checkbox"
                         name={`condition-${option.id}`}

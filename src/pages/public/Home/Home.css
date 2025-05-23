@@ -67,6 +67,10 @@
     margin-bottom: 0px;
 }
 
+
+
+
+
 @media (max-width: 768px) {
     .container-stock {
         flex-direction: column;
