@@ -33,15 +33,15 @@ export default function Header() {
                     <ul className="numeros">
                         <li className='li-telefone'>
                             <Phone size={30} color="#fff" weight="regular" />
-                            <p>(11) 99999-9999</p>
+                            <p>(44) 3423-1214</p>
                         </li>
-                        <li className='li-telefone'>
+                        <li className='li-telefone hover' onClick={() => window.open('https://wa.me/5544991535404?text=Olá, gostaria de mais informações sobre um veículo.', '_blank')}>
                             <WhatsappLogo size={30} color="#fff" weight="regular" />
-                            <p>(11) 99999-9999</p>
+                            <p>(44) 9 99153-5404</p>
                         </li>
-                        <li className='li-telefone'>
+                        <li className='li-telefone hover' onClick={() => window.open('https://wa.me/55449999202840?text=Olá, gostaria de mais informações sobre um veículo.', '_blank')}>
                             <WhatsappLogo size={30} color="#fff" weight="regular" />
-                            <p>(11) 99999-9999</p>
+                            <p>(44) 9 9920-2840</p>
                         </li>
                     </ul>
                     <div className='li-horarios'>
