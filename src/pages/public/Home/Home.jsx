@@ -4,6 +4,7 @@ import GenericCheckbox from '../../../components/CheckBox/GenericCheckbox'
 import Header from '../../../components/Header/Header'
 import Footer from '../../../components/Footer/Footer'
 import Maps from '../../../components/Maps/Maps'
+import BotaoWhatsApp from '../../../components/BotaoWhatsApp/BotaoWhatsApp'
 import './Home.css'
 import filter_active from '../../../assets/filter_1.svg';
 import filter_deactivate from '../../../assets/filter_2.svg';
@@ -305,10 +306,11 @@ export default function Home() {
                                     />
                                 ))}
                             </div>
-                        </div>
+                          </div>
                     </main>
                     <Maps />
                     <Footer />
+                    <BotaoWhatsApp />
                 </>
             }
         </>

@@ -11,7 +11,7 @@ import { useCarDetail } from "../../../hooks/useCarDetail";
 import { useEffect } from "react";
 import { useAllCars } from '../../../hooks/useAllCar'
 import { useCarsFiltered } from '../../../hooks/useCarsFiltered'
-
+import BotaoWhatsApp from "../../../components/BotaoWhatsApp/BotaoWhatsApp";
 import GenericLoader from "../../../components/GenericLoader/GenericLoader";
 import Card from "../../../components/Card/CardCars";
 export default function CarDetail() {
@@ -277,6 +277,7 @@ export default function CarDetail() {
                                     </Slider>
                                 </div>
                             </div>
+                             <BotaoWhatsApp />
                         </>
                     )}
                 </div >
