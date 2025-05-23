@@ -22,8 +22,18 @@ export default function Home() {
         "Câmbio": [],
         "Direção": [],
         "Combustível": [],
-        "Carroceria": []
+        "Carroceria": [],
+        "Carros": [] //novos e usados
     });
+
+    const novoUsado = [{
+        "id": "1",
+        "name": "Novos"
+    },
+    {
+        "id": "2",
+        "name": "Usados"
+    }]
 
     const handleCheckboxChange = (label, optionId) => {
         setCheckboxStates((prev) => {
@@ -38,7 +48,7 @@ export default function Home() {
                 ...prev,
                 [label]: newSelections
             };
-            // console.log('Checkbox States:', updatedStates);
+            console.log('Checkbox States:', updatedStates);
             return updatedStates;
         });
     };
@@ -148,6 +158,14 @@ export default function Home() {
                                         label="Aceita troca ?"
                                         onChange={setAcceptsTrade}
                                         value={acceptsTrade}
+                                    />
+
+
+                                    <GenericCheckbox
+                                        options={novoUsado}
+                                        label={"Carros"}
+                                        onChange={handleCheckboxChange}
+                                        checkedValues={checkboxStates["Carros"]}
                                     />
                                     <div className='container-inputs'>
                                         <GenericInput
