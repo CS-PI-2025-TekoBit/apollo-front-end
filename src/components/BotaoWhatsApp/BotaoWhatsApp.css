@@ -1,0 +1,41 @@
+.whatsapp-fixo {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.whatsapp-fixo:hover .contato {
+    display: flex;
+}
+
+.contato {
+    display: none;
+    flex-direction: column;
+    color: #fff;
+    background-color: #1AC420;
+    padding: 10px 15px;
+    border-radius: 30px;
+    text-align: center;
+    font-weight: 300;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.contato:hover {
+    background-color: #19aa1e;
+}
+
+.container {
+    background-color: #1AC420;
+    padding: 15px;
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin-right: 35px;
+    cursor: pointer;
+}
