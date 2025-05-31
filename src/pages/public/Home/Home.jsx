@@ -14,11 +14,12 @@ import { useAuth } from '../../../hooks/useAuth';
 import Card from '../../../components/Card/CardCars'
 import GenericInput from '../../../components/GenericInput/GenericInput';
 import GenericSelect from '../../../components/GenericSelect/GenericSelect'
-
+import { useNavigate } from 'react-router'
 export default function Home() {
     const { cars } = useAllCars()
     const { filtros, isLoading } = useFilters()
     const { user } = useAuth()
+    const navigate = useNavigate()
     const [filterActive, setFilterActive] = useState(false);
     const [acceptsTrade, setAcceptsTrade] = useState(null);
     const [hasArmor, setHasArmor] = useState(null);
@@ -119,6 +120,8 @@ export default function Home() {
         aplicarFiltros();
     }, [minYear, maxYear, minPrice, maxPrice, minKm, maxKm]);
 
+
+
     return (
         <>
             {isLoading === true ?
@@ -126,6 +129,7 @@ export default function Home() {
                     <p>Carregando</p>
                 </> :
                 <>
+                    {user?.role === 'ROLE_ADMIN' && navigate('/admin')}
                     <Header />
                     <main>
                         <div className="container-stock " style={{ display: 'flex', flexDirection: 'row' }}>
@@ -306,7 +310,7 @@ export default function Home() {
                                     />
                                 ))}
                             </div>
-                          </div>
+                        </div>
                     </main>
                     <Maps />
                     <Footer />
