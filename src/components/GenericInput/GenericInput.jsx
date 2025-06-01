@@ -8,6 +8,10 @@ export default function GenericInput({
     onChange,
     placeholder,
     mask = false,
+    required = false,
+    className = '',
+    classNameContainer = '',
+    name = '',
 }) {
     const [isFocused, setIsFocused] = useState(false);
     const [inputValue, setInputValue] = useState(
@@ -35,7 +39,7 @@ export default function GenericInput({
         }
     };
     return (
-        <div className="input-container">
+        <div className={`input-container ${classNameContainer} ${isFocused ? 'focused' : ''}`}>
             {type === 'textarea' ? (
                 <>
                     <label htmlFor="input-textarea" className={`${value.length > 0 ? 'label-text-area' : 'label-text-deactivate'}`}>{label}</label>
@@ -51,10 +55,12 @@ export default function GenericInput({
                 </>
             ) : (
                 <>
-                    <label htmlFor="input" className='label-input'>{label || '\u00A0'}</label>
+                    <label htmlFor="input" className='label-input'>{label || '\u00A0'} {required ? <span className='required'>*</span> : '\u00A0'}</label>
                     <input
                         id="input"
                         type={type}
+                        name={name}
+                        className={className ? className : ''}
                         value={inputValue}
                         onChange={handleInputChange}
                         placeholder={placeholder}

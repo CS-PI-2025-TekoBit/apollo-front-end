@@ -120,7 +120,11 @@ export default function Home() {
         aplicarFiltros();
     }, [minYear, maxYear, minPrice, maxPrice, minKm, maxKm]);
 
-
+    useEffect(() => {
+        if (user?.role === "ROLE_ADMIN") {
+            navigate('/admin')
+        }
+    }, [user])
 
     return (
         <>
