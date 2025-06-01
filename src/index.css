@@ -210,3 +210,10 @@ html {
 .odd-row {
   background-color: #ffffff !important;
 }
+
+
+@media (max-width: 1440px) {
+  .p-datatable-table {
+    min-width: 140vh !important;
+  }
+}

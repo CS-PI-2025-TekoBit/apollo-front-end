@@ -14,9 +14,11 @@ import GenericRegister from '../../../components/GenericRegister/GenericRegister
 import Api from '../../../api/api';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { useQueryClient } from '@tanstack/react-query';
 function Motors() {
     const { motors, isLoading } = useMotors()
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const dtCadBodyTemplate = (rowData) => {
         return (
             rowData.dt_create ? new Date(rowData.dt_create).toLocaleDateString('pt-BR') : 'N/A'
@@ -36,7 +38,7 @@ function Motors() {
                                 pageName: `022 - Edição de motor`,
                                 pageTitle: 'Editar Motor',
                                 labelNameForm: 'Nome do Motor',
-                                routeEdit: '/motors/update',
+                                routeEdit: '/motors/edit',
                                 initialData: {
                                     name: rowData.name,
                                     status: rowData.status,
@@ -51,7 +53,7 @@ function Motors() {
                     label='Excluir'
                     onClick={() => {
                         Swal.fire({
-                            title: 'Exlcuir motor',
+                            title: 'Excluir motor',
                             text: `Tem certeza que deseja excluir o motor ${rowData.name}?`,
                             icon: 'warning',
                             showCancelButton: true,
@@ -65,13 +67,16 @@ function Motors() {
                                 popup: 'sweet-alert-zindex'
                             },
                             cancelButtonText: 'Cancelar'
-                        }).then((result) => {
+                        }).then(async (result) => {
                             if (result.isConfirmed) {
                                 toast.success(`Motor ${rowData.name} excluído com sucesso!`);
-                                // const result = Api.post('/motors/delete', { id_motor: rowData.id_motor });
+                                return
+                                // const result = await Api.delete(`/motors/delete/${rowData.id_motor}`);
+                                // console.log('result', result);
                                 // if (result.status === 200) {
                                 //     toast.success('Motor excluído com sucesso!');
-                                //     window.location.reload();
+                                //     await queryClient.invalidateQueries(['motors']);
+                                //     // window.location.reload();
                                 //     return
                                 // } else {
                                 //     toast.error(`Erro ao excluir motor. Tente novamente. ${result.error}`);
@@ -91,18 +96,6 @@ function Motors() {
     const rowClassName = (data, index) => {
         return index % 2 === 0 ? 'even-row' : 'odd-row';
     };
-    const onEdit = (formData) => {
-        console.log('Editar motor', formData);
-        // const result = Api.post('/motors/update', formData);
-        // if (result.status === 200) {
-        //     toast.success('Motor atualizado com sucesso!');
-        //     navigate('/admin/motors');
-        //     return
-        // } else {
-        //     toast.error(`Erro ao atualizar motor. Tente novamente. ${result.error}`);
-        //     return
-        // }
-    }
     return (
         isLoading ? (
             <GenericLoader />

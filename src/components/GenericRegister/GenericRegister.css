@@ -144,3 +144,46 @@
 .required {
     color: #9B1605;
 }
+
+@media (max-width: 1200px) {
+    .content-cad {
+        height: auto;
+        padding: 1.5vh;
+    }
+
+    .generic-form {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 2vh;
+    }
+
+    .w-generic {
+        width: 100%;
+        max-width: 23rem;
+    }
+
+    .generic-form-input {
+        width: 100% !important;
+    }
+
+    .radio-buttons {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .form-action {
+        flex-direction: column;
+        gap: 1.5vh;
+        padding: 2vh;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .btn-generic {
+        width: 100%;
+        max-width: 167px;
+    }
+}

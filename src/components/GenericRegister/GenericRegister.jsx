@@ -1,7 +1,7 @@
 import { ArrowLeft } from 'lucide-react'
 import { Button } from 'primereact/button';
 import React, { use, useState } from 'react'
-import { NavLink, useLocation } from 'react-router';
+import { NavLink, useLocation, useNavigate } from 'react-router';
 import GenericInput from '../GenericInput/GenericInput'
 import { RadioButton } from 'primereact/radiobutton';
 import { TrashIcon } from '@phosphor-icons/react';
@@ -9,6 +9,8 @@ import { X } from 'lucide-react';
 import { Check } from 'lucide-react';
 import './GenericRegister.css';
 import { toast } from 'react-toastify';
+import Api from '../../api/api';
+import { useQueryClient } from '@tanstack/react-query';
 
 function GenericRegister({
     pageName = '001 - Cadastro Genérico',
@@ -18,6 +20,8 @@ function GenericRegister({
     onEdit = () => console.log('Editar'),
 }) {
     const location = useLocation();
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const {
         pageName: statePageName,
         pageTitle: statePageTitle,
@@ -72,15 +76,16 @@ function GenericRegister({
         }
         return true
     }
-    const validateAndSave = () => {
+    const validateAndSave = async () => {
         if (validateForm()) {
             if (stateId) {
                 toast.success('Motor atualizado com sucesso!');
                 window.history.back();
                 return
-                // const result = Api.post(stateRouteEdit, formData);
+                // const result = await Api.put(`${stateRouteEdit}/${stateId}`, formData);
                 // if (result.status === 200) {
                 //     toast.success('Motor atualizado com sucesso!');
+                //     await queryClient.invalidateQueries(['motors']);
                 //     navigate('/admin/motors');
                 //     return
                 // } else {
@@ -132,9 +137,9 @@ function GenericRegister({
                             <RadioButton
                                 inputId="statusDeactivated"
                                 name="status"
-                                value="inactive"
+                                value="deactivate"
                                 onChange={(e) => handleInputChange(e)}
-                                checked={formData.status === 'inactive'}
+                                checked={formData.status === 'deactivate'}
                             />
                             <label htmlFor="statusDeactivated">Desativado</label>
                         </div>
