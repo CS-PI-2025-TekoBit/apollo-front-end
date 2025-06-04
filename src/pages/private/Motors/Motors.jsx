@@ -34,7 +34,7 @@ function Motors() {
                     onClick={() =>
                         navigate('/admin/motors/register', {
                             state: {
-                                id_motor: rowData.id_motor,
+                                id: rowData.id_motor,
                                 pageName: `022 - Edição de motor`,
                                 pageTitle: 'Editar Motor',
                                 labelNameForm: 'Nome do Motor',
