@@ -1,0 +1,34 @@
+{
+    "colors": [
+        {
+            "id_colors": 1,
+            "name": "Branco",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_colors": 2,
+            "name": "Vermelho",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_colors": 3,
+            "name": "Prata",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_colors": 4,
+            "name": "Preto",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_colors": 5,
+            "name": "Cinza",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        }
+    ]
+}

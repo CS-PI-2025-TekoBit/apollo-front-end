@@ -24,7 +24,7 @@ function ColorsRegister() {
     };
 
     return (
-        <GenericRegister labelNameForm='Nome da Cor' onSalvar={onSalvar} pageName='013 - Cadastro de Cor' pageTitle='Cadastro de cor' backRouter='/admin/colors' name='Cor'/>
+        <GenericRegister labelNameForm='Nome da Cor' onSalvar={onSalvar} pageName='011 - Cadastro de Cor' pageTitle='Cadastro de cor' backRouter='/admin/colors' name='Cor'/>
     );
 }
 
