@@ -1,0 +1,76 @@
+{
+    "motors": [
+        {
+            "id_motor": 1,
+            "name": "Motor A",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_motor": 2,
+            "name": "Motor B",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "inactive"
+        },
+        {
+            "id_motor": 3,
+            "name": "Motor C",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_motor": 4,
+            "name": "Motor A",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_motor": 5,
+            "name": "Motor B",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "inactive"
+        },
+        {
+            "id_motor": 6,
+            "name": "Motor C",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_motor": 7,
+            "name": "Motor A",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_motor": 8,
+            "name": "Motor B",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "inactive"
+        },
+        {
+            "id_motor": 9,
+            "name": "Motor C",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_motor": 10,
+            "name": "Motor A",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_motor": 11,
+            "name": "Motor B",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "inactive"
+        },
+        {
+            "id_motor": 12,
+            "name": "Motor C",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        }
+    ]
+}

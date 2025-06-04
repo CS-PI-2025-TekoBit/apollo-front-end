@@ -19,14 +19,16 @@ export default function AppSidebar({ children }) {
         navigateTo(`/admin${path}`)
     };
 
+    const isActive = (path) => location.pathname.includes(path);
+
     const menuItems = [
-        { label: collapsed ? '' : 'Carros', icon: <CarProfile weight='fill' size={collapsed ? 27 : 25} color={location.pathname === '/admin/cars' ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/cars') },
-        { label: collapsed ? '' : 'Cores', icon: <Palette weight='fill' size={collapsed ? 25 : 25} color={location.pathname === '/admin/colors' ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/colors') },
-        { label: collapsed ? '' : 'Motores', icon: <Engine weight='fill' size={collapsed ? 25 : 25} color={location.pathname === '/admin/motors' ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/motors') },
-        { label: collapsed ? '' : 'Combustíveis', icon: <Fuel weight='fill' size={collapsed ? 25 : 25} color={location.pathname === '/admin/fuel' ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/fuel') },
-        { label: collapsed ? '' : 'Carrocerias', icon: <Car weight='fill' size={collapsed ? 25 : 25} color={location.pathname === '/admin/chassis' ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/chassis') },
-        { label: collapsed ? '' : 'Transmissões', icon: <Gear weight='fill' size={collapsed ? 25 : 25} color={location.pathname === '/admin/transmission' ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/transmission') },
-        { label: collapsed ? '' : 'Direções', icon: <SteeringWheel weight='fill' size={collapsed ? 25 : 25} color={location.pathname === '/admin/steering' ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/steering') },
+        { label: collapsed ? '' : 'Carros', icon: <CarProfile weight='fill' size={collapsed ? 27 : 25} color={isActive('/admin/cars') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/cars') },
+        { label: collapsed ? '' : 'Cores', icon: <Palette weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/colors') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/colors') },
+        { label: collapsed ? '' : 'Motores', icon: <Engine weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/motors') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/motors') },
+        { label: collapsed ? '' : 'Combustíveis', icon: <Fuel weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/fuel') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/fuel') },
+        { label: collapsed ? '' : 'Carrocerias', icon: <Car weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/chassis') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/chassis') },
+        { label: collapsed ? '' : 'Transmissões', icon: <Gear weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/transmission') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/transmission') },
+        { label: collapsed ? '' : 'Direções', icon: <SteeringWheel weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/steering') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/steering') },
     ];
     const handleLogout = () => {
         // Swal.fire({
