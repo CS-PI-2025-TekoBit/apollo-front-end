@@ -10,7 +10,7 @@ export default function GenericChoice({ label, onChange, value }) {
                     Sim
                 </button>
 
-                <button className={value === false ? "button-false" : "button-default-rigth"} onClick={() => onChange(false)}>
+                <button className={value === false ? "button-false" : "button-default-right"} onClick={() => onChange(false)}>
                     Não
                 </button>
 
