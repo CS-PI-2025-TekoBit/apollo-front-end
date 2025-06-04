@@ -1,0 +1,215 @@
+{
+    "marks": [
+        {
+            "id": "1",
+            "name": "Mercedes-Benz"
+        },
+        {
+            "id": "2",
+            "name": "audi"
+        },
+        {
+            "id": "3",
+            "name": "bmw"
+        },
+        {
+            "id": "4",
+            "name": "mc laren"
+        },
+        {
+            "id": "5",
+            "name": "ferrari"
+        },
+        {
+            "id": "6",
+            "name": "porsche"
+        },
+        {
+            "id": "7",
+            "name": "Volvo"
+        }
+    ],
+    "models": [
+        {
+            "mark": "Mercedes-Benz",
+            "models": [
+                "Todos",
+                "classe a",
+                "C 63 AMG",
+                "S 450"
+            ]
+        }
+    ],
+    "motors": [
+        {
+            "id": "1",
+            "name": "1.0"
+        },
+        {
+            "id": "2",
+            "name": "1.4"
+        },
+        {
+            "id": "3",
+            "name": "1.6"
+        },
+        {
+            "id": "4",
+            "name": "2.0"
+        },
+        {
+            "id": "5",
+            "name": "3.0"
+        },
+        {
+            "id": "6",
+            "name": "4.0"
+        },
+        {
+            "id": "7",
+            "name": "V6"
+        },
+        {
+            "id": "8",
+            "name": "V8"
+        }
+    ],
+    "colors": [
+        {
+            "id": "1",
+            "name": "Preto"
+        },
+        {
+            "id": "2",
+            "name": "Branco"
+        },
+        {
+            "id": "3",
+            "name": "Cinza"
+        },
+        {
+            "id": "4",
+            "name": "Prata"
+        },
+        {
+            "id": "5",
+            "name": "Vermelho"
+        },
+        {
+            "id": "6",
+            "name": "Azul"
+        },
+        {
+            "id": "7",
+            "name": "Verde"
+        },
+        {
+            "id": "8",
+            "name": "Amarelo"
+        },
+        {
+            "id": "9",
+            "name": "Rosa"
+        },
+        {
+            "id": "10",
+            "name": "Laranja"
+        },
+        {
+            "id": "11",
+            "name": "Marrom"
+        }
+    ],
+    "transmission": [
+        {
+            "id": "1",
+            "name": "Manual"
+        },
+        {
+            "id": "2",
+            "name": "Automático"
+        },
+        {
+            "id": "3",
+            "name": "Semi-automático"
+        },
+        {
+            "id": "4",
+            "name": "Automatizado"
+        }
+    ],
+    "direction": [
+        {
+            "id": "1",
+            "name": "Hidráulica"
+        },
+        {
+            "id": "2",
+            "name": "Elétrica"
+        },
+        {
+            "id": "3",
+            "name": "Mecânica"
+        },
+        {
+            "id": "4",
+            "name": "Eletro-hidráulica"
+        }
+    ],
+    "fuel": [
+        {
+            "id": "1",
+            "name": "Gasolina"
+        },
+        {
+            "id": "2",
+            "name": "Álcool"
+        },
+        {
+            "id": "3",
+            "name": "Diesel"
+        },
+        {
+            "id": "4",
+            "name": "Flex"
+        },
+        {
+            "id": "5",
+            "name": "Elétrico"
+        },
+        {
+            "id": "6",
+            "name": "Híbrido"
+        }
+    ],
+    "bodywork": [
+        {
+            "id": "1",
+            "name": "Bugy"
+        },
+        {
+            "id": "2",
+            "name": "Perua"
+        },
+        {
+            "id": "3",
+            "name": "SUV"
+        },
+        {
+            "id": "4",
+            "name": "Sedã"
+        },
+        {
+            "id": "5",
+            "name": "Hatch"
+        },
+        {
+            "id": "6",
+            "name": "Coupé"
+        },
+        {
+            "id": "7",
+            "name": "Pick-up"
+        }
+    ]
+}
