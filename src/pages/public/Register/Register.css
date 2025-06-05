@@ -6,6 +6,9 @@
     height: 90%;
 }
 
-.register-btn-enter{
+.register-btn{
+    display:flex;
+    gap: 25px;
     margin-top: 25px;
+    
 }

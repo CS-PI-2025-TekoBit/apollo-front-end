@@ -94,7 +94,7 @@ function Register() {
             return;
         }
 
-        toast.success("Cadastro válido! (simulado)");
+        toast.success("Cadastro Realizado!");
         setSending(false);
     };
 
@@ -230,9 +230,15 @@ function Register() {
                         </div>
                         {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
 
-                        <button type="submit" className="btn-enter register-btn-enter" disabled={sending}>
-                            <span>Cadastrar</span>
-                        </button>
+                        <div class="register-btn">
+                            <button type="submit" className="btn-enter" disabled={sending}>
+                                <span>voltar</span>
+                            </button>
+
+                            <button type="submit" className="btn-enter" disabled={sending}>
+                                <span>Cadastrar</span>
+                            </button>
+                        </div>
 
                     </form>
                     <span className="version">Versão {VERSION_APP}</span>
