@@ -4,6 +4,7 @@ import { User, Key } from '@phosphor-icons/react';
 import { toast } from 'react-toastify';
 import { VERSION_APP } from '../../../utils/constants';
 import './Register.css';
+import { useEffect } from 'react';
 
 function Register() {
     const navigate = useNavigate();
@@ -38,6 +39,16 @@ function Register() {
             }
         }
 
+        if (!form.user.trim()) {
+            errs.user = "Campo usuário é obrigatório";
+        } else if (form.user.length < 4) {
+            errs.user = "Usuário deve ter no mínimo 4 caracteres";
+        } else if (form.user.length > 15) {
+            errs.user = "Usuário deve ter no máximo 15 caracteres";
+        } else if (!/^[a-zA-Z0-9]*$/.test(form.user)) {
+            errs.user = "Usuário deve conter apenas letras e números";
+        }
+
         if (!form.email.trim()) {
             errs.email = "Campo email é obrigatório";
         } else if (!form.email.includes('@')) {
@@ -49,6 +60,26 @@ function Register() {
             } else if (!domain.includes('.')) {
                 errs.email = "Domínio inválido. Ex: exemplo@dominio.com";
             }
+        }
+
+        if (!form.password.trim()) {
+            errs.password = "Campo senha é obrigatório";
+        } else {
+            if (form.password.length < 8 || form.password.length > 20) {
+                errs.password = "A senha deve ter entre 8 e 20 caracteres";
+            } else if (!/[0-9]/.test(form.password)) {
+                errs.password = "A senha deve conter ao menos 1 número";
+            } else if (!/[!@#$%^&*(),.?":{}|<>_\-+=~`]/.test(form.password)) {
+                errs.password = "A senha deve conter ao menos 1 caractere especial";
+            } else if (!/[A-Z]/.test(form.password)) {
+                errs.password = "A senha deve conter ao menos 1 letra maiúscula";
+            }
+        }
+
+        if (!form.confirmPassword.trim()) {
+            errs.confirmPassword = "Campo confirmar senha é obrigatório";
+        } else if (form.confirmPassword !== form.password) {
+            errs.confirmPassword = "As senhas não coincidem";
         }
 
         setErrors(errs);
@@ -92,6 +123,21 @@ function Register() {
             setForm((prev) => ({ ...prev, phone: formatted }));
         }
     };
+
+    useEffect(() => {
+        const user = form.user;
+        let msg = '';
+
+        if (user.length > 0 && user.length < 4) {
+            msg = 'Usuário deve ter no mínimo 4 caracteres';
+        } else if (user.length > 15) {
+            msg = 'Usuário deve ter no máximo 15 caracteres';
+        } else if (user && !/^[a-zA-Z0-9]*$/.test(user)) {
+            msg = 'Usuário deve conter apenas letras e números';
+        }
+
+        setErrors((prev) => ({ ...prev, user: msg }));
+    }, [form.user]);
 
     return (
         <main className="login">
@@ -137,8 +183,10 @@ function Register() {
                                 placeholder="Nome de usuário"
                                 value={form.user}
                                 onChange={(e) => onChange('user', e)}
+                                className={`${errors.user ? 'error-input' : ''}`}
                             />
                         </div>
+                        {errors.user && <span className="error">{errors.user}</span>}
 
                         <div className="input-form">
                             <label htmlFor="email">Email</label>
@@ -163,8 +211,10 @@ function Register() {
                                 placeholder="Digite sua senha"
                                 value={form.password}
                                 onChange={(e) => onChange('password', e)}
+                                className={`${errors.password ? 'error-input' : ''}`}
                             />
                         </div>
+                        {errors.password && <span className="error">{errors.password}</span>}
 
                         <div className="input-form">
                             <label htmlFor="confirmPassword">Confirmar Senha</label>
@@ -175,16 +225,15 @@ function Register() {
                                 placeholder="Confirme sua senha"
                                 value={form.confirmPassword}
                                 onChange={(e) => onChange('confirmPassword', e)}
+                                className={`${errors.confirmPassword ? 'error-input' : ''}`}
                             />
                         </div>
+                        {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
 
-                        <button type="submit" className="btn-enter" disabled={sending}>
+                        <button type="submit" className="btn-enter register-btn-enter" disabled={sending}>
                             <span>Cadastrar</span>
                         </button>
 
-                        <p className="text-register">
-                            Já tem conta? <Link to="/">Voltar para login</Link>
-                        </p>
                     </form>
                     <span className="version">Versão {VERSION_APP}</span>
                 </div>

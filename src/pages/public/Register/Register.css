@@ -1,7 +1,11 @@
 .register-left {
-    height: 80%;
+    height: 90%;
 }
 
 .register-right {
-    height: 80%;
+    height: 90%;
+}
+
+.register-btn-enter{
+    margin-top: 25px;
 }
