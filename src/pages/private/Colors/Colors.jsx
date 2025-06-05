@@ -27,10 +27,6 @@ function Colors() {
         );
     }
 
-    const statusBodyTemplate = (rowData) => {
-        return rowData.status === 'active' ? "Ativo" : "Inativo";
-    }
-
     const rowClassName = (data, index) => {
         return index % 2 === 0 ? 'even-row' : 'odd-row';
     };
@@ -121,7 +117,14 @@ function Colors() {
                             </NavLink>
                         </div>
                     </div>
-                    {/* data table aqui */}
+                    <div className="card espacing-table">
+                        <DataTable value={colors} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
+                            <Column field="id_colors" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                            <Column header="Nome da Cor" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
+                            <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
+                            <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                        </DataTable>
+                    </div>
                 </section>
             </main >
         )
