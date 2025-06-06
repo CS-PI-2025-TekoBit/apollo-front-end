@@ -8,6 +8,11 @@ import { useEffect } from 'react';
 
 function Register() {
     const navigate = useNavigate();
+
+    const handleBack = () => {
+        navigate('/');
+    };
+
     const [form, setForm] = useState({
         name: '',
         user: '',
@@ -27,11 +32,11 @@ function Register() {
         let errs = {};
 
         if (!form.name.trim()) {
-            errs.name = "Campo nome é obrigatório";
+            errs.name = "Nome é obrigatório";
         }
 
         if (!form.phone.trim()) {
-            errs.phone = "Campo telefone é obrigatório";
+            errs.phone = "Telefone é obrigatório";
         } else {
             const phoneFormat = /^\(\d{2}\)\s\d{1}\s\d{4}-\d{4}$/;
             if (!phoneFormat.test(form.phone)) {
@@ -40,7 +45,7 @@ function Register() {
         }
 
         if (!form.user.trim()) {
-            errs.user = "Campo usuário é obrigatório";
+            errs.user = "Usuário é obrigatório";
         } else if (form.user.length < 4) {
             errs.user = "Usuário deve ter no mínimo 4 caracteres";
         } else if (form.user.length > 15) {
@@ -50,7 +55,7 @@ function Register() {
         }
 
         if (!form.email.trim()) {
-            errs.email = "Campo email é obrigatório";
+            errs.email = "Email é obrigatório";
         } else if (!form.email.includes('@')) {
             errs.email = "Inclua um @ no email";
         } else {
@@ -63,7 +68,7 @@ function Register() {
         }
 
         if (!form.password.trim()) {
-            errs.password = "Campo senha é obrigatório";
+            errs.password = "Senha é obrigatório";
         } else {
             if (form.password.length < 8 || form.password.length > 20) {
                 errs.password = "A senha deve ter entre 8 e 20 caracteres";
@@ -77,7 +82,7 @@ function Register() {
         }
 
         if (!form.confirmPassword.trim()) {
-            errs.confirmPassword = "Campo confirmar senha é obrigatório";
+            errs.confirmPassword = "Confirmar senha é obrigatório";
         } else if (form.confirmPassword !== form.password) {
             errs.confirmPassword = "As senhas não coincidem";
         }
@@ -146,7 +151,7 @@ function Register() {
                 <div className="login-right register-right">
                     <h1>Cadastro</h1>
                     <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <div className="input-form">
+                        <div className="input-form register-input-form">
                             <label htmlFor="name">Nome Completo</label>
                             <span className="icon"><User size={24} color="black" /></span>
                             <input
@@ -158,9 +163,9 @@ function Register() {
                                 className={`${errors.name ? 'error-input' : ''}`}
                             />
                         </div>
-                        {errors.name && <span className="error">{errors.name}</span>}
+                        {errors.name && <span className="register-error">{errors.name}</span>}
 
-                        <div className="input-form">
+                        <div className="input-form register-input-form">
                             <label htmlFor="phone">Telefone</label>
                             <span className="icon"><User size={24} color="black" /></span>
                             <input
@@ -172,9 +177,9 @@ function Register() {
                                 className={`${errors.phone ? 'error-input' : ''}`}
                             />
                         </div>
-                        {errors.phone && <span className="error">{errors.phone}</span>}
+                        {errors.phone && <span className="register-error">{errors.phone}</span>}
 
-                        <div className="input-form">
+                        <div className="input-form register-input-form">
                             <label htmlFor="user">Usuário</label>
                             <span className="icon"><User size={24} color="black" /></span>
                             <input
@@ -186,9 +191,9 @@ function Register() {
                                 className={`${errors.user ? 'error-input' : ''}`}
                             />
                         </div>
-                        {errors.user && <span className="error">{errors.user}</span>}
+                        {errors.user && <span className="register-error">{errors.user}</span>}
 
-                        <div className="input-form">
+                        <div className="input-form register-input-form">
                             <label htmlFor="email">Email</label>
                             <span className="icon"><User size={24} color="black" /></span>
                             <input
@@ -200,9 +205,9 @@ function Register() {
                                 className={`${errors.email ? 'error-input' : ''}`}
                             />
                         </div>
-                        {errors.email && <span className="error">{errors.email}</span>}
+                        {errors.email && <span className="register-error">{errors.email}</span>}
 
-                        <div className="input-form">
+                        <div className="input-form register-input-form">
                             <label htmlFor="password">Senha</label>
                             <span className="icon"><Key size={24} color="black" /></span>
                             <input
@@ -214,9 +219,9 @@ function Register() {
                                 className={`${errors.password ? 'error-input' : ''}`}
                             />
                         </div>
-                        {errors.password && <span className="error">{errors.password}</span>}
+                        {errors.password && <span className="register-error">{errors.password}</span>}
 
-                        <div className="input-form">
+                        <div className="input-form register-input-form">
                             <label htmlFor="confirmPassword">Confirmar Senha</label>
                             <span className="icon"><Key size={24} color="black" /></span>
                             <input
@@ -228,10 +233,10 @@ function Register() {
                                 className={`${errors.confirmPassword ? 'error-input' : ''}`}
                             />
                         </div>
-                        {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
+                        {errors.confirmPassword && <span className="register-error">{errors.confirmPassword}</span>}
 
                         <div class="register-btn">
-                            <button type="submit" className="btn-enter" disabled={sending}>
+                            <button type="buttom" className="btn-enter" onClick={handleBack} disabled={sending}>
                                 <span>voltar</span>
                             </button>
 
