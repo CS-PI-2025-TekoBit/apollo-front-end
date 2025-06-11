@@ -21,7 +21,7 @@ function MotorsRegister() {
         window.history.back();
     }
     return (
-        <GenericRegister labelNameForm='Nome do Motor' onSalvar={onSalvar} pageName='012 - Cadastro de Motor' pageTitle='Cadastro de motor' />
+        <GenericRegister labelNameForm='Nome do Motor' onSalvar={onSalvar} pageName='012 - Cadastro de Motor' pageTitle='Cadastro de motor' backRouter='/admin/motors' name='Motor' />
     )
 }
 
