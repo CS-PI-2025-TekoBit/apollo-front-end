@@ -125,7 +125,7 @@ function Colors() {
                             <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
                         </DataTable>
                     </div>
-                </section>
+                </section> 
             </main >
         )
     );
