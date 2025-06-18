@@ -1,0 +1,40 @@
+{
+    "fuel": [
+        {
+            "id_fuel": 1,
+            "name": "Etanol",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_fuel": 2,
+            "name": "Diesel",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_fuel": 3,
+            "name": "S10",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_fuel": 4,
+            "name": "Metano",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_fuel": 5,
+            "name": "Gasolina",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_fuel": 6,
+            "name": "GNV",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        }
+    ]
+}
