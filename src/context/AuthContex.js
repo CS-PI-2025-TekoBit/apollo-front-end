@@ -31,6 +31,9 @@ function AuthContextProvider({ children }) {
 
         const user_cad = users.users.find(u => (u.email === user || u.name === user) && u.password === password);
 
+        // const user_cad = Api.post("/auth/login", {"name":user,"password":password});
+        // console.log(user_cad);
+
         if (user_cad) {
             const token = user_cad.jwt;
             document.cookie = `token=${token}; path=/; max-age=3600`;
