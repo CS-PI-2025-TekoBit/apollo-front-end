@@ -1,24 +1,20 @@
-import { GasPump, Palette } from '@phosphor-icons/react';
+import { Gear, Palette } from '@phosphor-icons/react';
 import { Search } from 'lucide-react';
 import { Button } from 'primereact/button';
 import React from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import GenericLoader from '../../../components/GenericLoader/GenericLoader';
-import { useColors } from '../../../hooks/useColors';
 import { Edit } from 'lucide-react';
-import { Delete } from 'lucide-react';
 import { XCircle } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router';
-import GenericRegister from '../../../components/GenericRegister/GenericRegister';
-import Api from '../../../api/api';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { useQueryClient } from '@tanstack/react-query';
-import { useFuel } from '../../../hooks/useFuel';
+import { useTransmission } from '../../../hooks/useTransmission';
 
-function Fuel() {
-    const { fuel, isLoading } = useFuel();
+function Transmission() {
+    const { transmission, isLoading } = useTransmission();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -40,13 +36,13 @@ function Fuel() {
                     className="btn-edit"
                     label='Editar'
                     onClick={() =>
-                        navigate('/admin/fuel/register', {
+                        navigate('/admin/Transmission/register', {
                             state: {
-                                id: rowData.id_fuel,
-                                pageName: `023 - Edição de Combustível`,
-                                pageTitle: 'Editar Combustível',
-                                labelNameForm: 'Nome do Combustível',
-                                routeEdit: '/fuel/edit',
+                                id: rowData.id_transmisson,
+                                pageName: `023 - Edição de Transmissão`,
+                                pageTitle: 'Editar Transmissão',
+                                labelNameForm: 'Nome da Transmissão',
+                                routeEdit: '/transmission/edit',
                                 initialData: {
                                     name: rowData.name,
                                     status: rowData.status,
@@ -61,8 +57,8 @@ function Fuel() {
                     label='Excluir'
                     onClick={() => {
                         Swal.fire({
-                            title: 'Excluir Combustível',
-                            text: `Tem certeza que deseja excluir o Combustível ${rowData.name}?`,
+                            title: 'Excluir Transmissão',
+                            text: `Tem certeza que deseja excluir a Transmissão ${rowData.name}?`,
                             icon: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#3085d6',
@@ -77,7 +73,7 @@ function Fuel() {
                             cancelButtonText: 'Cancelar'
                         }).then(async (result) => {
                             if (result.isConfirmed) {
-                                toast.success(`Combustível ${rowData.name} excluída com sucesso!`);
+                                toast.success(`Transmissão ${rowData.name} excluída com sucesso!`);
                                 return
                             }
                         })
@@ -95,11 +91,11 @@ function Fuel() {
         ) : (
             <main style={{ position: 'relative', padding: '20px', zIndex: 20000 }} className='w-full'>
                 <section className="header-list w-full">
-                        <h3 className="text-header">004 - Listagem de Combustível</h3>
+                    <h3 className="text-header">004 - Listagem de Transmissão</h3>
                     <br />
                 </section>
                 <section className="title-page">
-                        <div style={{ padding: '20px' }}> <h1 className='title'> Listagem de Combustível</h1></div>
+                    <div style={{ padding: '20px' }}> <h1 className='title'> Listagem de Transmissão</h1></div>
                 </section>
                 <section className="content-list">
                     <div className="search-and-include">
@@ -108,20 +104,20 @@ function Fuel() {
                             <Button icon={<Search size={20} color='white' />} iconPos='left' className="button-search" />
                         </div>
                         <div className="include">
-                            <NavLink to="/admin/fuel/register">
+                            <NavLink to="/admin/transmission/register">
                                 <Button
-                                        label="Cadastrar Combustível"
-                                        icon={<GasPump size={30} weight='fill' />}
+                                    label="Cadastrar Transmissão"
+                                        icon={<Gear size={30} weight='fill' />}
                                     className="button-include"
-                                        onClick={() => console.log('Cadastrar Combustível')}
+                                    onClick={() => console.log('Cadastrar Transmissão')}
                                 />
                             </NavLink>
                         </div>
                     </div>
                     <div className="card espacing-table">
-                            <DataTable value={fuel} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                            <Column field="id_fuel" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
-                            <Column header="Nome do Combustível" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
+                        <DataTable value={transmission} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
+                            <Column field="id_transmisson" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                            <Column header="Nome da Transmissão" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
                             <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
                             <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
                         </DataTable>
@@ -132,5 +128,5 @@ function Fuel() {
     );
 }
 
-export default Fuel;
+export default Transmission;
 
