@@ -236,7 +236,7 @@ function Register() {
                         {errors.confirmPassword && <span className="register-error">{errors.confirmPassword}</span>}
 
                         <div class="register-btn">
-                            <button type="buttom" className="btn-enter" onClick={handleBack} disabled={sending}>
+                            <button type="button" className="btn-enter" onClick={handleBack} disabled={sending}>
                                 <span>voltar</span>
                             </button>
 
