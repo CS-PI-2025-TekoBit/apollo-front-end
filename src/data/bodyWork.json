@@ -1,0 +1,34 @@
+{
+    "bodyWork": [
+        {
+            "id_bodyWork": 1,
+            "name": "Hatchback",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_bodyWork": 2,
+            "name": "Sedan",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_bodyWork": 3,
+            "name": "SUV",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_bodyWork": 4,
+            "name": "Conversível",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_bodyWork": 5,
+            "name": "Picape",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        }
+    ]
+}
