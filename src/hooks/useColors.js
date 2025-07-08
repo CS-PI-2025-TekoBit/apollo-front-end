@@ -9,6 +9,8 @@ const fetchData = async () => {
         }, 1000);
     });
     return response.data;
+    // const response = await Api.get("/colors/fetch");
+    // return response.data.data;
 };
 
 export function useColors() {

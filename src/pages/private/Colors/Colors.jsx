@@ -41,7 +41,7 @@ function Colors() {
                     onClick={() =>
                         navigate('/admin/colors/register', {
                             state: {
-                                id: rowData.id_colors,
+                                id: rowData.id_color,
                                 pageName: `021 - Edição de cor`,
                                 pageTitle: 'Editar Cor',
                                 labelNameForm: 'Nome da Cor',
@@ -76,8 +76,21 @@ function Colors() {
                             cancelButtonText: 'Cancelar'
                         }).then(async (result) => {
                             if (result.isConfirmed) {
-                                toast.success(`Cor ${rowData.name} excluída com sucesso!`);
-                                return
+                                try {
+                                    // QUANDO USAR BACKEND ------------------------------------------------
+                                    // const response = await Api.delete(`/colors/delete/${rowData.id_color}`);
+                                    // if (response.status === 200) {
+                                    //     await queryClient.invalidateQueries(['colors']);
+                                    toast.success(`Cor ${rowData.name} excluída com sucesso!`);
+                                    return
+                                    // } else {
+                                    //     toast.error(`Erro ao excluir cor. Tente novamente. ${response.error}`);
+                                    //     return
+                                    // }
+                                } catch (error) {
+                                    toast.error(`Erro ao excluir cor. Tente novamente. ${error.message}`);
+                                    return
+                                }
                             }
                         })
                     }
@@ -117,16 +130,21 @@ function Colors() {
                             </NavLink>
                         </div>
                     </div>
+
                     <div className="card espacing-table">
-                        <DataTable value={colors} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                            <Column field="id_colors" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
-                            <Column header="Nome da Cor" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
-                        </DataTable>
+                        {colors && colors.length === 0 ? (
+                            <div className="no-data">Nenhuma cor encontrada</div>
+                        ) : (
+                            <DataTable value={colors} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
+                                <Column field="id_color" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                                <Column header="Nome da Cor" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
+                                <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
+                                <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                            </DataTable>
+                        )}
                     </div>
-                </section> 
-            </main >
+                </section>
+            </main>
         )
     );
 }

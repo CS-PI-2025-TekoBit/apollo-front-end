@@ -38,7 +38,7 @@ function Transmission() {
                     onClick={() =>
                         navigate('/admin/Transmission/register', {
                             state: {
-                                id: rowData.id_transmisson,
+                                id: rowData.id_transmission,
                                 pageName: `023 - Edição de Transmissão`,
                                 pageTitle: 'Editar Transmissão',
                                 labelNameForm: 'Nome da Transmissão',
@@ -73,8 +73,21 @@ function Transmission() {
                             cancelButtonText: 'Cancelar'
                         }).then(async (result) => {
                             if (result.isConfirmed) {
-                                toast.success(`Transmissão ${rowData.name} excluída com sucesso!`);
-                                return
+                                try {
+                                    // QUANDO USAR BACKEND ------------------------------------------------
+                                    // const response = await Api.delete(`/transmission/delete/${rowData.id_transmission}`);
+                                    // if (response.status === 200) {
+                                    //     await queryClient.invalidateQueries(['transmissions']);
+                                    toast.success(`Transmissão ${rowData.name} excluída com sucesso!`);
+                                    return
+                                    // } else {
+                                    //     toast.error(`Erro ao excluir transmissão. Tente novamente. ${response.error}`);
+                                    //     return
+                                    // }
+                                } catch (error) {
+                                    toast.error(`Erro ao excluir transmissão. Tente novamente. ${error.message}`);
+                                    return
+                                }
                             }
                         })
                     }
@@ -107,7 +120,7 @@ function Transmission() {
                             <NavLink to="/admin/transmission/register">
                                 <Button
                                     label="Cadastrar Transmissão"
-                                        icon={<Gear size={30} weight='fill' />}
+                                    icon={<Gear size={30} weight='fill' />}
                                     className="button-include"
                                     onClick={() => console.log('Cadastrar Transmissão')}
                                 />
@@ -116,7 +129,7 @@ function Transmission() {
                     </div>
                     <div className="card espacing-table">
                         <DataTable value={transmission} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                            <Column field="id_transmisson" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                            <Column field="id_transmission" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
                             <Column header="Nome da Transmissão" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
                             <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
                             <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
