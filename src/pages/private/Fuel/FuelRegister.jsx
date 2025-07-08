@@ -11,7 +11,7 @@ function FuelRegister() {
         toast.success('Combustível cadastrado com sucesso!');
         // QUANDO USAR BACKEND ------------------------------------------------
         // const result = await Api.post('/fuel/create', formData);
-        // if (result.status === 201) {
+        // if (result.status === 200) {
         //     toast.success('Fuel cadastrado com sucesso!');
         //     await queryClient.invalidateQueries(['fuels']);
         //     window.history.back();

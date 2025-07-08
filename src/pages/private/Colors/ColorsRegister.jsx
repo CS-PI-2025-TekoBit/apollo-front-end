@@ -11,7 +11,8 @@ function ColorsRegister() {
         toast.success('Cor cadastrada com sucesso!');
         // QUANDO USAR BACKEND ------------------------------------------------
         // const result = await Api.post('/colors/create', formData);
-        // if (result.status === 201) {
+        // console.log(result);
+        // if (result.status === 200) {
         //     toast.success('Cor cadastrada com sucesso!');
         //     await queryClient.invalidateQueries(['motors']);
         //     window.history.back();
@@ -24,7 +25,7 @@ function ColorsRegister() {
     };
 
     return (
-        <GenericRegister labelNameForm='Nome da Cor' onSalvar={onSalvar} pageName='011 - Cadastro de Cor' pageTitle='Cadastro de cor' backRouter='/admin/colors' name='Cor'/>
+        <GenericRegister labelNameForm='Nome da Cor' onSalvar={onSalvar} pageName='011 - Cadastro de Cor' pageTitle='Cadastro de cor' backRouter='/admin/colors' name='Cor' />
     );
 }
 

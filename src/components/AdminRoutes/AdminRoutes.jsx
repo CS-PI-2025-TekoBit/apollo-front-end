@@ -10,6 +10,8 @@ import Fuel from '../../pages/private/Fuel/Fuel';
 import FuelRegister from '../../pages/private/Fuel/FuelRegister';
 import Steering from '../../pages/private/Steering/Steering';
 import SteeringRegister from '../../pages/private/Steering/SteeringRegister';
+import Transmission from '../../pages/private/Transmissions/Transmissions';
+import TransmissionRegister from '../../pages/private/Transmissions/TransmissionRegister';
 
 const AdminRoutes = () => {
     return (
@@ -21,9 +23,12 @@ const AdminRoutes = () => {
             <Route path="colors/register" element={<ColorsRegister />} />
             <Route path="fuel" element={<Fuel />} />
             <Route path="fuel/register" element={<FuelRegister />} />
+            <Route path="transmission" element={<Transmission />} />
+            <Route path="transmission/register" element={<TransmissionRegister />} />
             <Route path="steering" element={<Steering />} />
             <Route path="steering/register" element={<SteeringRegister />} />
-            <Route path="*" element={<PageNotFound />} />'
+
+            <Route path="*" element={<PageNotFound />} />
         </Routes>
     );
 };

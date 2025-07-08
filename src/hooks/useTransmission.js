@@ -1,28 +1,28 @@
 import { useQuery } from '@tanstack/react-query';
-import colors from '../data/colors.json';
+import transmission from '../data/transmission.json';
 import Api from '../api/api';
 
 const fetchData = async () => {
     const response = await new Promise((resolve) => {
         setTimeout(() => {
-            resolve({ data: colors.colors });
+            resolve({ data: transmission.transmission });
         }, 1000);
     });
     return response.data;
-    // const response = await Api.get("/colors/fetch");
+    // const response = await Api.get("/transmission/fetch");
     // return response.data.data;
 };
 
-export function useColors() {
+export function useTransmission() {
     const query = useQuery({
         queryFn: fetchData,
-        queryKey: ['colors'],
+        queryKey: ['transmission'],
         refetchInterval: 20000,
         staleTime: 1000 * 60 * 5,
     });
 
     return {
         ...query,
-        colors: query.data,
+        transmission: query.data,
     };
 }

@@ -1,0 +1,28 @@
+{
+    "transmission": [
+        {
+            "id_transmisson": 1,
+            "name": "Manual",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_transmisson": 2,
+            "name": "Automática",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_transmisson": 3,
+            "name": "CVT",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_transmisson": 4,
+            "name": "Dupla Embreagem",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        }
+    ]
+}
