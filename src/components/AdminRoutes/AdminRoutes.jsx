@@ -27,7 +27,6 @@ const AdminRoutes = () => {
             <Route path="transmission/register" element={<TransmissionRegister />} />
             <Route path="steering" element={<Steering />} />
             <Route path="steering/register" element={<SteeringRegister />} />
-
             <Route path="*" element={<PageNotFound />} />
         </Routes>
     );
