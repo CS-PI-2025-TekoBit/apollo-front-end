@@ -1,4 +1,3 @@
-// src/context/AuthContext.js
 import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import users from '../data/users.json';
