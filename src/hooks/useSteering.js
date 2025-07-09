@@ -1,28 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
-import colors from '../data/colors.json';
+import steering from '../data/steering.json'
 import Api from '../api/api';
 
 const fetchData = async () => {
     const response = await new Promise((resolve) => {
         setTimeout(() => {
-            resolve({ data: colors.colors });
+            resolve({ data: steering.steering });
         }, 1000);
     });
     return response.data;
-    // const response = await Api.get("/colors/fetch");
-    // return response.data.data;
 };
 
-export function useColors() {
+export function useSteering() {
     const query = useQuery({
         queryFn: fetchData,
-        queryKey: ['colors'],
+        queryKey: ['steering'],
         refetchInterval: 20000,
         staleTime: 1000 * 60 * 5,
     });
 
     return {
         ...query,
-        colors: query.data,
+        steering: query.data,
     };
 }

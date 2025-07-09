@@ -4,15 +4,14 @@ import { toast } from 'react-toastify';
 import Api from '../../../api/api';
 import { useQueryClient } from '@tanstack/react-query';
 
-function ColorsRegister() {
+function SteerinRegister() {
     const queryClient = useQueryClient();
 
     const onSalvar = async (formData) => {
-        toast.success('Cor cadastrada com sucesso!');
+        toast.success('Direção cadastrada com sucesso!');
         // QUANDO USAR BACKEND ------------------------------------------------
         // const result = await Api.post('/colors/create', formData);
-        // console.log(result);
-        // if (result.status === 200) {
+        // if (result.status === 201) {
         //     toast.success('Cor cadastrada com sucesso!');
         //     await queryClient.invalidateQueries(['motors']);
         //     window.history.back();
@@ -25,8 +24,8 @@ function ColorsRegister() {
     };
 
     return (
-        <GenericRegister labelNameForm='Nome da Cor' onSalvar={onSalvar} pageName='011 - Cadastro de Cor' pageTitle='Cadastro de cor' backRouter='/admin/colors' name='Cor' />
+        <GenericRegister labelNameForm='Nome da Direção' onSalvar={onSalvar} pageName='016 - Cadastro de direção' pageTitle='Cadastro de direção' backRouter='/admin/steering' name='Steering'/>
     );
 }
 
-export default ColorsRegister;
+export default SteerinRegister;

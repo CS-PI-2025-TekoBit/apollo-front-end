@@ -139,9 +139,9 @@ function GenericRegister({
                             <RadioButton
                                 inputId="statusDeactivated"
                                 name="status"
-                                value="deactivate"
+                                value="deactive"
                                 onChange={(e) => handleInputChange(e)}
-                                checked={formData.status === 'deactivate'}
+                                checked={formData.status === 'deactive'}
                             />
                             <label htmlFor="statusDeactivated">Desativado</label>
                         </div>

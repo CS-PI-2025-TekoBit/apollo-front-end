@@ -1,0 +1,28 @@
+{
+    "steering": [
+        {
+            "id_steering": 1,
+            "name": "Mecânica",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_steering": 2,
+            "name": "Hidráulica",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_steering": 3,
+            "name": "Elétrica",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        },
+        {
+            "id_steering": 4,
+            "name": "Eletro-hidráulica",
+            "dt_create": "2023-10-01T12:00:00Z",
+            "status": "active"
+        }
+    ]
+}

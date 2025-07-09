@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { VERSION_APP } from '../../../utils/constants';
 import './Register.css';
 import { useEffect } from 'react';
+import Api from '../../../api/api';
 
 function Register() {
     const navigate = useNavigate();
@@ -91,16 +92,31 @@ function Register() {
         return Object.keys(errs).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setSending(true);
         if (!validate()) {
             setSending(false);
             return;
         }
+        try {
+            const result = await Api.post('auth/register', {
+                name: form.name,
+                user: form.user,
+                cellphone: form.phone,
+                email: form.email,
+                password: form.password
+            });
+            if (result.status === 200) {
+                toast.success("Cadastro Realizado!");
+            }
 
-        toast.success("Cadastro Realizado!");
-        setSending(false);
+        } catch (error) {
+            toast.error("Erro ao cadastrar usuário. Tente novamente.");
+        } finally {
+            setSending(false);
+            window.history.back();
+        }
     };
 
     const formatPhone = (value) => {
@@ -236,7 +252,7 @@ function Register() {
                         {errors.confirmPassword && <span className="register-error">{errors.confirmPassword}</span>}
 
                         <div class="register-btn">
-                            <button type="buttom" className="btn-enter" onClick={handleBack} disabled={sending}>
+                            <button type="button" className="btn-enter" onClick={handleBack} disabled={sending}>
                                 <span>voltar</span>
                             </button>
 
