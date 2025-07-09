@@ -81,19 +81,19 @@ function GenericRegister({
     const validateAndSave = async () => {
         if (validateForm()) {
             if (stateId) {
-                toast.success(`${name} atualizado com sucesso!`); //MUDAR AQUI DEPOIS PARA DEIXAR A FRASE GENERICA
-                window.history.back();
-                return
-                // const result = await Api.put(`${stateRouteEdit}/${stateId}`, formData);
-                // if (result.status === 200) {
-                //     toast.success(`${name} atualizado com sucesso!`);
-                //     await queryClient.invalidateQueries(['motors']);
-                //     navigate(`${backRouter}`);
-                //     return
-                // } else {
-                //     toast.error(`Erro ao atualizar ${name}. Tente novamente. ${result.error}`);
-                //     return
-                // }
+                // toast.success(`${name} atualizado com sucesso!`); //MUDAR AQUI DEPOIS PARA DEIXAR A FRASE GENERICA
+                // window.history.back();
+                // return
+                const result = await Api.put(`${stateRouteEdit}/${stateId}`, formData);
+                if (result.status === 200) {
+                    toast.success(`${name} atualizado com sucesso!`);
+                    await queryClient.invalidateQueries(['motors']);
+                    navigate(`${backRouter}`);
+                    return
+                } else {
+                    toast.error(`Erro ao atualizar ${name}. Tente novamente. ${result.error}`);
+                    return
+                }
             }
             else {
                 onSalvar(formData);

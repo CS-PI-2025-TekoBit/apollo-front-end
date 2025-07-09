@@ -78,15 +78,15 @@ function Colors() {
                             if (result.isConfirmed) {
                                 try {
                                     // QUANDO USAR BACKEND ------------------------------------------------
-                                    // const response = await Api.delete(`/colors/delete/${rowData.id_color}`);
-                                    // if (response.status === 200) {
-                                    //     await queryClient.invalidateQueries(['colors']);
-                                    toast.success(`Cor ${rowData.name} excluída com sucesso!`);
-                                    return
-                                    // } else {
-                                    //     toast.error(`Erro ao excluir cor. Tente novamente. ${response.error}`);
-                                    //     return
-                                    // }
+                                    const response = await Api.delete(`/colors/delete/${rowData.id_color}`);
+                                    if (response.status === 200) {
+                                        await queryClient.invalidateQueries(['colors']);
+                                        toast.success(`Cor ${rowData.name} excluída com sucesso!`);
+                                        return
+                                    } else {
+                                        toast.error(`Erro ao excluir cor. Tente novamente. ${response.error}`);
+                                        return
+                                    }
                                 } catch (error) {
                                     toast.error(`Erro ao excluir cor. Tente novamente. ${error.message}`);
                                     return

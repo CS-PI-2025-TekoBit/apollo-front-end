@@ -3,14 +3,14 @@ import colors from '../data/colors.json';
 import Api from '../api/api';
 
 const fetchData = async () => {
-    const response = await new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({ data: colors.colors });
-        }, 1000);
-    });
-    return response.data;
-    // const response = await Api.get("/colors/fetch");
-    // return response.data.data;
+    // const response = await new Promise((resolve) => {
+    //     setTimeout(() => {
+    //         resolve({ data: colors.colors });
+    //     }, 1000);
+    // });
+    // return response.data;
+    const response = await Api.get("/colors/fetch");
+    return response.data.data;
 };
 
 export function useColors() {

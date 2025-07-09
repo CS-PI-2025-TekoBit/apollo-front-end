@@ -8,19 +8,19 @@ function FuelRegister() {
     const queryClient = useQueryClient();
 
     const onSalvar = async (formData) => {
-        toast.success('Combustível cadastrado com sucesso!');
+        // toast.success('Combustível cadastrado com sucesso!');
         // QUANDO USAR BACKEND ------------------------------------------------
-        // const result = await Api.post('/fuel/create', formData);
-        // if (result.status === 200) {
-        //     toast.success('Fuel cadastrado com sucesso!');
-        //     await queryClient.invalidateQueries(['fuels']);
-        //     window.history.back();
-        //     return
-        // } else {
-        //     toast.error(`Erro ao cadastrar o combustível. Tente novamente. ${result.error}`);
-        //     return
-        // }
-        window.history.back();
+        const result = await Api.post('/fuels/create', formData);
+        if (result.status === 201) {
+            toast.success('Fuel cadastrado com sucesso!');
+            await queryClient.invalidateQueries(['fuels']);
+            window.history.back();
+            return
+        } else {
+            toast.error(`Erro ao cadastrar o combustível. Tente novamente. ${result.error}`);
+            return
+        }
+        // window.history.back();
     };
 
     return (

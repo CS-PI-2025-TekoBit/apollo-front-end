@@ -46,7 +46,7 @@ function Fuel() {
                                 pageName: `023 - Edição de Combustível`,
                                 pageTitle: 'Editar Combustível',
                                 labelNameForm: 'Nome do Combustível',
-                                routeEdit: '/fuel/edit',
+                                routeEdit: '/fuels/edit',
                                 initialData: {
                                     name: rowData.name,
                                     status: rowData.status,
@@ -79,15 +79,15 @@ function Fuel() {
                             if (result.isConfirmed) {
                                 try {
                                     // QUANDO USAR BACKEND ------------------------------------------------
-                                    // const response = await Api.delete(`/fuel/delete/${rowData.id_fuel}`);
-                                    // if (response.status === 200) {
-                                    //     await queryClient.invalidateQueries(['fuel']);
-                                    toast.success(`Combustível ${rowData.name} excluído com sucesso!`);
-                                    return
-                                    // } else {
-                                    //     toast.error(`Erro ao excluir combustível. Tente novamente. ${response.error}`);
-                                    //     return
-                                    // }
+                                    const response = await Api.delete(`/fuels/delete/${rowData.id_fuel}`);
+                                    if (response.status === 200) {
+                                        await queryClient.invalidateQueries(['fuel']);
+                                        toast.success(`Combustível ${rowData.name} excluído com sucesso!`);
+                                        return
+                                    } else {
+                                        toast.error(`Erro ao excluir combustível. Tente novamente. ${response.error}`);
+                                        return
+                                    }
                                 } catch (error) {
                                     toast.error(`Erro ao excluir combustível. Tente novamente. ${error.message}`);
                                     return
