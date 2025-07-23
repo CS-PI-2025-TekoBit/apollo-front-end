@@ -3,14 +3,14 @@ import fuel from '../data/fuel.json';
 import Api from '../api/api';
 
 const fetchData = async () => {
-    const response = await new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({ data: fuel.fuel });
-        }, 1000);
-    });
-    return response.data;
-    // const response = await Api.get("/fuel/fetch");
-    // return response.data.data;
+    // const response = await new Promise((resolve) => {
+    //     setTimeout(() => {
+    //         resolve({ data: fuel.fuel });
+    //     }, 1000);
+    // });
+    // return response.data;
+    const response = await Api.get("/fuels/fetch");
+    return response.data.data;
 };
 
 export function useFuel() {

@@ -69,19 +69,16 @@ function Motors() {
                             cancelButtonText: 'Cancelar'
                         }).then(async (result) => {
                             if (result.isConfirmed) {
-                                toast.success(`Motor ${rowData.name} excluído com sucesso!`);
-                                return
-                                // const result = await Api.delete(`/motors/delete/${rowData.id_motor}`);
-                                // console.log('result', result);
-                                // if (result.status === 200) {
-                                //     toast.success('Motor excluído com sucesso!');
-                                //     await queryClient.invalidateQueries(['motors']);
-                                //     // window.location.reload();
-                                //     return
-                                // } else {
-                                //     toast.error(`Erro ao excluir motor. Tente novamente. ${result.error}`);
-                                //     return
-                                // }
+                                const result = await Api.delete(`/motors/delete/${rowData.id_motor}`);
+                                if (result.status === 200) {
+                                    toast.success('Motor excluído com sucesso!');
+                                    await queryClient.invalidateQueries(['motors']);
+                                    // window.location.reload();
+                                    return
+                                } else {
+                                    toast.error(`Erro ao excluir motor. Tente novamente. ${result.error}`);
+                                    return
+                                }
                             }
                         })
                     }
@@ -127,13 +124,15 @@ function Motors() {
                         </div>
                     </div>
                     <div className="card espacing-table">
-                        <DataTable value={motors} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                            <Column field="id_motor" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
-                            <Column header="Nome do Motor" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column field="status" header="Status" body={statusBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
-                        </DataTable>
+                        {motors && motors.length === 0 ? <p>Nenhum motor encontrado.</p> : (
+                            <DataTable value={motors} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
+                                <Column field="id_motor" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                                <Column header="Nome do Motor" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
+                                <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
+                                <Column field="status" header="Status" body={statusBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
+                                <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                            </DataTable>
+                        )}
                     </div>
                 </section>
             </main >

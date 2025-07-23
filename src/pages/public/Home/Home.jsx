@@ -122,7 +122,7 @@ export default function Home() {
 
     useEffect(() => {
         if (user?.role === "ROLE_ADMIN") {
-            navigate('/admin')
+            navigate('/admin/colors')
         }
     }, [user])
 

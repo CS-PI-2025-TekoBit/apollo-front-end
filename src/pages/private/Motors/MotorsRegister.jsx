@@ -7,17 +7,17 @@ import { useQueryClient } from '@tanstack/react-query';
 function MotorsRegister() {
     const queryClient = useQueryClient();
     const onSalvar = async (formData) => {
-        toast.success('Motor salvo com sucesso!');
-        // const result = await Api.post('/motors/create', formData);
-        // if (result.status === 201) {
-        //     toast.success('Motor cadastrado com sucesso!');
-        //     await queryClient.invalidateQueries(['motors']);
-        //     window.history.back();
-        //     return
-        // } else {
-        //     toast.error(`Erro ao cadastrar motor. Tente novamente. ${result.error}`);
-        //     return
-        // }
+        const result = await Api.post('/motors/create', formData);
+        console.log(result);
+        if (result.status === 201) {
+            toast.success('Motor cadastrado com sucesso!');
+            await queryClient.invalidateQueries(['motors']);
+            window.history.back();
+            return
+        } else {
+            toast.error(`Erro ao cadastrar motor. Tente novamente. ${result}`);
+            return
+        }
         window.history.back();
     }
     return (
