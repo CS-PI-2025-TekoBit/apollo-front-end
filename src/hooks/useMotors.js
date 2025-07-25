@@ -3,13 +3,7 @@ import motors from '../data/motors.json';
 import Api from '../api/api';
 
 const fetchData = async () => {
-    // const response = await new Promise((resolve) => {
-    //     setTimeout(() => {
-    //         resolve({ data: motors.motors });
-    //     }, 1000);
-    // });
-    // return response.data;
-    /*retorno da api*/
+
     const response = await Api.get("/motors/fetch");
     return response.data.data;
 };

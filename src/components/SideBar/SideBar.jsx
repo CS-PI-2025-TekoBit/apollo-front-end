@@ -3,6 +3,7 @@ import { Sidebar } from 'primereact/sidebar';
 import { Button } from 'primereact/button';
 import { Menu } from 'primereact/menu';
 import logo from '../../assets/imgs/logomarca.png';
+import Swal from 'sweetalert2';
 import './SideBar.css';
 
 import { Car, Gear, CaretDoubleRight, CaretDoubleLeft, SignOut, SteeringWheel, CarProfile, Palette, Engine } from '@phosphor-icons/react';
@@ -31,20 +32,20 @@ export default function AppSidebar({ children }) {
         { label: collapsed ? '' : 'Direções', icon: <SteeringWheel weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/steering') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/steering') },
     ];
     const handleLogout = () => {
-        // Swal.fire({
-        //     title: 'Sair da conta',
-        //     text: 'Tem certeza que deseja sair?',
-        //     icon: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#3085d6',
-        //     cancelButtonColor: '#d33',
-        //     confirmButtonText: 'Sair',
-        //     cancelButtonText: 'Cancelar'
-        // }).then((result) => {
-        // if (result.isConfirmed) {
+        Swal.fire({
+            title: 'Sair da conta',
+            text: 'Tem certeza que deseja sair?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sair',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+        if (result.isConfirmed) {
         logout()
-        //     }
-        // })
+            }
+        })
     }
     return (
         <div >

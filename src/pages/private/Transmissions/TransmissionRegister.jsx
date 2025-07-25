@@ -8,19 +8,17 @@ function TransmissionRegister() {
     const queryClient = useQueryClient();
 
     const onSalvar = async (formData) => {
-        toast.success('Transmissão cadastrada com sucesso!');
         // QUANDO USAR BACKEND ------------------------------------------------
-        // const result = await Api.post('/transmission/create', formData);
-        // if (result.status === 200) {
-        //     toast.success('Transmissão cadastrada com sucesso!');
-        //     await queryClient.invalidateQueries(['transmissions']);
-        //     window.history.back();
-        //     return
-        // } else {
-        //     toast.error(`Erro ao cadastrar a transmissão. Tente novamente. ${result.error}`);
-        //     return
-        // }
-        window.history.back();
+        const result = await Api.post('/transmission/create', formData);
+        if (result.status === 200) {
+            toast.success('Transmissão cadastrada com sucesso!');
+            await queryClient.invalidateQueries(['transmissions']);
+            window.history.back();
+            return
+        } else {
+            toast.error(`Erro ao cadastrar a transmissão. Tente novamente. ${result.error}`);
+            return
+        }
     };
 
     return (

@@ -75,15 +75,15 @@ function Transmission() {
                             if (result.isConfirmed) {
                                 try {
                                     // QUANDO USAR BACKEND ------------------------------------------------
-                                    // const response = await Api.delete(`/transmission/delete/${rowData.id_transmission}`);
-                                    // if (response.status === 200) {
-                                    //     await queryClient.invalidateQueries(['transmissions']);
+                                    const response = await Api.delete(`/transmission/delete/${rowData.id_transmission}`);
+                                    if (response.status === 200) {
+                                        await queryClient.invalidateQueries(['transmissions']);
                                     toast.success(`Transmissão ${rowData.name} excluída com sucesso!`);
                                     return
-                                    // } else {
-                                    //     toast.error(`Erro ao excluir transmissão. Tente novamente. ${response.error}`);
-                                    //     return
-                                    // }
+                                    } else {
+                                        toast.error(`Erro ao excluir transmissão. Tente novamente. ${response.error}`);
+                                        return
+                                    }
                                 } catch (error) {
                                     toast.error(`Erro ao excluir transmissão. Tente novamente. ${error.message}`);
                                     return

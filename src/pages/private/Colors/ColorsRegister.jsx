@@ -8,7 +8,7 @@ function ColorsRegister() {
     const queryClient = useQueryClient();
 
     const onSalvar = async (formData) => {
-        // toast.success('Cor cadastrada com sucesso!');
+     
         // QUANDO USAR BACKEND ------------------------------------------------
         const result = await Api.post('/colors/create', formData);
         console.log(result);
@@ -21,7 +21,6 @@ function ColorsRegister() {
             toast.error(`Erro ao cadastrar a cor. Tente novamente. ${result.error}`);
             return
         }
-        // window.history.back();
     };
 
     return (

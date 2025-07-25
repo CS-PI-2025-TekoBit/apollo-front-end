@@ -8,7 +8,6 @@ function FuelRegister() {
     const queryClient = useQueryClient();
 
     const onSalvar = async (formData) => {
-        // toast.success('Combustível cadastrado com sucesso!');
         // QUANDO USAR BACKEND ------------------------------------------------
         const result = await Api.post('/fuels/create', formData);
         if (result.status === 201) {
@@ -20,7 +19,6 @@ function FuelRegister() {
             toast.error(`Erro ao cadastrar o combustível. Tente novamente. ${result.error}`);
             return
         }
-        // window.history.back();
     };
 
     return (

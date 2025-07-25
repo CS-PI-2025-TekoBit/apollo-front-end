@@ -9,7 +9,6 @@ export default function PageNotFound() {
 
     return (
         <>
-            {/* <Header /> */}
             <div className="page-not-found" style={{ position: 'relative', zIndex: 20000 }}>
                 <p>Oops!</p>
                 <img src={pagenotfound} alt="Page not found" />
@@ -18,7 +17,6 @@ export default function PageNotFound() {
                     <House size={40} color='white' />
                 </NavLink>
             </div>
-            {/* <Footer /> */}
         </>
     )
 
