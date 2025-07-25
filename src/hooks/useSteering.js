@@ -1,25 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
-import carros from '../data/car.json';
+import steering from '../data/steering.json'
+import Api from '../api/api';
 
 const fetchData = async () => {
     const response = await new Promise((resolve) => {
         setTimeout(() => {
-            resolve({ data: carros.data });
-        }, 100);
+            resolve({ data: steering.steering });
+        }, 1000);
     });
     return response.data;
 };
 
-export function useAllCars() {
+export function useSteering() {
     const query = useQuery({
         queryFn: fetchData,
-        queryKey: ['all_cars'],
+        queryKey: ['steering'],
         refetchInterval: 20000,
         staleTime: 1000 * 60 * 5,
     });
 
     return {
         ...query,
-        cars: query.data,
+        steering: query.data,
     };
 }

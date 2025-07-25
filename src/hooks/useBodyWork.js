@@ -1,25 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
-import carros from '../data/car.json';
+import bodyWork from '../data/bodyWork.json';
+import Api from '../api/api';
 
 const fetchData = async () => {
     const response = await new Promise((resolve) => {
         setTimeout(() => {
-            resolve({ data: carros.data });
-        }, 100);
+            resolve({ data: bodyWork.bodyWork });
+        }, 1000);
     });
     return response.data;
 };
 
-export function useAllCars() {
+export function useBodyWork() {
     const query = useQuery({
         queryFn: fetchData,
-        queryKey: ['all_cars'],
+        queryKey: ['bodyWork'],
         refetchInterval: 20000,
         staleTime: 1000 * 60 * 5,
     });
 
     return {
         ...query,
-        cars: query.data,
+        bodyWork: query.data,
     };
 }

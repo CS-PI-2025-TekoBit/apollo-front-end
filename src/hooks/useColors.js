@@ -1,23 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
-import motors from '../data/motors.json';
+import colors from '../data/colors.json';
 import Api from '../api/api';
 
 const fetchData = async () => {
 
-    const response = await Api.get("/motors/fetch");
+    const response = await Api.get("/colors/fetch");
     return response.data.data;
 };
 
-export function useMotors() {
+export function useColors() {
     const query = useQuery({
         queryFn: fetchData,
-        queryKey: ['motors'],
+        queryKey: ['colors'],
         refetchInterval: 20000,
         staleTime: 1000 * 60 * 5,
     });
 
     return {
         ...query,
-        motors: query.data,
+        colors: query.data,
     };
 }

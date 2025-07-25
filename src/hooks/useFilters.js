@@ -10,10 +10,6 @@ const fetchData = async () => {
     return response.data;
 };
 
-// const fetchData = async () => {
-//     const response = await Api.get('/buscar_carros')
-//     return response.data
-// }
 
 export function useFilters() {
     const query = useQuery({

@@ -1,25 +1,27 @@
 import { useQuery } from '@tanstack/react-query';
-import carros from '../data/car.json';
+import transmission from '../data/transmission.json';
+import Api from '../api/api';
 
 const fetchData = async () => {
     const response = await new Promise((resolve) => {
         setTimeout(() => {
-            resolve({ data: carros.data });
-        }, 100);
+            resolve({ data: transmission.transmission });
+        }, 1000);
     });
     return response.data;
+
 };
 
-export function useAllCars() {
+export function useTransmission() {
     const query = useQuery({
         queryFn: fetchData,
-        queryKey: ['all_cars'],
+        queryKey: ['transmission'],
         refetchInterval: 20000,
         staleTime: 1000 * 60 * 5,
     });
 
     return {
         ...query,
-        cars: query.data,
+        transmission: query.data,
     };
 }

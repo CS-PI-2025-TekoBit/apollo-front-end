@@ -16,6 +16,8 @@ function GenericRegister({
     pageName = '001 - Cadastro Genérico',
     pageTitle = 'Cadastro Genérico',
     labelNameForm = 'Nome',
+    backRouter = '/admin/',
+    name = 'Nome',
     onSalvar = () => console.log('Salvar'),
     onEdit = () => console.log('Editar'),
 }) {
@@ -27,7 +29,7 @@ function GenericRegister({
         pageTitle: statePageTitle,
         labelNameForm: stateLabelNameForm,
         initialData: stateInitialData,
-        id_motor: stateId,
+        id: stateId,
         routeEdit: stateRouteEdit,
     } = location.state || {};
 
@@ -79,19 +81,19 @@ function GenericRegister({
     const validateAndSave = async () => {
         if (validateForm()) {
             if (stateId) {
-                toast.success('Motor atualizado com sucesso!');
-                window.history.back();
-                return
-                // const result = await Api.put(`${stateRouteEdit}/${stateId}`, formData);
-                // if (result.status === 200) {
-                //     toast.success('Motor atualizado com sucesso!');
-                //     await queryClient.invalidateQueries(['motors']);
-                //     navigate('/admin/motors');
-                //     return
-                // } else {
-                //     toast.error(`Erro ao atualizar motor. Tente novamente. ${result.error}`);
-                //     return
-                // }
+                // toast.success(`${name} atualizado com sucesso!`); //MUDAR AQUI DEPOIS PARA DEIXAR A FRASE GENERICA
+                // window.history.back();
+                // return
+                const result = await Api.put(`${stateRouteEdit}/${stateId}`, formData);
+                if (result.status === 200) {
+                    toast.success(`${name} atualizado com sucesso!`);
+                    await queryClient.invalidateQueries(['motors']);
+                    navigate(`${backRouter}`);
+                    return
+                } else {
+                    toast.error(`Erro ao atualizar ${name}. Tente novamente. ${result.error}`);
+                    return
+                }
             }
             else {
                 onSalvar(formData);
@@ -137,9 +139,9 @@ function GenericRegister({
                             <RadioButton
                                 inputId="statusDeactivated"
                                 name="status"
-                                value="deactivate"
+                                value="deactive"
                                 onChange={(e) => handleInputChange(e)}
-                                checked={formData.status === 'deactivate'}
+                                checked={formData.status === 'deactive'}
                             />
                             <label htmlFor="statusDeactivated">Desativado</label>
                         </div>
@@ -153,7 +155,7 @@ function GenericRegister({
                             <TrashIcon size={20} weight='fill' color='white' />
                             Limpar Campos
                         </Button>
-                        <NavLink to="/admin/motors" className='btn-generic btn-cancel'>
+                        <NavLink to={backRouter} className='btn-generic btn-cancel'>
                             <X size={20} weight='fill' color='white' />
                             Cancelar
                         </NavLink>

@@ -1,23 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
-import motors from '../data/motors.json';
+import fuel from '../data/fuel.json';
 import Api from '../api/api';
 
 const fetchData = async () => {
 
-    const response = await Api.get("/motors/fetch");
+    const response = await Api.get("/fuels/fetch");
     return response.data.data;
 };
 
-export function useMotors() {
+export function useFuel() {
     const query = useQuery({
         queryFn: fetchData,
-        queryKey: ['motors'],
+        queryKey: ['fuel'],
         refetchInterval: 20000,
         staleTime: 1000 * 60 * 5,
     });
 
     return {
         ...query,
-        motors: query.data,
+        fuel: query.data,
     };
 }
