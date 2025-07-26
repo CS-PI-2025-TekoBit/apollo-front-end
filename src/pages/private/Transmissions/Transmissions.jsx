@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTransmission } from '../../../hooks/useTransmission';
+import Api from '../../../api/api';
 
 function Transmission() {
     const { transmission, isLoading } = useTransmission();
@@ -78,8 +79,8 @@ function Transmission() {
                                     const response = await Api.delete(`/transmission/delete/${rowData.id_transmission}`);
                                     if (response.status === 200) {
                                         await queryClient.invalidateQueries(['transmissions']);
-                                    toast.success(`Transmissão ${rowData.name} excluída com sucesso!`);
-                                    return
+                                        toast.success(`Transmissão ${rowData.name} excluída com sucesso!`);
+                                        return
                                     } else {
                                         toast.error(`Erro ao excluir transmissão. Tente novamente. ${response.error}`);
                                         return
