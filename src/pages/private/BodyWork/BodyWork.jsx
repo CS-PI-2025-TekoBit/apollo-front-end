@@ -35,9 +35,7 @@ function Bodywork() {
         return (
             <div className="btn-action">
                 <Button
-                    icon={<Edit size={20} weight='fill' color='white' />}
-                    className="btn-edit"
-                    label='Editar'
+                    icon="pi pi-pencil" rounded text severity="warning" aria-label="Edit"
                     onClick={() =>
                         navigate('/admin/bodywork/register', {
                             state: {
@@ -55,9 +53,8 @@ function Bodywork() {
                     }
                 />
                 <Button
-                    icon={<XCircle size={20} weight='fill' color='white' />}
-                    className="btn-delete"
-                    label='Excluir'
+                    icon='pi pi-trash'
+                    rounded text severity="danger" aria-label="Cancel"
                     onClick={() => {
                         Swal.fire({
                             title: 'Excluir corroceria',
@@ -86,7 +83,9 @@ function Bodywork() {
             </div>
         );
     }
-
+    const statusBodyTemplate = (rowData) => {
+        return rowData.status === 'active' ? "Ativo" : "Inativo";
+    }
 
     return (
         isLoading ? (
@@ -117,15 +116,16 @@ function Bodywork() {
                             </NavLink>
                         </div>
                     </div>
-                    <div className="card espacing-table">
-                        <DataTable value={bodyWork} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                            <Column field="id_bodyWork" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
-                            <Column header="Nome da Corroceria" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                    <div className="card espacing-table" style={{ width: '100%' }}>
+                        <DataTable value={bodyWork} tableStyle={{ width: '100%' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
+                            <Column field="id_bodyWork" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} ></Column>
+                            <Column header="Nome da Corroceria" field='name' headerClassName='header-table' align={'center'} ></Column>
+                            <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} ></Column>
+                            <Column field="status" header="Status" body={statusBodyTemplate} headerClassName='header-table' align={'center'} ></Column>
+                            <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} ></Column>
                         </DataTable>
                     </div>
-                </section> 
+                </section>
             </main >
         )
     );

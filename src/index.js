@@ -11,10 +11,13 @@ import Login from './pages/public/Login/Login';
 import Register from './pages/public/Register/Register';
 import AuthContextProvider from './context/AuthContex';
 import { ToastContainer } from 'react-toastify';
-import 'primereact/resources/primereact.min.css';
-import "primeicons/primeicons.css";
-import "primeflex/primeflex.css";
-import { PrimeReactProvider } from "primereact/api";
+
+import 'primeicons/primeicons.css';
+import { PrimeReactProvider } from 'primereact/api';
+import 'primeflex/primeflex.css';
+import 'primereact/resources/primereact.css';
+import 'primereact/resources/themes/md-light-indigo/theme.css';
+
 import { AdminLayout } from './components/AdminLayout/AdminLayout';
 import AdminRoutes from './components/AdminRoutes/AdminRoutes';
 import PageNotFound from './components/PageNotFound/PageNotFound';

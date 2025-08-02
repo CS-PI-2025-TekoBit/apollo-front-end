@@ -42,8 +42,8 @@ export default function AppSidebar({ children }) {
             confirmButtonText: 'Sair',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
-        if (result.isConfirmed) {
-        logout()
+            if (result.isConfirmed) {
+                logout()
             }
         })
     }
@@ -57,7 +57,7 @@ export default function AppSidebar({ children }) {
                 style={{
                     width: collapsed ? '60px' : '15rem',
                     transition: 'width 0.3s',
-                    zIndex: 1000,
+                    zIndex: 1,
                     pointerEvents: 'auto',
                 }}
             >
@@ -108,7 +108,7 @@ export default function AppSidebar({ children }) {
                 style={{
                     marginLeft: collapsed ? '60px' : '15rem',
                     transition: 'margin-left 0.3s',
-                    width: `calc(100% - ${collapsed ? '60px' : '15rem'})`,
+                    width: `auto`,
                 }}
             >
                 {children}

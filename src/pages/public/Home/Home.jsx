@@ -136,7 +136,7 @@ export default function Home() {
                     {user?.role === 'ROLE_ADMIN' && navigate('/admin')}
                     <Header />
                     <main>
-                        <div className="container-stock " style={{ display: 'flex', flexDirection: 'row' }}>
+                        <div className="container-stock " >
                             <div className="filter-opening-mobile">
                                 <button className='filter-button' onClick={() => setFilterActive(!filterActive)}>
                                     {filterActive ?

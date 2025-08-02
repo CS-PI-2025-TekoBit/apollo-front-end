@@ -33,9 +33,7 @@ function Transmission() {
         return (
             <div className="btn-action">
                 <Button
-                    icon={<Edit size={20} weight='fill' color='white' />}
-                    className="btn-edit"
-                    label='Editar'
+                    icon="pi pi-pencil" rounded text severity="warning" aria-label="Edit"
                     onClick={() =>
                         navigate('/admin/Transmission/register', {
                             state: {
@@ -53,9 +51,8 @@ function Transmission() {
                     }
                 />
                 <Button
-                    icon={<XCircle size={20} weight='fill' color='white' />}
-                    className="btn-delete"
-                    label='Excluir'
+                    icon='pi pi-trash'
+                    rounded text severity="danger" aria-label="Cancel"
                     onClick={() => {
                         Swal.fire({
                             title: 'Excluir Transmissão',
@@ -97,7 +94,9 @@ function Transmission() {
             </div>
         );
     }
-
+    const statusBodyTemplate = (rowData) => {
+        return rowData.status === 'active' ? "Ativo" : "Inativo";
+    }
 
     return (
         isLoading ? (
@@ -128,12 +127,14 @@ function Transmission() {
                             </NavLink>
                         </div>
                     </div>
-                    <div className="card espacing-table">
-                        <DataTable value={transmission} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                            <Column field="id_transmission" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
-                            <Column header="Nome da Transmissão" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                    <div className="card espacing-table" style={{ width: '100%' }}>
+                        <DataTable value={transmission} tableStyle={{ width: '100%' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
+                            <Column field="id_transmition" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} ></Column>
+                            <Column header="Nome da Transmissão" field='name' headerClassName='header-table' align={'center'} ></Column>
+                            <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} ></Column>
+                            <Column field="status" header="Status" body={statusBodyTemplate} headerClassName='header-table' align={'center'} ></Column>
+
+                            <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} ></Column>
                         </DataTable>
                     </div>
                 </section>
