@@ -1,7 +1,7 @@
 import { ArrowLeft } from 'lucide-react';
 import { Button } from 'primereact/button';
 import React, { useRef, useState, useEffect } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import { FileUpload } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
 import { TrashIcon } from '@phosphor-icons/react';
@@ -13,29 +13,32 @@ import { ProgressBar } from 'primereact/progressbar';
 import { Tag } from 'primereact/tag';
 import { InputText } from 'primereact/inputtext';
 import { RadioButton } from 'primereact/radiobutton';
-import { Calendar } from 'primereact/calendar';
 import GenericSelect from '../../../components/GenericSelect/GenericSelect';
 import { InputNumber } from 'primereact/inputnumber';
 
 function CarRegister() {
-    const location = useLocation();
     const navigate = useNavigate();
-    const [totalSize, setTotalSize] = useState(0);
     const fileUploadRef = useRef(null);
+    const toast = useRef(null);
     const queryClient = useQueryClient();
+
+    const [totalSize, setTotalSize] = useState(0);
+    const [inputKey, setInputKey] = useState(0);
+    const [errors, setErrors] = useState({});
+
     const [formData, setFormData] = useState({
         images: [],
         brand: null,
-        tipo_carro: null,
+        brand_code: null,
         model: null,
+        year: null,
+        tipo_carro: null,
         carType: null,
         condition: '',
-        motor: null,
         color: '',
         blind: '',
         vehiclePrice: '',
         mileage: '',
-        year: null,
         transmission: null,
         direction: null,
         fuel: null,
@@ -44,7 +47,6 @@ function CarRegister() {
         acceptsExchange: null
     });
 
-    // Estado para dados da FIPE
     const [fipeData, setFipeData] = useState({
         brands: [],
         models: [],
@@ -55,42 +57,79 @@ function CarRegister() {
         loadingPrice: false
     });
 
-    const [inputKey, setInputKey] = useState(0);
-    const [errors, setErrors] = useState({});
-    const toast = React.useRef(null);
+    const POPULAR_BRANDS = [
+        'Volkswagen', 'GM - Chevrolet', 'Fiat', 'Ford', 'Toyota', 'Honda', 'Hyundai',
+        'Renault', 'Nissan', 'Peugeot', 'Citroën', 'Jeep', 'BMW', 'Mercedes-Benz',
+        'Audi', 'Mitsubishi', 'Suzuki', 'Kia', 'Volvo', 'Land Rover'
+    ];
 
-    // Buscar marcas da FIPE
+    const OPTIONS = {
+        carTypes: [
+            { name: 'Utilitário' },
+            { name: 'Sedan' },
+            { name: 'SUV' },
+            { name: 'Hatchback' },
+            { name: 'Coupe' }
+        ],
+        transmissions: [
+            { name: 'Automático' },
+            { name: 'Manual' },
+            { name: 'CVT' },
+            { name: 'Semi-automático' }
+        ],
+        directions: [
+            { name: 'Hidráulica' },
+            { name: 'Elétrica' },
+            { name: 'Mecânica' },
+            { name: 'Eletro-hidráulica' }
+        ],
+        fuels: [
+            { name: 'Gasolina' },
+            { name: 'Álcool' },
+            { name: 'Flex' },
+            { name: 'Diesel' },
+            { name: 'Híbrido' },
+            { name: 'Elétrico' }
+        ],
+        bodyworks: [
+            { name: 'Sedan' },
+            { name: 'Hatchback' },
+            { name: 'SUV' },
+            { name: 'Pickup' },
+            { name: 'Conversível' }
+        ],
+        vehicleStatuses: [
+            { name: 'Vendido' },
+            { name: 'Disponível' },
+            { name: 'Reservado' }
+        ]
+    };
+
+    // ================== FUNÇÕES DA API FIPE ==================
+
     const fetchFipeBrands = async () => {
         setFipeData(prev => ({ ...prev, loadingBrands: true }));
         try {
             const response = await fetch('https://parallelum.com.br/fipe/api/v2/cars/brands');
             const brands = await response.json();
-            setFipeData(prev => ({
-                ...prev,
-                brands: brands.map(brand => ({ name: brand.name, code: brand.code })),
-                loadingBrands: false
-            }));
+            setFipeData(prev => ({ ...prev, brands: brands, loadingBrands: false }));
         } catch (error) {
             console.error('Erro ao buscar marcas:', error);
             setFipeData(prev => ({ ...prev, loadingBrands: false }));
-            toast.current.show({
-                severity: 'error',
-                summary: 'Erro',
-                detail: 'Erro ao carregar marcas da FIPE'
-            });
+            showToast('error', 'Erro', 'Erro ao carregar marcas da FIPE');
         }
     };
 
-    // Buscar modelos baseado na marca
     const fetchFipeModels = async (brandCode) => {
         if (!brandCode) return;
 
         setFipeData(prev => ({ ...prev, loadingModels: true, models: [], years: [] }));
-        setFormData(prev => ({ ...prev, model: null, year: null }));
+        setFormData(prev => ({ ...prev, model: null, year: null, vehiclePrice: '' }));
 
         try {
             const response = await fetch(`https://parallelum.com.br/fipe/api/v2/cars/brands/${brandCode}/models`);
             const models = await response.json();
+
             setFipeData(prev => ({
                 ...prev,
                 models: models.map(model => ({ name: model.name, code: model.code })),
@@ -99,24 +138,20 @@ function CarRegister() {
         } catch (error) {
             console.error('Erro ao buscar modelos:', error);
             setFipeData(prev => ({ ...prev, loadingModels: false }));
-            toast.current.show({
-                severity: 'error',
-                summary: 'Erro',
-                detail: 'Erro ao carregar modelos'
-            });
+            showToast('error', 'Erro', 'Erro ao carregar modelos');
         }
     };
 
-    // Buscar anos baseado no modelo
     const fetchFipeYears = async (brandCode, modelCode) => {
         if (!brandCode || !modelCode) return;
 
         setFipeData(prev => ({ ...prev, loadingYears: true, years: [] }));
-        setFormData(prev => ({ ...prev, year: null }));
+        setFormData(prev => ({ ...prev, year: null, vehiclePrice: '' }));
 
         try {
             const response = await fetch(`https://parallelum.com.br/fipe/api/v2/cars/brands/${brandCode}/models/${modelCode}/years`);
             const years = await response.json();
+
             setFipeData(prev => ({
                 ...prev,
                 years: years.map(year => ({ name: year.name, code: year.code })),
@@ -125,15 +160,10 @@ function CarRegister() {
         } catch (error) {
             console.error('Erro ao buscar anos:', error);
             setFipeData(prev => ({ ...prev, loadingYears: false }));
-            toast.current.show({
-                severity: 'error',
-                summary: 'Erro',
-                detail: 'Erro ao carregar anos'
-            });
+            showToast('error', 'Erro', 'Erro ao carregar anos');
         }
     };
 
-    // Buscar preço FIPE
     const fetchFipePrice = async (brandCode, modelCode, yearCode) => {
         if (!brandCode || !modelCode || !yearCode) return;
 
@@ -144,74 +174,90 @@ function CarRegister() {
             const priceData = await response.json();
 
             if (priceData.price) {
-                // Converter preço para número
                 const priceNumber = parseFloat(priceData.price.replace('R$ ', '').replace(/\./g, '').replace(',', '.'));
-                setFormData(prev => ({
-                    ...prev,
-                    vehiclePrice: priceNumber
-                }));
-
-                toast.current.show({
-                    severity: 'info',
-                    summary: 'Preço FIPE',
-                    detail: `Valor sugerido: ${priceData.price}`
-                });
+                setFormData(prev => ({ ...prev, vehiclePrice: priceNumber }));
+                showToast('info', 'Preço FIPE', `Valor sugerido: ${priceData.price}`);
             }
-
         } catch (error) {
             console.error('Erro ao buscar preço:', error);
-            toast.current.show({
-                severity: 'error',
-                summary: 'Erro',
-                detail: 'Erro ao buscar preço FIPE'
-            });
+            showToast('error', 'Erro', 'Erro ao buscar preço FIPE');
         } finally {
             setFipeData(prev => ({ ...prev, loadingPrice: false }));
         }
     };
 
-    // Carregar marcas ao montar o componente
-    useEffect(() => {
-        fetchFipeBrands();
-    }, []);
+    // ================== HANDLERS ==================
 
-    // Handler para mudança de marca
-    const handleBrandChange = (brand) => {
-        console.log("marca", brand);
-        setFormData(prev => ({ ...prev, brand, model: null, year: null, vehiclePrice: '' }));
-        if (brand?.code) {
-            fetchFipeModels(brand.code);
+    const showToast = (severity, summary, detail) => {
+        toast.current.show({ severity, summary, detail });
+    };
+
+    const handleBrandChange = (selectedBrandValue) => {
+        const selectedBrand = fipeData.brands.find(brand => brand.name === selectedBrandValue.target.value);
+        setFormData(prev => ({
+            ...prev,
+            brand: selectedBrand.name,
+            brand_code: selectedBrand.code,
+            model: null,
+            year: null,
+            vehiclePrice: ''
+        }));
+
+        if (selectedBrand?.code) {
+            fetchFipeModels(selectedBrand.code);
+        } else {
+            setFipeData(prev => ({ ...prev, models: [], years: [] }));
         }
     };
 
-    // Handler para mudança de modelo
-    const handleModelChange = (model) => {
-        setFormData(prev => ({ ...prev, model, year: null, vehiclePrice: '' }));
-        if (formData.brand?.code && model?.code) {
-            fetchFipeYears(formData.brand.code, model.code);
+    const handleModelChange = (selectedModelValue) => {
+
+        const selectedModel = fipeData.models.find(model => model.name === selectedModelValue.target.value);
+
+        setFormData(prev => ({
+            ...prev,
+            model: selectedModel.name,
+            year: null,
+            vehiclePrice: ''
+        }));
+
+        if (formData.brand_code && selectedModel?.code) {
+            fetchFipeYears(formData.brand_code, selectedModel.code);
+        } else {
+            setFipeData(prev => ({ ...prev, years: [] }));
         }
     };
 
-    // Handler para mudança de ano
-    const handleYearChange = (year) => {
-        setFormData(prev => ({ ...prev, year, vehiclePrice: '' }));
-        if (formData.brand?.code && formData.model?.code && year?.code) {
-            fetchFipePrice(formData.brand.code, formData.model.code, year.code);
+    const handleYearChange = (selectedYearValue) => {
+        const selectedYear = fipeData.years.find(year => year.name === selectedYearValue);
+
+        setFormData(prev => ({
+            ...prev,
+            year: selectedYear,
+            vehiclePrice: ''
+        }));
+
+        if (formData.brand?.code && formData.model?.code && selectedYear?.code) {
+            fetchFipePrice(formData.brand.code, formData.model.code, selectedYear.code);
         }
     };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     const handleRadioChange = (name, value) => {
-        setFormData({ ...formData, [name]: value });
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSelectChange = (name, value) => {
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     const handleImageUpload = (event) => {
         const files = Array.from(event.files);
-        setFormData({ ...formData, images: files });
+        setFormData(prev => ({ ...prev, images: files }));
     };
 
     const handleClearFields = () => {
@@ -219,16 +265,15 @@ function CarRegister() {
         setFormData({
             images: [],
             brand: null,
-            tipo_carro: null,
             model: null,
+            year: null,
+            tipo_carro: null,
             carType: null,
             condition: '',
-            motor: null,
             color: '',
             blind: '',
             vehiclePrice: '',
             mileage: '',
-            year: null,
             transmission: null,
             direction: null,
             fuel: null,
@@ -238,165 +283,119 @@ function CarRegister() {
         });
         setFipeData(prev => ({ ...prev, models: [], years: [] }));
         setTotalSize(0);
+        setErrors({});
     };
 
-    const validateForm = () => {
-        let erros = {};
-        if (!formData.images || formData.images.length === 0) erros.images = 'Campo imagem é obrigatório';
-        if (!formData.brand) erros.brand = 'Campo marca é obrigatório';
-        if (!formData.model) erros.model = 'Campo modelo é obrigatório';
-        if (!formData.carType) erros.carType = 'Campo tipo de carro é obrigatório';
-        if (!formData.condition) erros.condition = 'Campo condição é obrigatório';
-        if (!formData.motor) erros.motor = 'Campo motor é obrigatório';
-        if (!formData.color) erros.color = 'Campo cor é obrigatório';
-        if (!formData.blind) erros.blind = 'Campo blindagem é obrigatório';
-        if (!formData.vehiclePrice) erros.vehiclePrice = 'Campo preço é obrigatório';
-        if (!formData.mileage) erros.mileage = 'Campo quilometragem é obrigatório';
-        if (!formData.year) erros.year = 'Campo ano é obrigatório';
-        if (!formData.transmission) erros.transmission = 'Campo câmbio é obrigatório';
-        if (!formData.direction) erros.direction = 'Campo direção é obrigatório';
-        if (!formData.fuel) erros.fuel = 'Campo combustível é obrigatório';
-        if (!formData.bodywork) erros.bodywork = 'Campo carroceria é obrigatório';
-        if (!formData.vehicleStatus) erros.vehicleStatus = 'Campo status é obrigatório';
+    // ================== VALIDAÇÃO E SALVAMENTO ==================
 
-        if (Object.keys(erros).length > 0) {
-            setErrors(erros);
-            return false;
-        }
-        return true;
+    const validateForm = () => {
+        const newErrors = {};
+        const requiredFields = {
+            images: 'Campo imagem é obrigatório',
+            brand: 'Campo marca é obrigatório',
+            model: 'Campo modelo é obrigatório',
+            carType: 'Campo tipo de carro é obrigatório',
+            condition: 'Campo condição é obrigatório',
+            color: 'Campo cor é obrigatório',
+            blind: 'Campo blindagem é obrigatório',
+            vehiclePrice: 'Campo preço é obrigatório',
+            mileage: 'Campo quilometragem é obrigatório',
+            year: 'Campo ano é obrigatório',
+            transmission: 'Campo câmbio é obrigatório',
+            direction: 'Campo direção é obrigatório',
+            fuel: 'Campo combustível é obrigatório',
+            bodywork: 'Campo carroceria é obrigatório',
+            vehicleStatus: 'Campo status é obrigatório'
+        };
+
+        Object.keys(requiredFields).forEach(field => {
+            if (field === 'images' && (!formData[field] || formData[field].length === 0)) {
+                newErrors[field] = requiredFields[field];
+            } else if (field !== 'images' && !formData[field]) {
+                newErrors[field] = requiredFields[field];
+            }
+        });
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const validateAndSave = async () => {
-        if (validateForm()) {
-            const formDataToSend = new FormData();
-            formData.images.forEach((image, index) => {
-                formDataToSend.append(`images[${index}]`, image);
-            });
-            formDataToSend.append('brand', formData.brand?.name);
-            formDataToSend.append('model', formData.model?.name);
-            formDataToSend.append('carType', formData.carType);
-            formDataToSend.append('condition', formData.condition);
-            formDataToSend.append('motor', formData.motor?.name);
-            formDataToSend.append('color', formData.color);
-            formDataToSend.append('blind', formData.blind);
-            formDataToSend.append('vehiclePrice', formData.vehiclePrice);
-            formDataToSend.append('mileage', formData.mileage);
-            formDataToSend.append('year', formData.year?.name);
-            formDataToSend.append('transmission', formData.transmission?.name);
-            formDataToSend.append('direction', formData.direction?.name);
-            formDataToSend.append('fuel', formData.fuel?.name);
-            formDataToSend.append('bodywork', formData.bodywork?.name);
-            formDataToSend.append('vehicleStatus', formData.vehicleStatus?.name);
+        if (!validateForm()) return;
 
-            try {
-                const result = await Api.post('cars', formDataToSend, {
-                    headers: { 'Content-Type': 'multipart/form-data' },
-                });
-                if (result.status === 200 || result.status === 201) {
-                    toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Registro salvo com sucesso!' });
-                    queryClient.invalidateQueries(['cars']);
-                    navigate(-1);
-                } else {
-                    toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Erro ao salvar registro. Tente novamente.' });
-                }
-            } catch (error) {
-                toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Erro ao salvar registro. Tente novamente.' });
+        const formDataToSend = new FormData();
+
+        formData.images.forEach((image, index) => {
+            formDataToSend.append(`images[${index}]`, image);
+        });
+
+        const dataToSend = {
+            brand: formData.brand?.name,
+            model: formData.model?.name,
+            carType: formData.carType,
+            condition: formData.condition,
+            color: formData.color,
+            blind: formData.blind,
+            vehiclePrice: formData.vehiclePrice,
+            mileage: formData.mileage,
+            year: formData.year?.name,
+            transmission: formData.transmission?.name,
+            direction: formData.direction?.name,
+            fuel: formData.fuel?.name,
+            bodywork: formData.bodywork?.name,
+            vehicleStatus: formData.vehicleStatus?.name
+        };
+
+        Object.keys(dataToSend).forEach(key => {
+            formDataToSend.append(key, dataToSend[key]);
+        });
+
+        try {
+            const result = await Api.post('cars', formDataToSend, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+
+            if (result.status === 200 || result.status === 201) {
+                showToast('success', 'Sucesso', 'Registro salvo com sucesso!');
+                queryClient.invalidateQueries(['cars']);
+                navigate(-1);
+            } else {
+                showToast('error', 'Erro', 'Erro ao salvar registro. Tente novamente.');
             }
+        } catch (error) {
+            showToast('error', 'Erro', 'Erro ao salvar registro. Tente novamente.');
         }
     };
 
-    // Options data (mantidos os originais para outros campos)
-    const motors = [
-        { name: 'EC3 Bi-Turbo' },
-        { name: 'V6 3.0' },
-        { name: '1.4 TSI' },
-        { name: '2.0 TFSI' },
-        { name: '1.0 Turbo' }
-    ];
+    // ================== FILE UPLOAD HANDLERS ==================
 
-    const carTypes = [
-        { name: 'Utilitário' },
-        { name: 'Sedan' },
-        { name: 'SUV' },
-        { name: 'Hatchback' },
-        { name: 'Coupe' }
-    ];
-
-    const transmissions = [
-        { name: 'Automático' },
-        { name: 'Manual' },
-        { name: 'CVT' },
-        { name: 'Semi-automático' }
-    ];
-
-    const directions = [
-        { name: 'Hidráulica' },
-        { name: 'Elétrica' },
-        { name: 'Mecânica' },
-        { name: 'Eletro-hidráulica' }
-    ];
-
-    const fuels = [
-        { name: 'Gasolina' },
-        { name: 'Álcool' },
-        { name: 'Flex' },
-        { name: 'Diesel' },
-        { name: 'Híbrido' },
-        { name: 'Elétrico' }
-    ];
-
-    const bodyworks = [
-        { name: 'Sedan' },
-        { name: 'Hatchback' },
-        { name: 'SUV' },
-        { name: 'Pickup' },
-        { name: 'Conversível' }
-    ];
-
-    const vehicleStatuses = [
-        { name: 'Vendido' },
-        { name: 'Disponível' },
-        { name: 'Reservado' }
-    ];
-
-    // FileUpload handlers
     const onTemplateSelect = (e) => {
         let _totalSize = totalSize;
-        let files = e.files;
-
-        Object.keys(files).forEach((key) => {
-            _totalSize += files[key].size || 0;
+        Object.keys(e.files).forEach((key) => {
+            _totalSize += e.files[key].size || 0;
         });
-
         setTotalSize(_totalSize);
         handleImageUpload(e);
-    };
-
-    const onTemplateUpload = (e) => {
-        let _totalSize = 0;
-        e.files.forEach((file) => {
-            _totalSize += file.size || 0;
-        });
-        setTotalSize(_totalSize);
-        toast.current.show({ severity: 'info', summary: 'Sucesso', detail: 'Arquivo enviado' });
     };
 
     const onTemplateRemove = (file, callback) => {
         setTotalSize(totalSize - file.size);
         const updatedImages = formData.images.filter(img => img !== file);
-        setFormData({ ...formData, images: updatedImages });
+        setFormData(prev => ({ ...prev, images: updatedImages }));
         callback();
     };
 
     const onTemplateClear = () => {
         setTotalSize(0);
-        setFormData({ ...formData, images: [] });
+        setFormData(prev => ({ ...prev, images: [] }));
     };
 
+    // ================== TEMPLATES ==================
+
     const headerTemplate = (options) => {
-        const { className, chooseButton, uploadButton, cancelButton } = options;
+        const { className } = options;
         const value = totalSize / 10000;
-        const formatedValue = fileUploadRef && fileUploadRef.current ? fileUploadRef.current.formatSize(totalSize) : '0 B';
+        const formatedValue = fileUploadRef?.current?.formatSize(totalSize) || '0 B';
 
         return (
             <div className={className} style={{ backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 1rem', marginTop: '1rem' }}>
@@ -406,67 +405,63 @@ function CarRegister() {
                 </div>
                 <div className="flex align-items-center gap-3 ml-auto">
                     <span>{formatedValue} / 1 MB</span>
-                    <ProgressBar value={value} showValue={false} style={{ width: '10rem', height: '12px' }}></ProgressBar>
+                    <ProgressBar value={value} showValue={false} style={{ width: '10rem', height: '12px' }} />
                 </div>
             </div>
         );
     };
 
-    const itemTemplate = (file, props) => {
-        return (
-            <div className="flex align-items-center" style={{ padding: '1rem', borderBottom: '1px solid #e5e7eb' }}>
-                <div className="flex align-items-center justify-content-center" style={{ width: '50%' }}>
-                    <img alt={file.name} role="presentation" src={file.objectURL} width={100} height={60} style={{ objectFit: 'cover', borderRadius: '4px' }} />
-                    <span className="flex flex-column text-left ml-3">
-                        {file.name}
-                        <small>{new Date().toLocaleDateString()}</small>
-                    </span>
-                </div>
-                <Tag value={props.formatSize} severity="warning" className="px-3 py-2" />
-                <Button
-                    type="button"
-                    icon="pi pi-times"
-                    className="p-button-outlined p-button-rounded p-button-danger ml-auto"
-                    onClick={() => onTemplateRemove(file, props.onRemove)}
-                    style={{ backgroundColor: '#ef4444', borderColor: '#ef4444', color: 'white' }}
-                />
-            </div>
-        );
-    };
-
-    const emptyTemplate = () => {
-        return (
-            <div className="flex align-items-center flex-column" style={{ padding: '3rem' }}>
-                <div style={{ fontSize: '4em', color: '#6b7280', marginBottom: '1rem' }}>
-                    <i className="pi pi-cloud-upload"></i>
-                </div>
-                <span style={{ fontSize: '1.2em', color: '#6b7280', marginBottom: '0.5rem' }}>
-                    Arraste e solte as imagens aqui
+    const itemTemplate = (file, props) => (
+        <div className="flex align-items-center" style={{ padding: '1rem', borderBottom: '1px solid #e5e7eb' }}>
+            <div className="flex align-items-center justify-content-center" style={{ width: '50%' }}>
+                <img alt={file.name} role="presentation" src={file.objectURL} width={100} height={60} style={{ objectFit: 'cover', borderRadius: '4px' }} />
+                <span className="flex flex-column text-left ml-3">
+                    {file.name}
+                    <small>{new Date().toLocaleDateString()}</small>
                 </span>
-                <span style={{ fontSize: '1em', color: '#9ca3af' }}>
-                    OU
-                </span>
-                <Button
-                    label="Clique para buscar a imagem"
-                    className="p-button-outlined mt-3"
-                    style={{ borderColor: '#6b7280', color: '#6b7280' }}
-                    onClick={() => fileUploadRef.current.choose()}
-                />
             </div>
-        );
-    };
+            <Tag value={props.formatSize} severity="warning" className="px-3 py-2" />
+            <Button
+                type="button"
+                icon="pi pi-times"
+                className="p-button-outlined p-button-rounded p-button-danger ml-auto"
+                onClick={() => onTemplateRemove(file, props.onRemove)}
+                style={{ backgroundColor: '#ef4444', borderColor: '#ef4444', color: 'white' }}
+            />
+        </div>
+    );
 
-    const chooseOptions = {
-        icon: 'pi pi-fw pi-images',
-        iconOnly: true,
-        className: 'custom-choose-btn p-button-rounded p-button-outlined',
-        style: { display: 'none' }
-    };
+    const emptyTemplate = () => (
+        <div className="flex align-items-center flex-column" style={{ padding: '3rem' }}>
+            <div style={{ fontSize: '4em', color: '#6b7280', marginBottom: '1rem' }}>
+                <i className="pi pi-cloud-upload"></i>
+            </div>
+            <span style={{ fontSize: '1.2em', color: '#6b7280', marginBottom: '0.5rem' }}>
+                Arraste e solte as imagens aqui
+            </span>
+            <span style={{ fontSize: '1em', color: '#9ca3af' }}>OU</span>
+            <Button
+                label="Clique para buscar a imagem"
+                className="p-button-outlined mt-3"
+                style={{ borderColor: '#6b7280', color: '#6b7280' }}
+                onClick={() => fileUploadRef.current.choose()}
+            />
+        </div>
+    );
+
+    // ================== USEEFFECT ==================
+
+    useEffect(() => {
+        fetchFipeBrands();
+    }, []);
+
+    // ================== RENDER ==================
 
     return (
         <main style={{ position: 'relative', padding: '20px', zIndex: 2000 }}>
             <Toast ref={toast} />
 
+            {/* Header */}
             <section className="header-cad w-full">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                     <button
@@ -488,6 +483,7 @@ function CarRegister() {
                 </div>
             </section>
 
+            {/* Conteúdo */}
             <section className="content-cad">
                 <form>
                     {/* Upload de Imagens */}
@@ -504,12 +500,18 @@ function CarRegister() {
                             headerTemplate={headerTemplate}
                             itemTemplate={itemTemplate}
                             emptyTemplate={emptyTemplate}
-                            chooseOptions={chooseOptions}
+                            chooseOptions={{
+                                icon: 'pi pi-fw pi-images',
+                                iconOnly: true,
+                                className: 'custom-choose-btn p-button-rounded p-button-outlined',
+                                style: { display: 'none' }
+                            }}
                             style={{ border: '2px dashed #d1d5db', borderRadius: '8px' }}
                         />
                         {errors.images && <small className="p-error">{errors.images}</small>}
                     </div>
 
+                    {/* Preview das Imagens */}
                     <div style={{ marginBottom: '2rem' }}>
                         <h3 style={{ marginBottom: '1rem', fontSize: '18px', fontWeight: 'bold' }}>Listagem das Imagens</h3>
                         {formData.images.length > 0 ? (
@@ -540,7 +542,7 @@ function CarRegister() {
                                             }}
                                             onClick={() => {
                                                 const updatedImages = formData.images.filter((_, i) => i !== index);
-                                                setFormData({ ...formData, images: updatedImages });
+                                                setFormData(prev => ({ ...prev, images: updatedImages }));
                                             }}
                                         />
                                     </div>
@@ -554,13 +556,13 @@ function CarRegister() {
                     {/* Formulário de dados */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
 
-                        {/* Marca - Integrada com FIPE */}
+                        {/* Marca */}
                         <div className="field">
                             <label>Marca <span style={{ color: 'red' }}>*</span></label>
                             <GenericSelect
                                 options={fipeData.brands}
                                 value={formData.brand}
-                                onChange={(e) => { handleBrandChange(e.value); console.log("marca", e) }}
+                                onChange={handleBrandChange}
                                 placeholder={fipeData.loadingBrands ? "Carregando marcas..." : "Selecione uma marca"}
                                 disabled={fipeData.loadingBrands}
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
@@ -571,13 +573,13 @@ function CarRegister() {
                             {errors.brand && <small className="p-error">{errors.brand}</small>}
                         </div>
 
-                        {/* Modelo - Integrado com FIPE */}
+                        {/* Modelo */}
                         <div className="field">
                             <label>Modelo <span style={{ color: 'red' }}>*</span></label>
                             <GenericSelect
                                 options={fipeData.models}
                                 value={formData.model}
-                                onChange={(e) => handleModelChange(e.value)}
+                                onChange={handleModelChange}
                                 placeholder={fipeData.loadingModels ? "Carregando modelos..." : formData.brand ? "Selecione um modelo" : "Primeiro selecione uma marca"}
                                 disabled={fipeData.loadingModels || !formData.brand}
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
@@ -588,13 +590,13 @@ function CarRegister() {
                             {errors.model && <small className="p-error">{errors.model}</small>}
                         </div>
 
-                        {/* Ano - Integrado com FIPE */}
+                        {/* Ano */}
                         <div className="field">
                             <label>Ano <span style={{ color: 'red' }}>*</span></label>
                             <GenericSelect
                                 options={fipeData.years}
                                 value={formData.year}
-                                onChange={(e) => handleYearChange(e.value)}
+                                onChange={handleYearChange}
                                 placeholder={fipeData.loadingYears ? "Carregando anos..." : formData.model ? "Selecione o ano" : "Primeiro selecione o modelo"}
                                 disabled={fipeData.loadingYears || !formData.model}
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
@@ -605,7 +607,7 @@ function CarRegister() {
                             {errors.year && <small className="p-error">{errors.year}</small>}
                         </div>
 
-                        {/* Tipo de carro */}
+                        {/* Tipo de Carro */}
                         <div className="field">
                             <label>Tipo de Carro <span style={{ color: 'red' }}>*</span></label>
                             <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
@@ -661,40 +663,25 @@ function CarRegister() {
                             {errors.condition && <small className="p-error">{errors.condition}</small>}
                         </div>
 
-                        {/* Motor */}
-                        <div className="field">
-                            <label>Motor <span style={{ color: 'red' }}>*</span></label>
-                            <GenericSelect
-                                options={motors}
-                                value={formData.motor}
-                                onChange={(e) => setFormData({ ...formData, motor: e.value })}
-                                placeholder="Ex: EC3 Bi-Turbo"
-                                styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
-                                styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
-                                styleLabel={{ marginBottom: '0px' }}
-                            />
-                            {errors.motor && <small className="p-error">{errors.motor}</small>}
-                        </div>
-
-                        {/* Tipo de carro - Radio buttons em linha completa */}
-                        <div className="field" style={{ gridColumn: '1 / -1' }}>
-                            <label>Tipo de carro <span style={{ color: 'red' }}>*</span></label>
+                        {/* Categoria - Avaliar se vai colocar mesmo */}
+                        {/* <div className="field" style={{ gridColumn: '1 / -1' }}>
+                            <label>Categoria <span style={{ color: 'red' }}>*</span></label>
                             <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
-                                {carTypes.map((type) => (
+                                {OPTIONS.carTypes.map((type) => (
                                     <div key={type.name} className="flex align-items-center" style={{ marginRight: '1rem' }}>
                                         <RadioButton
-                                            inputId={`tipo-${type.name}`}
+                                            inputId={`categoria-${type.name}`}
                                             name="carType"
                                             value={type.name}
                                             onChange={(e) => handleRadioChange('carType', e.value)}
                                             checked={formData.carType === type.name}
                                         />
-                                        <label htmlFor={`tipo-${type.name}`} className="ml-2">{type.name}</label>
+                                        <label htmlFor={`categoria-${type.name}`} className="ml-2">{type.name}</label>
                                     </div>
                                 ))}
                             </div>
                             {errors.carType && <small className="p-error">{errors.carType}</small>}
-                        </div>
+                        </div> */}
 
                         {/* Aceita Troca */}
                         <div className="field">
@@ -766,13 +753,13 @@ function CarRegister() {
                             {errors.blind && <small className="p-error">{errors.blind}</small>}
                         </div>
 
-                        {/* Preço do veículo - Com integração FIPE */}
+                        {/* Preço do veículo */}
                         <div className="field">
                             <label>Preço do veículo <span style={{ color: 'red' }}>*</span></label>
                             <div style={{ position: 'relative' }}>
                                 <InputNumber
                                     value={formData.vehiclePrice}
-                                    onValueChange={(e) => setFormData(prev => ({ ...prev, vehiclePrice: e.value }))}
+                                    onValueChange={(e) => handleSelectChange('vehiclePrice', e.value)}
                                     mode="currency"
                                     currency="BRL"
                                     locale="pt-BR"
@@ -810,9 +797,9 @@ function CarRegister() {
                         <div className="field">
                             <label>Câmbio <span style={{ color: 'red' }}>*</span></label>
                             <GenericSelect
-                                options={transmissions}
+                                options={OPTIONS.transmissions}
                                 value={formData.transmission}
-                                onChange={(e) => setFormData({ ...formData, transmission: e.value })}
+                                onChange={(value) => handleSelectChange('transmission', value)}
                                 placeholder="Ex: Automático"
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
                                 styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
@@ -825,9 +812,9 @@ function CarRegister() {
                         <div className="field">
                             <label>Direção <span style={{ color: 'red' }}>*</span></label>
                             <GenericSelect
-                                options={directions}
+                                options={OPTIONS.directions}
                                 value={formData.direction}
-                                onChange={(e) => setFormData({ ...formData, direction: e.value })}
+                                onChange={(value) => handleSelectChange('direction', value)}
                                 placeholder="Ex: Hidráulica"
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
                                 styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
@@ -840,9 +827,9 @@ function CarRegister() {
                         <div className="field">
                             <label>Combustível <span style={{ color: 'red' }}>*</span></label>
                             <GenericSelect
-                                options={fuels}
+                                options={OPTIONS.fuels}
                                 value={formData.fuel}
-                                onChange={(e) => setFormData({ ...formData, fuel: e.value })}
+                                onChange={(value) => handleSelectChange('fuel', value)}
                                 placeholder="Ex: Flex"
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
                                 styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
@@ -855,9 +842,9 @@ function CarRegister() {
                         <div className="field">
                             <label>Carroceria <span style={{ color: 'red' }}>*</span></label>
                             <GenericSelect
-                                options={bodyworks}
+                                options={OPTIONS.bodyworks}
                                 value={formData.bodywork}
-                                onChange={(e) => setFormData({ ...formData, bodywork: e.value })}
+                                onChange={(value) => handleSelectChange('bodywork', value)}
                                 placeholder="Ex: Sedan"
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
                                 styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
@@ -870,9 +857,9 @@ function CarRegister() {
                         <div className="field">
                             <label>Status do veículo <span style={{ color: 'red' }}>*</span></label>
                             <GenericSelect
-                                options={vehicleStatuses}
+                                options={OPTIONS.vehicleStatuses}
                                 value={formData.vehicleStatus}
-                                onChange={(e) => setFormData({ ...formData, vehicleStatus: e.value })}
+                                onChange={(value) => handleSelectChange('vehicleStatus', value)}
                                 placeholder="Ex: Disponível"
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
                                 styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
@@ -883,10 +870,11 @@ function CarRegister() {
                     </div>
                 </form>
 
+                {/* Ações do formulário */}
                 <div className="form-action" style={{ marginTop: '2rem', textAlign: 'center' }}>
                     <p style={{ marginBottom: '1rem' }}>Os campos marcados com <span style={{ color: 'red' }}>*</span> são obrigatórios</p>
                     <div className="btn" style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-                        <Button className='btn-generic btn-clean' onClick={() => handleClearFields()}>
+                        <Button className='btn-generic btn-clean' onClick={handleClearFields}>
                             <TrashIcon size={20} weight='fill' color='white' />
                             Limpar Campos
                         </Button>
