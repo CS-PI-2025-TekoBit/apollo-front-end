@@ -42,11 +42,7 @@
     padding: 0.5rem 1rem !important;
 }
 
-/* Button */
-.p-button {
-    margin: 0 !important;
-    padding: 0.75rem 1rem !important;
-}
+
 
 /* Dropdown/Select */
 .p-dropdown {
@@ -70,7 +66,7 @@
     margin: 0 !important;
     padding: 0.75rem !important;
     border: 1px solid rgba(0, 0, 0, 0.38) !important;
-    border-radius: 4px !important;
+    /* border-radius: 4px !important; */
 }
 
 /* RadioButton */

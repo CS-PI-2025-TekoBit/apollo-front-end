@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTransmission } from '../../../hooks/useTransmission';
 import Api from '../../../api/api';
+import { InputText } from 'primereact/inputtext';
 
 function Transmission() {
     const { transmission, isLoading } = useTransmission();
@@ -113,8 +114,8 @@ function Transmission() {
                 <section className="content-list">
                     <div className="search-and-include">
                         <div className="search">
-                            <input type="text" placeholder="Pesquisar" />
-                            <Button icon={<Search size={20} color='white' />} iconPos='left' className="button-search" />
+                            <InputText type="text" placeholder="Pesquisar" style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} />
+                            <Button icon={<Search size={22} color='white' />} iconPos='left' className="button-search" />
                         </div>
                         <div className="include">
                             <NavLink to="/admin/transmission/register">

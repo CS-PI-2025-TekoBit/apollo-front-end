@@ -15,6 +15,9 @@ import { InputText } from 'primereact/inputtext';
 import { RadioButton } from 'primereact/radiobutton';
 import GenericSelect from '../../../components/GenericSelect/GenericSelect';
 import { InputNumber } from 'primereact/inputnumber';
+import { InputTextarea } from "primereact/inputtextarea";
+import { FloatLabel } from "primereact/floatlabel";
+import OptionalSelector from '../../../components/OptionalCars/OptionCars';
 
 function CarRegister() {
     const navigate = useNavigate();
@@ -44,7 +47,9 @@ function CarRegister() {
         fuel: null,
         bodywork: null,
         vehicleStatus: null,
-        acceptsExchange: null
+        acceptsExchange: null,
+        description: '',
+        optionalFeatures: []
     });
 
     const [fipeData, setFipeData] = useState({
@@ -229,17 +234,17 @@ function CarRegister() {
     };
 
     const handleYearChange = (selectedYearValue) => {
-        const selectedYear = fipeData.years.find(year => year.name === selectedYearValue);
-
+        const selectedYear = fipeData.years.find(year => year.name === selectedYearValue.target.value);
+        let combustivel;
+        if (selectedYear.name.includes('Gasolina') || selectedYear.name.includes('Diesel') || selectedYear.name.includes('Híbrido')) {
+            combustivel = selectedYear.name.split(' ')[1];
+        }
         setFormData(prev => ({
             ...prev,
-            year: selectedYear,
-            vehiclePrice: ''
+            year: selectedYear.name,
+            fuel: combustivel
         }));
 
-        if (formData.brand?.code && formData.model?.code && selectedYear?.code) {
-            fetchFipePrice(formData.brand.code, formData.model.code, selectedYear.code);
-        }
     };
 
     const handleInputChange = (e) => {
@@ -279,7 +284,9 @@ function CarRegister() {
             fuel: null,
             bodywork: null,
             vehicleStatus: null,
-            acceptsExchange: null
+            acceptsExchange: null,
+            description: '',
+            optionalFeatures: []
         });
         setFipeData(prev => ({ ...prev, models: [], years: [] }));
         setTotalSize(0);
@@ -343,28 +350,32 @@ function CarRegister() {
             direction: formData.direction?.name,
             fuel: formData.fuel?.name,
             bodywork: formData.bodywork?.name,
-            vehicleStatus: formData.vehicleStatus?.name
+            vehicleStatus: formData.vehicleStatus?.name,
+            description: formData.description,
+            optionalFeatures: JSON.stringify(formData.optionalFeatures)
         };
 
         Object.keys(dataToSend).forEach(key => {
-            formDataToSend.append(key, dataToSend[key]);
-        });
-
-        try {
-            const result = await Api.post('cars', formDataToSend, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
-
-            if (result.status === 200 || result.status === 201) {
-                showToast('success', 'Sucesso', 'Registro salvo com sucesso!');
-                queryClient.invalidateQueries(['cars']);
-                navigate(-1);
-            } else {
-                showToast('error', 'Erro', 'Erro ao salvar registro. Tente novamente.');
+            if (dataToSend[key] !== null && dataToSend[key] !== undefined) {
+                formDataToSend.append(key, dataToSend[key]);
             }
-        } catch (error) {
-            showToast('error', 'Erro', 'Erro ao salvar registro. Tente novamente.');
-        }
+        });
+        console.log('Form Data to Send:', Object.fromEntries(formDataToSend.entries()));
+        // try {
+        //     const result = await Api.post('cars', formDataToSend, {
+        //         headers: { 'Content-Type': 'multipart/form-data' },
+        //     });
+
+        //     if (result.status === 200 || result.status === 201) {
+        //         showToast('success', 'Sucesso', 'Registro salvo com sucesso!');
+        //         queryClient.invalidateQueries(['cars']);
+        //         navigate(-1);
+        //     } else {
+        //         showToast('error', 'Erro', 'Erro ao salvar registro. Tente novamente.');
+        //     }
+        // } catch (error) {
+        //     showToast('error', 'Erro', 'Erro ao salvar registro. Tente novamente.');
+        // }
     };
 
     // ================== FILE UPLOAD HANDLERS ==================
@@ -554,7 +565,7 @@ function CarRegister() {
                     </div>
 
                     {/* Formulário de dados */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
 
                         {/* Marca */}
                         <div className="field">
@@ -765,7 +776,7 @@ function CarRegister() {
                                     locale="pt-BR"
                                     placeholder="Ex: R$ 152.000,00"
                                     className="w-full"
-                                    style={{ padding: '0.75rem' }}
+
                                 />
                                 {fipeData.loadingPrice && (
                                     <i className="pi pi-spin pi-spinner" style={{
@@ -866,6 +877,19 @@ function CarRegister() {
                                 styleLabel={{ marginBottom: '0px' }}
                             />
                             {errors.vehicleStatus && <small className="p-error">{errors.vehicleStatus}</small>}
+                        </div>
+
+                        <div className="field" style={{ gridColumn: '1 / -1' }}>
+                            <label htmlFor="description" style={{ marginBottom: '1rem', display: 'block', fontWeight: 'bold' }}>Descrição</label>
+                            <InputTextarea id="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={5} cols={30} style={{ width: '100%' }} />
+                        </div>
+                        <div className="field" style={{ gridColumn: '1 / -1' }}>
+                            <OptionalSelector
+                                selectedOptionals={formData.optionalFeatures || []}
+                                setSelectedOptionals={(value) => {
+                                    setFormData(prev => ({ ...prev, optionalFeatures: value }));
+                                }}
+                            />
                         </div>
                     </div>
                 </form>
