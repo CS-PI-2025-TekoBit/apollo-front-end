@@ -135,7 +135,7 @@ export default function CarDetail() {
                                     <div className="left-side-car-detail">
                                         <section>
                                             <div className="title-with-highlight">
-                                                <h1 className="car-title">
+                                                <h1 className="car-title" style={{ margin: 0 }}>
                                                     {car?.mark} <span className="title-color">{car?.model}</span>
                                                 </h1>
                                                 {
@@ -226,7 +226,7 @@ export default function CarDetail() {
                                         </section>
                                     </div>
                                     <div className="right-side-car-detail">
-                                        <section>
+                                        <section style={{ margin: 0 }}>
                                             <h1 className="car-detail-price">
                                                 {car?.price?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                             </h1>
@@ -237,9 +237,9 @@ export default function CarDetail() {
                                             <h2 className="car-detail-vendor">
                                                 Envie uma mensagem ao vendedor
                                             </h2>
-                                            <a href={`http://wa.me/5500000000?text=Olá, gostaria de saber se o veículo ${car?.model} na cor ${car?.color} ainda esta disponível ? `} className="button-whats">
+                                            <a href={`http://wa.me/5500000000?text=Olá, gostaria de saber se o veículo ${car?.model} na cor ${car?.color} ainda esta disponível ? `} className="button-whats" >
                                                 <img src={IMG} alt="" />
-                                                <div className="whats">
+                                                <div className="whats" >
                                                     <p>
                                                         Fale conosco pelo
                                                     </p>

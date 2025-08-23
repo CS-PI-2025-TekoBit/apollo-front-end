@@ -49,7 +49,7 @@ export default function Card(
 
                 <div className="txt-card-cars">
                     <h1 className="titulo-card-cars">{mark} {name}</h1>
-                    <p className="valor-card-cars"><span>Preço: </span>{price}</p>
+                    <p className="valor-card-cars"><span>Preço: </span> {price?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>
                     <p className="marca-card-cars"><span>Marca: </span>{mark}</p>
                     <p className="tracao-card-cars"><span>Tração: </span>{traction}</p>
                     <p className="ano-card-cars"><span>Ano: </span>{year}</p>

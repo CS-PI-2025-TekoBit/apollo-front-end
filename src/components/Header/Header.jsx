@@ -71,7 +71,7 @@ export default function Header() {
 
                     {
                         user ? (
-                            <div className='dropdown'>
+                            <div className='dropdowns'>
                                 <span className="dropdown-texto">
                                     <UserCircleGear size={32} weight="duotone" />
                                     <p>{user.name}</p>

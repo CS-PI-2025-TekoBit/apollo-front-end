@@ -5,6 +5,8 @@ import Home from './pages/public/Home/Home';
 import CarDetail from './pages/public/CarDetail/CarDetail';
 
 import './index.css';
+import './flag.css'
+import './primereact-override.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PrivateRoute } from './components/PrivateRoutes/PrivateRoutes';
 import Login from './pages/public/Login/Login';
@@ -16,7 +18,8 @@ import 'primeicons/primeicons.css';
 import { PrimeReactProvider } from 'primereact/api';
 import 'primeflex/primeflex.css';
 import 'primereact/resources/primereact.css';
-import 'primereact/resources/themes/md-light-indigo/theme.css';
+import 'primereact/resources/themes/mdc-light-indigo/theme.css'
+
 
 import { AdminLayout } from './components/AdminLayout/AdminLayout';
 import AdminRoutes from './components/AdminRoutes/AdminRoutes';
