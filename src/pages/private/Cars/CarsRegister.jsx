@@ -1,13 +1,12 @@
 import { ArrowLeft } from 'lucide-react';
 import { Button } from 'primereact/button';
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 import { FileUpload } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
 import { TrashIcon } from '@phosphor-icons/react';
 import { X } from 'lucide-react';
 import { Check } from 'lucide-react';
-import Api from '../../../api/api';
 import { useQueryClient } from '@tanstack/react-query';
 import { ProgressBar } from 'primereact/progressbar';
 import { Tag } from 'primereact/tag';
@@ -16,11 +15,15 @@ import { RadioButton } from 'primereact/radiobutton';
 import GenericSelect from '../../../components/GenericSelect/GenericSelect';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputTextarea } from "primereact/inputtextarea";
-import { FloatLabel } from "primereact/floatlabel";
 import OptionalSelector from '../../../components/OptionalCars/OptionCars';
+import { useColors } from '../../../hooks/useColors';
+import { useFuel } from '../../../hooks/useFuel';
+import Api from '../../../api/api';
 
 function CarRegister() {
     const navigate = useNavigate();
+    const { colors, isLoading } = useColors();
+    const { fuel } = useFuel();
     const fileUploadRef = useRef(null);
     const toast = useRef(null);
     const queryClient = useQueryClient();
@@ -30,14 +33,14 @@ function CarRegister() {
     const [errors, setErrors] = useState({});
 
     const [formData, setFormData] = useState({
-        images: [],
+        car_images: [],
         brand: null,
         brand_code: null,
         model: null,
         year: null,
-        tipo_carro: null,
         carType: null,
         condition: '',
+        licensePlateEnd: null,
         color: '',
         blind: '',
         vehiclePrice: '',
@@ -104,9 +107,9 @@ function CarRegister() {
             { name: 'Conversível' }
         ],
         vehicleStatuses: [
-            { name: 'Vendido' },
-            { name: 'Disponível' },
-            { name: 'Reservado' }
+            { name: 'VENDIDO' },
+            { name: 'DISPONIVEL' },
+            { name: 'ALUGADO' }
         ]
     };
 
@@ -262,19 +265,19 @@ function CarRegister() {
 
     const handleImageUpload = (event) => {
         const files = Array.from(event.files);
-        setFormData(prev => ({ ...prev, images: files }));
+        setFormData(prev => ({ ...prev, car_images: files }));
     };
 
     const handleClearFields = () => {
         setInputKey(prevKey => prevKey + 1);
         setFormData({
-            images: [],
+            car_images: [],
             brand: null,
             model: null,
             year: null,
-            tipo_carro: null,
             carType: null,
             condition: '',
+            licensePlateEnd: null,
             color: '',
             blind: '',
             vehiclePrice: '',
@@ -298,7 +301,7 @@ function CarRegister() {
     const validateForm = () => {
         const newErrors = {};
         const requiredFields = {
-            images: 'Campo imagem é obrigatório',
+            car_images: 'Campo imagem é obrigatório',
             brand: 'Campo marca é obrigatório',
             model: 'Campo modelo é obrigatório',
             carType: 'Campo tipo de carro é obrigatório',
@@ -316,9 +319,10 @@ function CarRegister() {
         };
 
         Object.keys(requiredFields).forEach(field => {
-            if (field === 'images' && (!formData[field] || formData[field].length === 0)) {
+            if (field === 'car_images' && (!formData[field] || formData[field].length === 0)) {
                 newErrors[field] = requiredFields[field];
-            } else if (field !== 'images' && !formData[field]) {
+            } else if (field !== 'car_images' && !formData[field]) {
+                console.log("erro", field)
                 newErrors[field] = requiredFields[field];
             }
         });
@@ -328,54 +332,62 @@ function CarRegister() {
     };
 
     const validateAndSave = async () => {
-        if (!validateForm()) return;
+        console.log('Form Data:', formData);
+        if (!validateForm()) {
+            showToast('error', 'Erro', 'Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+
+        const yearFormate = formData.year ? formData.year.split(' ')[0] : '';
 
         const formDataToSend = new FormData();
 
-        formData.images.forEach((image, index) => {
-            formDataToSend.append(`images[${index}]`, image);
-        });
-
+        if (formData.car_images && formData.car_images.length > 0) {
+            formData.car_images.forEach((image, index) => {
+                formDataToSend.append(`car_images`, image);
+            });
+        }
         const dataToSend = {
-            brand: formData.brand?.name,
-            model: formData.model?.name,
+            brand: formData.brand,
+            model: formData.model,
             carType: formData.carType,
             condition: formData.condition,
+            licensePlateEnd: formData.licensePlateEnd,
             color: formData.color,
             blind: formData.blind,
             vehiclePrice: formData.vehiclePrice,
             mileage: formData.mileage,
-            year: formData.year?.name,
-            transmission: formData.transmission?.name,
-            direction: formData.direction?.name,
-            fuel: formData.fuel?.name,
-            bodywork: formData.bodywork?.name,
-            vehicleStatus: formData.vehicleStatus?.name,
+            year: yearFormate, // Ano formatado
+            transmission: formData.transmission,
+            direction: formData.direction,
+            fuel: formData.fuel,
+            bodywork: formData.bodywork,
+            vehicleStatus: formData.vehicleStatus,
+            acceptsExchange: formData.acceptsExchange,
             description: formData.description,
             optionalFeatures: JSON.stringify(formData.optionalFeatures)
         };
-
         Object.keys(dataToSend).forEach(key => {
-            if (dataToSend[key] !== null && dataToSend[key] !== undefined) {
+            if (dataToSend[key] !== null && dataToSend[key] !== undefined && dataToSend[key] !== '') {
                 formDataToSend.append(key, dataToSend[key]);
             }
         });
-        console.log('Form Data to Send:', Object.fromEntries(formDataToSend.entries()));
-        // try {
-        //     const result = await Api.post('cars', formDataToSend, {
-        //         headers: { 'Content-Type': 'multipart/form-data' },
-        //     });
+        try {
+            const result = await Api.post('cars', formDataToSend, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
 
-        //     if (result.status === 200 || result.status === 201) {
-        //         showToast('success', 'Sucesso', 'Registro salvo com sucesso!');
-        //         queryClient.invalidateQueries(['cars']);
-        //         navigate(-1);
-        //     } else {
-        //         showToast('error', 'Erro', 'Erro ao salvar registro. Tente novamente.');
-        //     }
-        // } catch (error) {
-        //     showToast('error', 'Erro', 'Erro ao salvar registro. Tente novamente.');
-        // }
+            if (result.status === 200 || result.status === 201) {
+                showToast('success', 'Sucesso', 'Registro salvo com sucesso!');
+                queryClient.invalidateQueries(['cars']);
+                navigate(-1);
+            } else {
+                showToast('error', 'Erro', 'Erro ao salvar registro. Tente novamente.');
+            }
+        } catch (error) {
+            console.error('Erro ao salvar:', error);
+            showToast('error', 'Erro', 'Erro ao salvar registro. Tente novamente.');
+        }
     };
 
     // ================== FILE UPLOAD HANDLERS ==================
@@ -391,14 +403,14 @@ function CarRegister() {
 
     const onTemplateRemove = (file, callback) => {
         setTotalSize(totalSize - file.size);
-        const updatedImages = formData.images.filter(img => img !== file);
-        setFormData(prev => ({ ...prev, images: updatedImages }));
+        const updatedImages = formData.car_images.filter(img => img !== file);
+        setFormData(prev => ({ ...prev, car_images: updatedImages }));
         callback();
     };
 
     const onTemplateClear = () => {
         setTotalSize(0);
-        setFormData(prev => ({ ...prev, images: [] }));
+        setFormData(prev => ({ ...prev, car_images: [] }));
     };
 
     // ================== TEMPLATES ==================
@@ -455,7 +467,7 @@ function CarRegister() {
                 label="Clique para buscar a imagem"
                 className="p-button-outlined mt-3"
                 style={{ borderColor: '#6b7280', color: '#6b7280' }}
-                onClick={() => fileUploadRef.current.choose()}
+                onClick={() => console.log(fileUploadRef?.current)}
             />
         </div>
     );
@@ -501,7 +513,7 @@ function CarRegister() {
                     <div style={{ marginBottom: '2rem' }}>
                         <FileUpload
                             ref={fileUploadRef}
-                            name="images[]"
+                            name="car_images[]"
                             multiple
                             accept="image/*"
                             customUpload
@@ -512,22 +524,22 @@ function CarRegister() {
                             itemTemplate={itemTemplate}
                             emptyTemplate={emptyTemplate}
                             chooseOptions={{
-                                icon: 'pi pi-fw pi-images',
+                                icon: 'pi pi-fw pi-car_images',
                                 iconOnly: true,
                                 className: 'custom-choose-btn p-button-rounded p-button-outlined',
                                 style: { display: 'none' }
                             }}
                             style={{ border: '2px dashed #d1d5db', borderRadius: '8px' }}
                         />
-                        {errors.images && <small className="p-error">{errors.images}</small>}
+                        {errors.car_images && <small className="p-error">{errors.car_images}</small>}
                     </div>
 
                     {/* Preview das Imagens */}
                     <div style={{ marginBottom: '2rem' }}>
                         <h3 style={{ marginBottom: '1rem', fontSize: '18px', fontWeight: 'bold' }}>Listagem das Imagens</h3>
-                        {formData.images.length > 0 ? (
+                        {formData.car_images.length > 0 ? (
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '10px' }}>
-                                {formData.images.map((file, index) => (
+                                {formData.car_images.map((file, index) => (
                                     <div key={index} style={{ position: 'relative' }}>
                                         <img
                                             src={file.objectURL || URL.createObjectURL(file)}
@@ -552,8 +564,8 @@ function CarRegister() {
                                                 backgroundColor: '#ef4444'
                                             }}
                                             onClick={() => {
-                                                const updatedImages = formData.images.filter((_, i) => i !== index);
-                                                setFormData(prev => ({ ...prev, images: updatedImages }));
+                                                const updatedImages = formData.car_images.filter((_, i) => i !== index);
+                                                setFormData(prev => ({ ...prev, car_images: updatedImages }));
                                             }}
                                         />
                                     </div>
@@ -625,25 +637,25 @@ function CarRegister() {
                                 <div className="flex align-items-center">
                                     <RadioButton
                                         inputId="carro-venda"
-                                        name="tipo_carro"
+                                        name="carType"
                                         value="Venda"
-                                        onChange={(e) => handleRadioChange('tipo_carro', e.value)}
-                                        checked={formData.tipo_carro === 'Venda'}
+                                        onChange={(e) => handleRadioChange('carType', e.value)}
+                                        checked={formData.carType === 'Venda'}
                                     />
                                     <label htmlFor="carro-venda" className="ml-2">Venda</label>
                                 </div>
                                 <div className="flex align-items-center">
                                     <RadioButton
                                         inputId="carro-aluguel"
-                                        name="tipo_carro"
+                                        name="carType"
                                         value="Aluguel"
-                                        onChange={(e) => handleRadioChange('tipo_carro', e.value)}
-                                        checked={formData.tipo_carro === 'Aluguel'}
+                                        onChange={(e) => handleRadioChange('carType', e.value)}
+                                        checked={formData.carType === 'Aluguel'}
                                     />
                                     <label htmlFor="carro-aluguel" className="ml-2">Aluguel</label>
                                 </div>
                             </div>
-                            {errors.tipo_carro && <small className="p-error">{errors.tipo_carro}</small>}
+                            {errors.carType && <small className="p-error">{errors.carType}</small>}
                         </div>
 
                         {/* Condição */}
@@ -725,13 +737,14 @@ function CarRegister() {
                         {/* Cor */}
                         <div className="field">
                             <label>Cor <span style={{ color: 'red' }}>*</span></label>
-                            <InputText
-                                name="color"
+                            <GenericSelect
+                                options={colors}
                                 value={formData.color}
-                                onChange={handleInputChange}
-                                placeholder="Ex: Azul meia noite"
-                                className="w-full"
-                                style={{ padding: '0.75rem' }}
+                                onChange={(e) => handleSelectChange('color', e.target.value)}
+                                placeholder={"Selecione uma cor"}
+                                styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
+                                styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
+                                styleLabel={{ marginBottom: '0px' }}
                             />
                             {errors.color && <small className="p-error">{errors.color}</small>}
                         </div>
@@ -810,7 +823,7 @@ function CarRegister() {
                             <GenericSelect
                                 options={OPTIONS.transmissions}
                                 value={formData.transmission}
-                                onChange={(value) => handleSelectChange('transmission', value)}
+                                onChange={(value) => handleSelectChange('transmission', value.target.value)}
                                 placeholder="Ex: Automático"
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
                                 styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
@@ -825,7 +838,7 @@ function CarRegister() {
                             <GenericSelect
                                 options={OPTIONS.directions}
                                 value={formData.direction}
-                                onChange={(value) => handleSelectChange('direction', value)}
+                                onChange={(value) => handleSelectChange('direction', value.target.value)}
                                 placeholder="Ex: Hidráulica"
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
                                 styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
@@ -838,9 +851,9 @@ function CarRegister() {
                         <div className="field">
                             <label>Combustível <span style={{ color: 'red' }}>*</span></label>
                             <GenericSelect
-                                options={OPTIONS.fuels}
+                                options={fuel}
                                 value={formData.fuel}
-                                onChange={(value) => handleSelectChange('fuel', value)}
+                                onChange={(value) => handleSelectChange('fuel', value.target.value)}
                                 placeholder="Ex: Flex"
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
                                 styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
@@ -855,7 +868,7 @@ function CarRegister() {
                             <GenericSelect
                                 options={OPTIONS.bodyworks}
                                 value={formData.bodywork}
-                                onChange={(value) => handleSelectChange('bodywork', value)}
+                                onChange={(value) => handleSelectChange('bodywork', value.target.value)}
                                 placeholder="Ex: Sedan"
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
                                 styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
@@ -870,13 +883,26 @@ function CarRegister() {
                             <GenericSelect
                                 options={OPTIONS.vehicleStatuses}
                                 value={formData.vehicleStatus}
-                                onChange={(value) => handleSelectChange('vehicleStatus', value)}
+                                onChange={(value) => handleSelectChange('vehicleStatus', value.target.value)}
                                 placeholder="Ex: Disponível"
                                 styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
                                 styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
                                 styleLabel={{ marginBottom: '0px' }}
                             />
                             {errors.vehicleStatus && <small className="p-error">{errors.vehicleStatus}</small>}
+                        </div>
+                        <div className="field">
+                            <label>Final de placa <span style={{ color: 'red' }}>*</span></label>
+                            <InputNumber
+                                placeholder='Ex: 1'
+                                label='Final de placa'
+                                maxLength={1}
+                                min={0}
+                                max={9}
+                                value={formData.licensePlateEnd}
+                                onValueChange={(e) => setFormData({ ...formData, licensePlateEnd: e.value || null })}
+                                style={{ width: '100%' }}
+                            />
                         </div>
 
                         <div className="field" style={{ gridColumn: '1 / -1' }}>

@@ -39,8 +39,8 @@ const Api = {
     get: async (route) => {
         return api.get(route);
     },
-    post: async (route, data) => {
-        return api.post(route, data);
+    post: async (route, data, config) => {
+        return api.post(route, data, config);
     },
     put: async (route, data) => {
         return api.put(route, data);

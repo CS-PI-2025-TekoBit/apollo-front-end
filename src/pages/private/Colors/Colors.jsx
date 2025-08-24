@@ -1,16 +1,11 @@
 import { Palette } from '@phosphor-icons/react';
 import { Search } from 'lucide-react';
 import { Button } from 'primereact/button';
-import React from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import GenericLoader from '../../../components/GenericLoader/GenericLoader';
 import { useColors } from '../../../hooks/useColors';
-import { Edit } from 'lucide-react';
-import { Delete } from 'lucide-react';
-import { XCircle } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router';
-import GenericRegister from '../../../components/GenericRegister/GenericRegister';
 import Api from '../../../api/api';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
