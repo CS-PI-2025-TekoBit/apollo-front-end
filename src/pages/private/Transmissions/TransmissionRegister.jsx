@@ -9,8 +9,8 @@ function TransmissionRegister() {
 
     const onSalvar = async (formData) => {
         // QUANDO USAR BACKEND ------------------------------------------------
-        const result = await Api.post('/transmission/create', formData);
-        if (result.status === 200) {
+        const result = await Api.post('/transmissions/create', formData);
+        if (result.status === 201) {
             toast.success('Transmissão cadastrada com sucesso!');
             await queryClient.invalidateQueries(['transmissions']);
             window.history.back();
@@ -22,7 +22,7 @@ function TransmissionRegister() {
     };
 
     return (
-        <GenericRegister labelNameForm='Nome da Transmissão' onSalvar={onSalvar} pageName='013 - Cadastro de Transmissão' pageTitle='Cadastro de Transmissão' backRouter='/admin/transmissons' name='Transmissão' />
+        <GenericRegister labelNameForm='Nome da Transmissão' onSalvar={onSalvar} pageName='013 - Cadastro de Transmissão' pageTitle='Cadastro de Transmissão' backRouter='/admin/transmission' name='Transmissão' />
     );
 }
 

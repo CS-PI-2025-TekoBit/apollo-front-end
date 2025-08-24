@@ -19,11 +19,16 @@ import OptionalSelector from '../../../components/OptionalCars/OptionCars';
 import { useColors } from '../../../hooks/useColors';
 import { useFuel } from '../../../hooks/useFuel';
 import Api from '../../../api/api';
+import { VEHICLE_STATUS } from '../../../utils/constants';
+import { useTransmission } from '../../../hooks/useTransmission';
+import { useBodyWork } from '../../../hooks/useBodyWork';
 
 function CarRegister() {
     const navigate = useNavigate();
     const { colors, isLoading } = useColors();
     const { fuel } = useFuel();
+    const { transmission } = useTransmission();
+    const { bodyWork } = useBodyWork();
     const fileUploadRef = useRef(null);
     const toast = useRef(null);
     const queryClient = useQueryClient();
@@ -34,8 +39,8 @@ function CarRegister() {
 
     const [formData, setFormData] = useState({
         car_images: [],
-        brand: null,
-        brand_code: null,
+        brand: '',
+        brand_code: '',
         model: null,
         year: null,
         carType: null,
@@ -45,12 +50,12 @@ function CarRegister() {
         blind: '',
         vehiclePrice: '',
         mileage: '',
-        transmission: null,
-        direction: null,
-        fuel: null,
-        bodywork: null,
-        vehicleStatus: null,
-        acceptsExchange: null,
+        transmission: '',
+        direction: '',
+        fuel: '',
+        bodywork: '',
+        vehicleStatus: '',
+        acceptsExchange: '',
         description: '',
         optionalFeatures: []
     });
@@ -79,38 +84,12 @@ function CarRegister() {
             { name: 'Hatchback' },
             { name: 'Coupe' }
         ],
-        transmissions: [
-            { name: 'Automático' },
-            { name: 'Manual' },
-            { name: 'CVT' },
-            { name: 'Semi-automático' }
-        ],
         directions: [
             { name: 'Hidráulica' },
             { name: 'Elétrica' },
             { name: 'Mecânica' },
             { name: 'Eletro-hidráulica' }
         ],
-        fuels: [
-            { name: 'Gasolina' },
-            { name: 'Álcool' },
-            { name: 'Flex' },
-            { name: 'Diesel' },
-            { name: 'Híbrido' },
-            { name: 'Elétrico' }
-        ],
-        bodyworks: [
-            { name: 'Sedan' },
-            { name: 'Hatchback' },
-            { name: 'SUV' },
-            { name: 'Pickup' },
-            { name: 'Conversível' }
-        ],
-        vehicleStatuses: [
-            { name: 'VENDIDO' },
-            { name: 'DISPONIVEL' },
-            { name: 'ALUGADO' }
-        ]
     };
 
     // ================== FUNÇÕES DA API FIPE ==================
@@ -365,7 +344,7 @@ function CarRegister() {
             vehicleStatus: formData.vehicleStatus,
             acceptsExchange: formData.acceptsExchange,
             description: formData.description,
-            optionalFeatures: JSON.stringify(formData.optionalFeatures)
+            opcionais: JSON.stringify(formData.optionalFeatures)
         };
         Object.keys(dataToSend).forEach(key => {
             if (dataToSend[key] !== null && dataToSend[key] !== undefined && dataToSend[key] !== '') {
@@ -821,7 +800,7 @@ function CarRegister() {
                         <div className="field">
                             <label>Câmbio <span style={{ color: 'red' }}>*</span></label>
                             <GenericSelect
-                                options={OPTIONS.transmissions}
+                                options={transmission}
                                 value={formData.transmission}
                                 onChange={(value) => handleSelectChange('transmission', value.target.value)}
                                 placeholder="Ex: Automático"
@@ -866,7 +845,7 @@ function CarRegister() {
                         <div className="field">
                             <label>Carroceria <span style={{ color: 'red' }}>*</span></label>
                             <GenericSelect
-                                options={OPTIONS.bodyworks}
+                                options={bodyWork}
                                 value={formData.bodywork}
                                 onChange={(value) => handleSelectChange('bodywork', value.target.value)}
                                 placeholder="Ex: Sedan"
@@ -881,7 +860,7 @@ function CarRegister() {
                         <div className="field">
                             <label>Status do veículo <span style={{ color: 'red' }}>*</span></label>
                             <GenericSelect
-                                options={OPTIONS.vehicleStatuses}
+                                options={VEHICLE_STATUS}
                                 value={formData.vehicleStatus}
                                 onChange={(value) => handleSelectChange('vehicleStatus', value.target.value)}
                                 placeholder="Ex: Disponível"

@@ -3,13 +3,8 @@ import transmission from '../data/transmission.json';
 import Api from '../api/api';
 
 const fetchData = async () => {
-    const response = await new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({ data: transmission.transmission });
-        }, 1000);
-    });
-    return response.data;
-
+    const response = await Api.get('/transmissions/fetch');
+    return response.data.data;
 };
 
 export function useTransmission() {

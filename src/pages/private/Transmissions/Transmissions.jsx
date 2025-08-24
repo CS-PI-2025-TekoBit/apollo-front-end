@@ -42,7 +42,7 @@ function Transmission() {
                                 pageName: `023 - Edição de Transmissão`,
                                 pageTitle: 'Editar Transmissão',
                                 labelNameForm: 'Nome da Transmissão',
-                                routeEdit: '/transmission/edit',
+                                routeEdit: '/transmissions/edit',
                                 initialData: {
                                     name: rowData.name,
                                     status: rowData.status,
@@ -74,7 +74,7 @@ function Transmission() {
                             if (result.isConfirmed) {
                                 try {
                                     // QUANDO USAR BACKEND ------------------------------------------------
-                                    const response = await Api.delete(`/transmission/delete/${rowData.id_transmission}`);
+                                    const response = await Api.delete(`/transmissions/delete/${rowData.id_transmission}`);
                                     if (response.status === 200) {
                                         await queryClient.invalidateQueries(['transmissions']);
                                         toast.success(`Transmissão ${rowData.name} excluída com sucesso!`);
@@ -130,7 +130,7 @@ function Transmission() {
                     </div>
                     <div className="card espacing-table" style={{ width: '100%' }}>
                         <DataTable value={transmission} tableStyle={{ width: '100%' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                            <Column field="id_transmition" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} ></Column>
+                            <Column field="id_transmission" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} ></Column>
                             <Column header="Nome da Transmissão" field='name' headerClassName='header-table' align={'center'} ></Column>
                             <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} ></Column>
                             <Column field="status" header="Status" body={statusBodyTemplate} headerClassName='header-table' align={'center'} ></Column>
