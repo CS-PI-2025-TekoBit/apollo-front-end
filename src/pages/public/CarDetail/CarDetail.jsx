@@ -26,14 +26,14 @@ export default function CarDetail() {
     const [errors, setErrors] = useState({})
     const ViewportHeight = window.innerHeight;
     const settings = {
-        infinite: true,
+        infinite: car?.images.length > 2 ? true : false,
         speed: 1000,
         slidesToShow: 3,
         slidesToScroll: 1,
         arrows: true,
     };
     const settings_mobile = {
-        infinite: true,
+        infinite: car?.images.length > 2 ? true : false,
         speed: 1000,
         slidesToShow: 1,
         slidesToScroll: 1,
