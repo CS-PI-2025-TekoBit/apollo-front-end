@@ -19,15 +19,16 @@ import { useAllCars } from '../../../hooks/useAllCar';
 function Cars() {
     const [layout, setLayout] = useState('list');
     const { cars, isLoading } = useAllCars();
+    console.log('craros', cars)
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
     const getSeverity = (car) => {
-        switch (car.condition) {
-            case 'novo':
+        switch (car.vehicleCondition) {
+            case 'NOVO':
                 return 'success';
 
-            case 'usado':
+            case 'USADO':
                 return 'warning';
 
             case 'seminovo':
@@ -42,12 +43,12 @@ function Cars() {
         return (
             <NavLink className="col-12  hover:bg-cyan-700" key={car.id} style={{ textDecoration: 'none', color: 'inherit' }} to={`/carros/${car.id}`}>
                 <div className={classNames('flex flex-column justify-center xl:flex-row xl:align-items-start p-4 gap-4', { 'border-top-1 surface-border': index !== 0 })}>
-                    <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={`${car.imgs[0]}`} alt={car.name} />
+                    <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={`${car.images[0].img_url}`} alt={car.name} />
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center  flex-1 gap-4">
                         <div className="flex flex-column align-items-center sm:align-items-start gap-1">
-                            <div className="text-2xl font-bold text-900">{car.model + ' ' + car.mark}</div>
-                            <div className="text-500">Ano: {car.year} Km: {car.kilometers} km</div>
-                            <div className="text-500">Preço:  {car?.price?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</div>
+                            <div className="text-2xl font-bold text-900">{car.brand + ' ' + car.model}</div>
+                            <div className="text-500">Ano: {car.year} Km: {car.mileage}</div>
+                            <div className="text-500">Preço:  {car?.vehiclePrice?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</div>
                             <div className="text-500">Cor:  {car.color}</div>
                         </div>
                         {/* <div className="flex-column align-items-center sm:align-items-end gap-3 h-full "> */}
@@ -73,7 +74,7 @@ function Cars() {
                             <i className="pi pi-tag"></i>
                             {/* <span className="font-semibold">{car.category}</span> */}
                         </div>
-                        <Tag value={car.condition} severity={getSeverity(car)}></Tag>
+                        <Tag value={car.vehicleCondition} severity={getSeverity(car)}></Tag>
                     </div>
                     <div className="flex flex-column align-items-center gap-3 py-5">
                         <img className="w-9 shadow-2 border-round" src={`${car.imgs[0]}`} alt={car.name} />

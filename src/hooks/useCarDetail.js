@@ -1,14 +1,12 @@
 
 import { useQuery } from '@tanstack/react-query'
 import carros from '../data/car.json';
+import Api from '../api/api';
 
 const fetch = async (id) => {
     const id_car = parseInt(id);
-    const car = carros.data.find(car => car.id_car == id_car);
-    if (!car) {
-        throw new Error('Carro não encontrado');
-    }
-    return car;
+    const response = await Api.get(`/cars/${id_car}`);
+    return response.data.data;
 };
 
 export function useCarDetail(id) {

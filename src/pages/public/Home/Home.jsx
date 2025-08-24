@@ -305,12 +305,13 @@ export default function Home() {
                                         key={car.id_car}
                                         id={car.id_car}
                                         name={car.model}
-                                        imgs={car.imgs}
-                                        mark={car.mark}
-                                        price={car.price}
+                                        imgs={car.images}
+                                        mark={car.brand}
+                                        price={car.vehiclePrice}
                                         traction={car.traction}
                                         year={car.year}
-                                        kilometers={car.kilometers}
+                                        kilometers={car.mileage}
+                                        disableSlideImgs={true}
                                     />
                                 ))}
                             </div>

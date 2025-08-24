@@ -13,6 +13,12 @@
     width: 100%;
 }
 
+.card-img {
+    width: 100%;
+    height: 10vw;
+    object-fit: cover;
+}
+
 .txt-card-cars {
     padding: 2% 5% 5%;
     text-align: left;
@@ -74,6 +80,11 @@
         padding: 0.8em 1em;
         font-size: 0.9em;
     }
+
+    .card-img {
+        width: 100%;
+        height: auto;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -99,5 +110,10 @@
         padding: 0.7em 0.9em;
         font-size: 0.85em;
         right: 10%;
+    }
+
+    .card-img {
+        width: 100%;
+        height: auto;
     }
 }
