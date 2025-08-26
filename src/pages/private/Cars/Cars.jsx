@@ -19,7 +19,6 @@ import { useAllCars } from '../../../hooks/useAllCar';
 function Cars() {
     const [layout, setLayout] = useState('list');
     const { cars, isLoading } = useAllCars();
-    console.log('craros', cars)
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -41,7 +40,7 @@ function Cars() {
 
     const listItem = (car, index) => {
         return (
-            <NavLink className="col-12  hover:bg-cyan-700" key={car.id} style={{ textDecoration: 'none', color: 'inherit' }} to={`/carros/${car.id}`}>
+            <NavLink className="col-12  hover:bg-cyan-700" key={car.id} style={{ textDecoration: 'none', color: 'inherit' }} to={`/admin/cars/edit/${car.id_car}`}>
                 <div className={classNames('flex flex-column justify-center xl:flex-row xl:align-items-start p-4 gap-4', { 'border-top-1 surface-border': index !== 0 })}>
                     <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={`${car.images[0].img_url}`} alt={car.name} />
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center  flex-1 gap-4">

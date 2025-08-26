@@ -1,7 +1,7 @@
 import { ArrowLeft } from 'lucide-react';
 import { Button } from 'primereact/button';
 import { useRef, useState, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router';
+import { NavLink, useNavigate, useParams } from 'react-router';
 import { FileUpload } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
 import { TrashIcon } from '@phosphor-icons/react';
@@ -22,8 +22,12 @@ import Api from '../../../api/api';
 import { VEHICLE_STATUS } from '../../../utils/constants';
 import { useTransmission } from '../../../hooks/useTransmission';
 import { useBodyWork } from '../../../hooks/useBodyWork';
+import { useCarDetail } from '../../../hooks/useCarDetail';
 
 function CarRegister() {
+    const { id } = useParams();
+    const isEditMode = Boolean(id);
+    const { car } = useCarDetail(id);
     const navigate = useNavigate();
     const { colors, isLoading } = useColors();
     const { fuel } = useFuel();
@@ -44,10 +48,10 @@ function CarRegister() {
         model: null,
         year: null,
         carType: null,
-        condition: '',
+        vehicleCondition: '',
         licensePlateEnd: null,
         color: '',
-        blind: '',
+        armored: '',
         vehiclePrice: '',
         mileage: '',
         transmission: '',
@@ -255,10 +259,10 @@ function CarRegister() {
             model: null,
             year: null,
             carType: null,
-            condition: '',
+            vehicleCondition: '',
             licensePlateEnd: null,
             color: '',
-            blind: '',
+            armored: '',
             vehiclePrice: '',
             mileage: '',
             transmission: null,
@@ -284,9 +288,9 @@ function CarRegister() {
             brand: 'Campo marca é obrigatório',
             model: 'Campo modelo é obrigatório',
             carType: 'Campo tipo de carro é obrigatório',
-            condition: 'Campo condição é obrigatório',
+            vehicleCondition: 'Campo condição é obrigatório',
             color: 'Campo cor é obrigatório',
-            blind: 'Campo blindagem é obrigatório',
+            armored: 'Campo blindagem é obrigatório',
             vehiclePrice: 'Campo preço é obrigatório',
             mileage: 'Campo quilometragem é obrigatório',
             year: 'Campo ano é obrigatório',
@@ -311,14 +315,12 @@ function CarRegister() {
     };
 
     const validateAndSave = async () => {
-        console.log('Form Data:', formData);
         if (!validateForm()) {
             showToast('error', 'Erro', 'Por favor, preencha todos os campos obrigatórios.');
             return;
         }
 
         const yearFormate = formData.year ? formData.year.split(' ')[0] : '';
-
         const formDataToSend = new FormData();
 
         if (formData.car_images && formData.car_images.length > 0) {
@@ -326,17 +328,18 @@ function CarRegister() {
                 formDataToSend.append(`car_images`, image);
             });
         }
+
         const dataToSend = {
             brand: formData.brand,
             model: formData.model,
             carType: formData.carType,
-            condition: formData.condition,
+            vehicleCondition: formData.vehicleCondition,
             licensePlateEnd: formData.licensePlateEnd,
             color: formData.color,
-            blind: formData.blind,
+            armored: formData.armored === 'Sim',
             vehiclePrice: formData.vehiclePrice,
             mileage: formData.mileage,
-            year: yearFormate, // Ano formatado
+            year: yearFormate,
             transmission: formData.transmission,
             direction: formData.direction,
             fuel: formData.fuel,
@@ -346,26 +349,38 @@ function CarRegister() {
             description: formData.description,
             opcionais: JSON.stringify(formData.optionalFeatures)
         };
+
         Object.keys(dataToSend).forEach(key => {
             if (dataToSend[key] !== null && dataToSend[key] !== undefined && dataToSend[key] !== '') {
                 formDataToSend.append(key, dataToSend[key]);
             }
         });
+
         try {
-            const result = await Api.post('cars', formDataToSend, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
+            let result;
+
+            if (isEditMode) {
+                // PUT para edição
+                result = await Api.put(`cars/${id}`, formDataToSend, {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                });
+            } else {
+                // POST para criação
+                result = await Api.post('cars', formDataToSend, {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                });
+            }
 
             if (result.status === 200 || result.status === 201) {
-                showToast('success', 'Sucesso', 'Registro salvo com sucesso!');
+                showToast('success', 'Sucesso', `Registro ${isEditMode ? 'atualizado' : 'salvo'} com sucesso!`);
                 queryClient.invalidateQueries(['cars']);
                 navigate(-1);
             } else {
-                showToast('error', 'Erro', 'Erro ao salvar registro. Tente novamente.');
+                showToast('error', 'Erro', `Erro ao ${isEditMode ? 'atualizar' : 'salvar'} registro. Tente novamente.`);
             }
         } catch (error) {
             console.error('Erro ao salvar:', error);
-            showToast('error', 'Erro', 'Erro ao salvar registro. Tente novamente.');
+            showToast('error', 'Erro', `Erro ao ${isEditMode ? 'atualizar' : 'salvar'} registro. Tente novamente.`);
         }
     };
 
@@ -453,6 +468,64 @@ function CarRegister() {
 
     // ================== USEEFFECT ==================
 
+
+    useEffect(() => {
+        if (car && isEditMode) {
+            console.log("carro", car)
+            setFormData({
+                car_images: [],
+                brand: car?.brand || '',
+                brand_code: car?.brand_code || '',
+                model: car?.model,
+                year: String(car?.year) || null,
+                carType: car?.carType || null,
+                vehicleCondition: car?.vehicleCondition || '',
+                licensePlateEnd: car?.licensePlateEnd || null,
+                color: car?.color || '',
+                armored: car?.armored ? 'Sim' : 'Não',
+                vehiclePrice: car?.vehiclePrice || '',
+                mileage: car?.mileage || '',
+                transmission: car?.transmission || '',
+                direction: car?.direction || '',
+                fuel: car.fuel || '',
+                bodywork: car?.bodywork || '',
+                vehicleStatus: car?.vehicleStatus || '',
+                acceptsExchange: car?.acceptsExchange || '',
+                description: car?.description || '',
+                opcionais: car?.opcionais || []
+            });
+
+            // Se tiver marca, buscar modelos
+            if (car?.brand && fipeData.brands.length > 0) {
+                const brandFound = fipeData.brands.find(brand => brand.name === car.brand);
+                if (brandFound) {
+                    setFormData(prev => ({ ...prev, brand_code: brandFound.code }));
+                    fetchFipeModels(brandFound.code).then(() => {
+                        if (car?.model) {
+                            setTimeout(() => {
+                                setFipeData(currentFipeData => {
+                                    const modelFound = currentFipeData.models.find(model => model.name === car.model);
+                                    setFormData(prev => ({ ...prev, model: modelFound ? modelFound.name : null }));
+                                    fetchFipeYears(brandFound.code, modelFound.code);
+                                    setFipeData(currentFipeData => {
+                                        const yearFound = currentFipeData.years.find(year => {
+                                            console.log(year);
+                                            return year.name.includes(String(car.year));
+                                        });
+                                        setFormData(prev => ({ ...prev, year: yearFound ? yearFound.name : null }));
+                                        return currentFipeData;
+                                    });
+                                    return currentFipeData;
+                                });
+                            }, 100);
+                        }
+                    });
+                }
+            }
+        }
+    }, [car, isEditMode, fipeData.brands]);
+
+    // ...existing code...
     useEffect(() => {
         fetchFipeBrands();
     }, []);
@@ -617,9 +690,9 @@ function CarRegister() {
                                     <RadioButton
                                         inputId="carro-venda"
                                         name="carType"
-                                        value="Venda"
+                                        value="VENDA"
                                         onChange={(e) => handleRadioChange('carType', e.value)}
-                                        checked={formData.carType === 'Venda'}
+                                        checked={formData.carType === 'VENDA'}
                                     />
                                     <label htmlFor="carro-venda" className="ml-2">Venda</label>
                                 </div>
@@ -627,9 +700,9 @@ function CarRegister() {
                                     <RadioButton
                                         inputId="carro-aluguel"
                                         name="carType"
-                                        value="Aluguel"
+                                        value="ALUGUEL"
                                         onChange={(e) => handleRadioChange('carType', e.value)}
-                                        checked={formData.carType === 'Aluguel'}
+                                        checked={formData.carType === 'ALUGUEL'}
                                     />
                                     <label htmlFor="carro-aluguel" className="ml-2">Aluguel</label>
                                 </div>
@@ -646,23 +719,23 @@ function CarRegister() {
                                         inputId="condicao-novo"
                                         name="condition"
                                         value="Novo"
-                                        onChange={(e) => handleRadioChange('condition', e.value)}
-                                        checked={formData.condition === 'Novo'}
+                                        onChange={(e) => handleRadioChange('vehicleCondition', e.value)}
+                                        checked={formData.vehicleCondition === 'NOVO'}
                                     />
                                     <label htmlFor="condicao-novo" className="ml-2">Novo</label>
                                 </div>
                                 <div className="flex align-items-center">
                                     <RadioButton
                                         inputId="condicao-usado"
-                                        name="condition"
+                                        name="vehicleCondition"
                                         value="Usado"
-                                        onChange={(e) => handleRadioChange('condition', e.value)}
-                                        checked={formData.condition === 'Usado'}
+                                        onChange={(e) => handleRadioChange('vehicleCondition', e.value)}
+                                        checked={formData.vehicleCondition === 'USADO'}
                                     />
                                     <label htmlFor="condicao-usado" className="ml-2">Usado</label>
                                 </div>
                             </div>
-                            {errors.condition && <small className="p-error">{errors.condition}</small>}
+                            {errors.vehicleCondition && <small className="p-error">{errors.vehicleCondition}</small>}
                         </div>
 
                         {/* Categoria - Avaliar se vai colocar mesmo */}
@@ -734,26 +807,26 @@ function CarRegister() {
                             <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
                                 <div className="flex align-items-center">
                                     <RadioButton
-                                        inputId="blind-sim"
-                                        name="blind"
+                                        inputId="armored-sim"
+                                        name="armored"
                                         value="Sim"
-                                        onChange={(e) => handleRadioChange('blind', e.value)}
-                                        checked={formData.blind === 'Sim'}
+                                        onChange={(e) => handleRadioChange('armored', e.value)}
+                                        checked={formData.armored === 'Sim'}
                                     />
-                                    <label htmlFor="blind-sim" className="ml-2">Sim</label>
+                                    <label htmlFor="armored-sim" className="ml-2">Sim</label>
                                 </div>
                                 <div className="flex align-items-center">
                                     <RadioButton
-                                        inputId="blind-nao"
-                                        name="blind"
+                                        inputId="armored-nao"
+                                        name="armored"
                                         value="Não"
-                                        onChange={(e) => handleRadioChange('blind', e.value)}
-                                        checked={formData.blind === 'Não'}
+                                        onChange={(e) => handleRadioChange('armored', e.value)}
+                                        checked={formData.armored === 'Não'}
                                     />
-                                    <label htmlFor="blind-nao" className="ml-2">Não</label>
+                                    <label htmlFor="armored-nao" className="ml-2">Não</label>
                                 </div>
                             </div>
-                            {errors.blind && <small className="p-error">{errors.blind}</small>}
+                            {errors.armored && <small className="p-error">{errors.armored}</small>}
                         </div>
 
                         {/* Preço do veículo */}
@@ -913,7 +986,7 @@ function CarRegister() {
                         </NavLink>
                         <Button className='btn-generic btn-save' onClick={validateAndSave}>
                             <Check size={20} weight='fill' color='white' />
-                            Salvar
+                            {isEditMode ? 'Atualizar' : 'Salvar'}
                         </Button>
                     </div>
                 </div>

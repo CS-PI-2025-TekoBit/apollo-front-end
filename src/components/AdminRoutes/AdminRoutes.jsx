@@ -33,6 +33,7 @@ const AdminRoutes = () => {
             <Route path="steering" element={<Steering />} />
             <Route path="steering/register" element={<SteeringRegister />} />
             <Route path="/cars/register" element={<CarRegister />} />
+            <Route path="/cars/edit/:id" element={<CarRegister />} />
             <Route path="*" element={<PageNotFound />} />
         </Routes>
     );
