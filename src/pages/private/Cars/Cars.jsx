@@ -10,6 +10,7 @@ import { classNames } from 'primereact/utils';
 import { Tag } from 'primereact/tag';
 import { Car } from 'lucide-react';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
+import { formatDateTime } from '../../../utils/formatDate';
 
 
 import GenericLoader from '../../../components/GenericLoader/GenericLoader';
@@ -19,6 +20,7 @@ import { useAllCars } from '../../../hooks/useAllCar';
 function Cars() {
     const [layout, setLayout] = useState('list');
     const { cars, isLoading } = useAllCars();
+    console.log(cars);
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -44,11 +46,17 @@ function Cars() {
                 <div className={classNames('flex flex-column justify-center xl:flex-row xl:align-items-start p-4 gap-4', { 'border-top-1 surface-border': index !== 0 })}>
                     <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={`${car.images[0].img_url}`} alt={car.name} />
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center  flex-1 gap-4">
-                        <div className="flex flex-column align-items-center sm:align-items-start gap-1">
+                        <div className="flex flex-column align-items-center sm:align-items-start gap-1" style={{ width: '40%' }}>
                             <div className="text-2xl font-bold text-900">{car.brand + ' ' + car.model}</div>
                             <div className="text-500">Ano: {car.year} Km: {car.mileage}</div>
                             <div className="text-500">Preço:  {car?.vehiclePrice?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</div>
                             <div className="text-500">Cor:  {car.color}</div>
+                        </div>
+                        <div className="flex flex-column align-items-center sm:align-items-start gap-1">
+                            <div className="text-2xl font-bold text-900">Informações do cadastro</div>
+                            <div className="text-500">Data de cadastro: {formatDateTime(car.dt_create)}</div>
+                            <div className="text-500">Usuário de cadastro: {car.username || ''}</div>
+                            <div className="text-500">Tipo de carro:  {car.carType || ''}</div>
                         </div>
                         {/* <div className="flex-column align-items-center sm:align-items-end gap-3 h-full "> */}
                         <div className="flex sm:flex-row align-items-center justify-content-center  gap-3 sm:gap-2">

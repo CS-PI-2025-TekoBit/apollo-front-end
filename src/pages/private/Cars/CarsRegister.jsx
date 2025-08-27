@@ -115,7 +115,9 @@ function CarRegister() {
         if (!brandCode) return;
 
         setFipeData(prev => ({ ...prev, loadingModels: true, models: [], years: [] }));
-        setFormData(prev => ({ ...prev, model: null, year: null, vehiclePrice: '' }));
+        if (!isEditMode) {
+            setFormData(prev => ({ ...prev, model: null, year: null, vehiclePrice: '' }));
+        }
 
         try {
             const response = await fetch(`https://parallelum.com.br/fipe/api/v2/cars/brands/${brandCode}/models`);
@@ -137,7 +139,9 @@ function CarRegister() {
         if (!brandCode || !modelCode) return;
 
         setFipeData(prev => ({ ...prev, loadingYears: true, years: [] }));
-        setFormData(prev => ({ ...prev, year: null, vehiclePrice: '' }));
+        if (!isEditMode) {
+            setFormData(prev => ({ ...prev, year: null, vehiclePrice: '' }));
+        }
 
         try {
             const response = await fetch(`https://parallelum.com.br/fipe/api/v2/cars/brands/${brandCode}/models/${modelCode}/years`);
@@ -148,32 +152,13 @@ function CarRegister() {
                 years: years.map(year => ({ name: year.name, code: year.code })),
                 loadingYears: false
             }));
+
+            return years;
         } catch (error) {
             console.error('Erro ao buscar anos:', error);
             setFipeData(prev => ({ ...prev, loadingYears: false }));
             showToast('error', 'Erro', 'Erro ao carregar anos');
-        }
-    };
-
-    const fetchFipePrice = async (brandCode, modelCode, yearCode) => {
-        if (!brandCode || !modelCode || !yearCode) return;
-
-        setFipeData(prev => ({ ...prev, loadingPrice: true }));
-
-        try {
-            const response = await fetch(`https://parallelum.com.br/fipe/api/v2/cars/brands/${brandCode}/models/${modelCode}/years/${yearCode}`);
-            const priceData = await response.json();
-
-            if (priceData.price) {
-                const priceNumber = parseFloat(priceData.price.replace('R$ ', '').replace(/\./g, '').replace(',', '.'));
-                setFormData(prev => ({ ...prev, vehiclePrice: priceNumber }));
-                showToast('info', 'Preço FIPE', `Valor sugerido: ${priceData.price}`);
-            }
-        } catch (error) {
-            console.error('Erro ao buscar preço:', error);
-            showToast('error', 'Erro', 'Erro ao buscar preço FIPE');
-        } finally {
-            setFipeData(prev => ({ ...prev, loadingPrice: false }));
+            throw error;
         }
     };
 
@@ -472,12 +457,13 @@ function CarRegister() {
     useEffect(() => {
         if (car && isEditMode) {
             console.log("carro", car)
+
             setFormData({
                 car_images: [],
                 brand: car?.brand || '',
-                brand_code: car?.brand_code || '',
-                model: car?.model,
-                year: String(car?.year) || null,
+                brand_code: '',
+                model: car?.model || null,
+                year: null, 
                 carType: car?.carType || null,
                 vehicleCondition: car?.vehicleCondition || '',
                 licensePlateEnd: car?.licensePlateEnd || null,
@@ -487,37 +473,53 @@ function CarRegister() {
                 mileage: car?.mileage || '',
                 transmission: car?.transmission || '',
                 direction: car?.direction || '',
-                fuel: car.fuel || '',
+                fuel: car?.fuel || '',
                 bodywork: car?.bodywork || '',
                 vehicleStatus: car?.vehicleStatus || '',
                 acceptsExchange: car?.acceptsExchange || '',
                 description: car?.description || '',
-                opcionais: car?.opcionais || []
+                optionalFeatures: Array.isArray(car?.opcionais) ? car.opcionais : []
             });
 
-            // Se tiver marca, buscar modelos
+            // Buscar dados da FIPE quando tiver marca
             if (car?.brand && fipeData.brands.length > 0) {
                 const brandFound = fipeData.brands.find(brand => brand.name === car.brand);
                 if (brandFound) {
                     setFormData(prev => ({ ...prev, brand_code: brandFound.code }));
+
+                
                     fetchFipeModels(brandFound.code).then(() => {
                         if (car?.model) {
+                            // Aguardar modelos carregarem
                             setTimeout(() => {
                                 setFipeData(currentFipeData => {
                                     const modelFound = currentFipeData.models.find(model => model.name === car.model);
-                                    setFormData(prev => ({ ...prev, model: modelFound ? modelFound.name : null }));
-                                    fetchFipeYears(brandFound.code, modelFound.code);
-                                    setFipeData(currentFipeData => {
-                                        const yearFound = currentFipeData.years.find(year => {
-                                            console.log(year);
-                                            return year.name.includes(String(car.year));
+                                    if (modelFound) {
+                                        // Buscar anos do modelo
+                                        fetchFipeYears(brandFound.code, modelFound.code).then(() => {
+                                            // Após carregar os anos, encontrar o ano correspondente
+                                            setTimeout(() => {
+                                                setFipeData(yearsFipeData => {
+                                                    const yearFound = yearsFipeData.years.find(year =>
+                                                        year.name.includes(car.year.toString())
+                                                    );
+
+                                                    if (yearFound) {
+                                                        console.log("Ano encontrado:", yearFound.name);
+                                                        setFormData(prev => ({
+                                                            ...prev,
+                                                            year: yearFound.name
+                                                        }));
+                                                    }
+
+                                                    return yearsFipeData;
+                                                });
+                                            }, 200);
                                         });
-                                        setFormData(prev => ({ ...prev, year: yearFound ? yearFound.name : null }));
-                                        return currentFipeData;
-                                    });
+                                    }
                                     return currentFipeData;
                                 });
-                            }, 100);
+                            }, 300);
                         }
                     });
                 }
@@ -525,7 +527,7 @@ function CarRegister() {
         }
     }, [car, isEditMode, fipeData.brands]);
 
-    // ...existing code...
+
     useEffect(() => {
         fetchFipeBrands();
     }, []);

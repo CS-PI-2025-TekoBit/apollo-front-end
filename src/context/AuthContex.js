@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import users from '../data/users.json';
 import Api from "../api/api";
 
 export const AuthContext = createContext();
@@ -9,53 +8,145 @@ function AuthContextProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const token = document.cookie
+    const isTokenValid = (token) => {
+        try {
+            const payload = jwtDecode(token);
+            const currentTime = Date.now() / 1000;
+
+            if (payload.exp && payload.exp < currentTime) {
+                console.warn('Token expirado');
+                return false;
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Token inválido', error);
+            return false;
+        }
+    };
+
+    const getToken = () => {
+        return document.cookie
             .split('; ')
             .find(row => row.startsWith('token='))
             ?.split('=')[1];
-        if (token) {
+    };
+
+    const clearAuth = () => {
+        setUser(null);
+        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; secure; httpOnly; samesite=strict';
+    };
+
+    useEffect(() => {
+        const token = getToken();
+
+        if (token && isTokenValid(token)) {
             try {
                 const payload = jwtDecode(token);
-                setUser({ id: payload.id, role: payload.role });
+                setUser({
+                    id: payload.id,
+                    role: payload.role,
+                    name: payload.name
+                });
             } catch (error) {
-                console.error('Token inválido', error);
-                setUser(null);
+                console.error('Erro ao decodificar token', error);
+                clearAuth();
             }
+        } else if (token) {
+            clearAuth();
         }
+
         setLoading(false);
     }, []);
 
     const login = async (credential) => {
         const { user, password } = credential;
+
+        if (!user?.trim() || !password?.trim()) {
+            return {
+                status: false,
+                message: 'Usuário e senha são obrigatórios'
+            };
+        }
+
         try {
             const result = await Api.post('auth/login', {
-                name: user,
+                name: user.trim(),
                 password: password
             });
+
             if (result.status === 200 && result.data.token) {
                 const token = result.data.token;
-                document.cookie = `token=${token}; path=/; max-age=3600`;
+
+                if (!isTokenValid(token)) {
+                    return {
+                        status: false,
+                        message: 'Token inválido recebido do servidor'
+                    };
+                }
+
+                const isProduction = process.env.NODE_ENV === 'production';
+                const secureFlag = isProduction ? 'secure;' : '';
+
+                document.cookie = `token=${token}; path=/; max-age=3600; ${secureFlag} samesite=strict`;
+
                 const payload = jwtDecode(token);
-                setUser({ id: payload.id, role: payload.role, name: payload.name });
+                setUser({
+                    id: payload.id,
+                    role: payload.role,
+                    name: payload.name
+                });
+
                 return { status: true };
-            }
-            else {
-                setUser(null);
-                return { status: false, message: 'Usuário não encontrado, senha inválida ou credenciais inválidas' };
+            } else {
+                return {
+                    status: false,
+                    message: result.data?.message || 'Credenciais inválidas'
+                };
             }
         } catch (error) {
-            return { status: false, message: 'Erro ao fazer login. Tente novamente mais tarde.' };
+            console.error('Erro no login:', error);
+
+            if (error.response?.status === 401) {
+                return {
+                    status: false,
+                    message: 'Usuário ou senha incorretos'
+                };
+            } else if (error.response?.status === 429) {
+                return {
+                    status: false,
+                    message: 'Muitas tentativas. Tente novamente em alguns minutos.'
+                };
+            }
+
+            return {
+                status: false,
+                message: 'Erro interno. Tente novamente mais tarde.'
+            };
         }
     };
 
     const logout = () => {
-        setUser(null);
-        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+        clearAuth();
+    };
+
+    const checkAuth = () => {
+        const token = getToken();
+        if (!token || !isTokenValid(token)) {
+            clearAuth();
+            return false;
+        }
+        return true;
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading }}>
+        <AuthContext.Provider value={{
+            user,
+            login,
+            logout,
+            loading,
+            checkAuth
+        }}>
             {children}
         </AuthContext.Provider>
     );
