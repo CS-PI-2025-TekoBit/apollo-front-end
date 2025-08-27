@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import './ForgotPassword.css';
 import { At } from '@phosphor-icons/react';
-import SLA from '../../../assets/imgs/logomarca.png'
+import logo from '../../../assets/imgs/logomarca.png'
 
 function ForgotPassword() {
     const [email, setEmail] = useState('');
@@ -33,21 +33,12 @@ function ForgotPassword() {
         }
 
         setErro('');
-        try {
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-            toast.success('Se o email existir, você receberá instruções em instantes.');
-            navigate('/');
-        } catch (error) {
-            toast.error('Erro ao tentar redefinir senha.');
-        } finally {
-            setEnviando(false);
-        }
     };
 
     return (
         <main className="forgot-background">
             <div className="forgot-modal">
-                <img src={SLA} alt="Apollo" className="forgot-logo" />
+                <img src={logo} alt="Apollo" className="forgot-logo" />
 
                 <h1>Esqueci Minha Senha</h1>
                 <p>informe seu email para receber a definição de senha</p>
@@ -68,7 +59,7 @@ function ForgotPassword() {
                     {erro && <span className="error">{erro}</span>}
 
                     <div className="actions-forgot">
-                        <Link to="/" className="btn-back">Voltar</Link>
+                        <Link to="/" className="btn-backs">Voltar</Link>
                         <button type="submit" className="btn-confirm" disabled={enviando}>
                             Confirmar
                         </button>
