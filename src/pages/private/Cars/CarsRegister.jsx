@@ -23,6 +23,7 @@ import { VEHICLE_STATUS } from '../../../utils/constants';
 import { useTransmission } from '../../../hooks/useTransmission';
 import { useBodyWork } from '../../../hooks/useBodyWork';
 import { useCarDetail } from '../../../hooks/useCarDetail';
+import LoadingCar from '../../../components/LoadingCar/LoadingCar';
 
 function CarRegister() {
     const { id } = useParams();
@@ -40,6 +41,7 @@ function CarRegister() {
     const [totalSize, setTotalSize] = useState(0);
     const [inputKey, setInputKey] = useState(0);
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
 
     const [formData, setFormData] = useState({
         car_images: [],
@@ -343,6 +345,7 @@ function CarRegister() {
 
         try {
             let result;
+            setLoading(true);
 
             if (isEditMode) {
                 // PUT para edição
@@ -366,6 +369,8 @@ function CarRegister() {
         } catch (error) {
             console.error('Erro ao salvar:', error);
             showToast('error', 'Erro', `Erro ao ${isEditMode ? 'atualizar' : 'salvar'} registro. Tente novamente.`);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -463,7 +468,7 @@ function CarRegister() {
                 brand: car?.brand || '',
                 brand_code: '',
                 model: car?.model || null,
-                year: null, 
+                year: null,
                 carType: car?.carType || null,
                 vehicleCondition: car?.vehicleCondition || '',
                 licensePlateEnd: car?.licensePlateEnd || null,
@@ -487,7 +492,7 @@ function CarRegister() {
                 if (brandFound) {
                     setFormData(prev => ({ ...prev, brand_code: brandFound.code }));
 
-                
+
                     fetchFipeModels(brandFound.code).then(() => {
                         if (car?.model) {
                             // Aguardar modelos carregarem
@@ -720,7 +725,7 @@ function CarRegister() {
                                     <RadioButton
                                         inputId="condicao-novo"
                                         name="condition"
-                                        value="Novo"
+                                        value="NOVO"
                                         onChange={(e) => handleRadioChange('vehicleCondition', e.value)}
                                         checked={formData.vehicleCondition === 'NOVO'}
                                     />
@@ -730,7 +735,7 @@ function CarRegister() {
                                     <RadioButton
                                         inputId="condicao-usado"
                                         name="vehicleCondition"
-                                        value="Usado"
+                                        value="USADO"
                                         onChange={(e) => handleRadioChange('vehicleCondition', e.value)}
                                         checked={formData.vehicleCondition === 'USADO'}
                                     />
@@ -992,7 +997,12 @@ function CarRegister() {
                         </Button>
                     </div>
                 </div>
+
             </section>
+            <LoadingCar
+                visible={loading}
+                text="Salvando veículo..."
+            />
         </main>
     );
 }
