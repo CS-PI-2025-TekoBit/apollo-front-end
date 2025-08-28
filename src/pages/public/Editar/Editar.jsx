@@ -12,8 +12,10 @@ export default function Editar(){
             <div className="editar-container">
                 <div className="cards-wrapper">
                     <div className="card">
-                        <h2>Dados da minha conta</h2>
-                        <p>Campos com asterisco (*) são obrigatórios</p>
+                        <div className="titulo">
+                            <h2>Dados da minha conta</h2>
+                            <p>Campos com asterisco (*) são obrigatórios</p>
+                        </div>
 
                         <div className="input-form">
                             <label htmlFor="nome">Nome Completo*</label>
@@ -53,8 +55,10 @@ export default function Editar(){
                     </div>
 
                     <div className="card">
-                        <h2>Meu endereço e contato</h2>
-                        <p>Campos com asterisco (*) são obrigatórios</p>
+                        <div className="titulo">
+                            <h2>Meu endereço e contato</h2>
+                            <p>Campos com asterisco (*) são obrigatórios</p>
+                        </div>
 
                         <div className="input-form">
                             <label htmlFor="cep">Cep*</label>
@@ -62,7 +66,7 @@ export default function Editar(){
                             <input type="text" id="cep" placeholder="CEP" />
                         </div>
 
-                        <div className="row">
+                        <div className="row-exclusiva">
                             <div className="input-form">
                                 <label htmlFor="estado">Estado*</label>
                                 <span className="icon"><User size={24} color='black' /></span>
@@ -82,12 +86,14 @@ export default function Editar(){
                             <input type="tel" id="telefone" placeholder="Telefone" />
                         </div>
                     </div>
+
+                    <div className="actions">
+                        <button className="btn salvar">Salvar</button>
+                        <button className="btn deletar">Deletar conta</button>
+                    </div>
                 </div>
 
-                <div className="actions">
-                    <button className="btn salvar">Salvar alterações</button>
-                    <button className="btn deletar">Deletar conta</button>
-                </div>
+
             </div>
         </>
     )

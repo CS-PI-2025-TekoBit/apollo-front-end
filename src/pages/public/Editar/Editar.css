@@ -15,11 +15,21 @@
 
 .card {
     background: white;
+    display: flex;
+    flex-direction: column;
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    flex: 1 1 350px;
-    max-width: 400px;
+    width: 600px;
+    align-items: center;
+}
+
+.titulo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80%;
+    margin-bottom: 2vh;
 }
 
 .input-form {
@@ -53,10 +63,19 @@
     gap: 1rem;
 }
 
+.row-exclusiva {
+    display: flex;
+    gap: 1rem;
+    width: 80%;
+}
+
 .actions {
     display: flex;
     gap: 1rem;
     margin-top: 2rem;
+    width: 100%;
+    justify-content: right;
+    margin-right: 2rem;
 }
 
 .btn {
@@ -70,9 +89,41 @@
 .salvar {
     background-color: #5c7252;
     color: white;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
 
 .deletar {
     background-color: #d32f2f;
     color: white;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 500px) {
+    .row-exclusiva {
+        width: 90%;
+    }
+
+    .titulo h2 {
+        font-size: 1em;
+    }
+
+    .titulo p {
+        font-size: 0.90em;
+    }
+
+    .salvar {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    .deletar {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
 }
