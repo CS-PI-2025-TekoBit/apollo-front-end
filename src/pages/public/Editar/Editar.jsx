@@ -22,6 +22,11 @@ export default function Editar(){
     const [errors, setErrors] = useState({});
     const [sending, setSending] = useState(false);
 
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+    const [deleteError, setDeleteError] = useState("");
+
     const onChange = (field, e) => {
         setForm({ ...form, [field]: e.target.value });
     };
@@ -144,6 +149,18 @@ export default function Editar(){
         setForm((prev) => ({ ...prev, cep: formatted }));
     };
 
+    const handleDeleteAccount = () => {
+        if (confirmPassword !== form.senha) {
+            setDeleteError("Senha incorreta, tente novamente.");
+            return;
+        }
+
+        // chamar do back depois
+        console.log("Conta deletada com sucesso!");
+        setDeleteError("");
+        setShowDeleteModal(false);
+    };
+
     return (
         <>
             <Header />
@@ -260,33 +277,37 @@ export default function Editar(){
                         {errors.cep && <span className="register-error">{errors.cep}</span>}
 
                         <div className="row-exclusiva">
-                            <div className="input-form">
-                                <label htmlFor="estado">Estado*</label>
-                                <span className="icon"><User size={24} color='black' /></span>
-                                <input
-                                    type="text"
-                                    id="estado"
-                                    placeholder="Estado"
-                                    value={form.estado}
-                                    onChange={handleEstadoChange}
-                                    className={errors.estado ? 'error-input' : ''}
-                                />
+                            <div className="field-wrapper">
+                                <div className="input-form">
+                                    <label htmlFor="estado">Estado*</label>
+                                    <span className="icon"><User size={24} color="black" /></span>
+                                    <input
+                                        type="text"
+                                        id="estado"
+                                        placeholder="Estado"
+                                        value={form.estado}
+                                        onChange={handleEstadoChange}
+                                        className={errors.estado ? 'error-input' : ''}
+                                    />
+                                </div>
+                                {errors.estado && <span className="register-error">{errors.estado}</span>}
                             </div>
-                            {errors.estado && <span className="register-error">{errors.estado}</span>}
 
-                            <div className="input-form">
-                                <label htmlFor="cidade">Cidade*</label>
-                                <span className="icon"><User size={24} color='black' /></span>
-                                <input
-                                    type="text"
-                                    id="cidade"
-                                    placeholder="Cidade"
-                                    value={form.cidade}
-                                    onChange={(e) => onChange('cidade', e)}
-                                    className={errors.cidade ? 'error-input' : ''}
-                                />
+                            <div className="field-wrapper">
+                                <div className="input-form">
+                                    <label htmlFor="cidade">Cidade*</label>
+                                    <span className="icon"><User size={24} color="black" /></span>
+                                    <input
+                                        type="text"
+                                        id="cidade"
+                                        placeholder="Cidade"
+                                        value={form.cidade}
+                                        onChange={(e) => onChange('cidade', e)}
+                                        className={errors.cidade ? 'error-input' : ''}
+                                    />
+                                </div>
+                                {errors.cidade && <span className="register-error">{errors.cidade}</span>}
                             </div>
-                            {errors.cidade && <span className="register-error">{errors.cidade}</span>}
                         </div>
 
                         <div className="input-form">
@@ -306,8 +327,49 @@ export default function Editar(){
 
                     <div className="actions">
                         <button type="submit" className="btn salvar" disabled={sending}>Salvar</button>
-                        <button type="button" className="btn deletar">Deletar conta</button>
+                        <button
+                            type="button"
+                            className="btn deletar"
+                            onClick={() => setShowDeleteModal(true)}
+                        >
+                            Deletar conta
+                        </button>
                     </div>
+
+                    {showDeleteModal && (
+                        <div
+                            className="modal-overlay"
+                            onClick={() => setShowDeleteModal(false)}
+                        >
+                            <div
+                                className="modal-card"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <div className="modal-warning">⚠</div>
+                                <p>Para confirmar, digite sua senha abaixo:</p>
+                                <input
+                                    type="password"
+                                    placeholder="Digite sua senha"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    className="input-delete"
+                                />
+                                {deleteError && <p className="delete-error">{deleteError}</p>}
+
+                                <div className="modal-actions">
+                                    <button
+                                        className={`btn deletar full-width ${!confirmPassword || confirmPassword !== form.senha ? "disabled" : ""
+                                            }`}
+                                        onClick={handleDeleteAccount}
+                                        disabled={!confirmPassword || confirmPassword !== form.senha}
+                                    >
+                                        Deletar Conta
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                 </form>
             </div>
         </>
