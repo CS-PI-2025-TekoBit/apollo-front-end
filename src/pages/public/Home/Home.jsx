@@ -15,6 +15,7 @@ import Card from '../../../components/Card/CardCars'
 import GenericInput from '../../../components/GenericInput/GenericInput';
 import GenericSelect from '../../../components/GenericSelect/GenericSelect'
 import { useNavigate } from 'react-router'
+
 export default function Home() {
     const { cars } = useAllCars()
     const { filtros, isLoading } = useFilters()
