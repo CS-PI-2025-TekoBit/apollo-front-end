@@ -32,7 +32,7 @@ export default function Card(
                         {imgs.map((img, index) => (
                             <div key={index}>
                                 <img
-                                    src={`${img.img_url}`}
+                                    src={`${img?.img_url}`}
                                     alt={`Slide ${index + 1}`}
                                     className="card-img"
                                 />
@@ -41,7 +41,7 @@ export default function Card(
                     </Slider>
                 ) : (
                     <img
-                        src={`${imgs[0].img_url}`}
+                        src={`${imgs[0]?.img_url}`}
                         alt="First Slide"
                         className="card-img"
                     />

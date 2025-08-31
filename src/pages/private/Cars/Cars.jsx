@@ -47,7 +47,7 @@ function Cars() {
                         setLoading(true);
                         const result = await Api.delete(`/cars/${car.id_car}`);
                         if (result.status === 204) {
-                            queryClient.invalidateQueries({ queryKey: ['cars'] });
+                            queryClient.invalidateQueries({ queryKey: ['all_cars'] });
                             toast.success('Carro deletado com sucesso!');
                         } else {
                             toast.error('Erro ao deletar carro.');
@@ -64,7 +64,7 @@ function Cars() {
             <div className="col-12  hover:bg-cyan-700" key={car.id} style={{ textDecoration: 'none', color: 'inherit' }} to={`/admin/cars/edit/${car.id_car}`}>
                 <div className={classNames('flex flex-column justify-center xl:flex-row xl:align-items-start p-4 gap-4', { 'border-top-1 surface-border': index !== 0 })}>
                     <NavLink to={`/admin/cars/edit/${car.id_car}`} style={{ textDecoration: 'none', color: 'inherit', flex: 1 }} className="flex flex-row align-items-start gap-3">
-                        <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={`${car.images[0].img_url}`} alt={car.name} />
+                        <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={`${car?.images[0]?.img_url}`} alt={car.name} />
                         <div className="flex flex-column sm:flex-row justify-content-start align-items-center flex-1 gap-4">
                             <div className="flex flex-column align-items-center sm:align-items-start gap-1" style={{ width: '50%' }}>
                                 <div className="text-2xl font-bold text-900">{car.brand + ' ' + car.model}</div>
@@ -82,7 +82,9 @@ function Cars() {
                     </NavLink>
                     <div className="flex-column align-items-center sm:align-items-end gap-3 h-full ">
                         <div className="flex sm:flex-row align-items-center justify-content-center  gap-3 sm:gap-2">
-                            <Button icon="pi pi-pencil" rounded severity="warning" aria-label="Edit" className='flex align-items-center justify-content-center'></Button>
+                            <NavLink to={`/admin/cars/edit/${car.id_car}`}>
+                                <Button icon="pi pi-pencil" rounded severity="warning" aria-label="Edit" className='flex align-items-center justify-content-center'></Button>
+                            </NavLink>
                             <Button icon="pi pi-trash" rounded severity="danger" className='flex align-items-center justify-content-center' onClick={(e) => handleDelete(e)}></Button>
                             <Button icon={<CurrencyDollarSimple size={20} />} rounded severity="success" ></Button>
                             <Button icon="pi pi-shopping-cart" rounded severity="info" ></Button>

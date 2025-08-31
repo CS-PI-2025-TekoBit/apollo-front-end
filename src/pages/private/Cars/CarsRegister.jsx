@@ -24,6 +24,7 @@ import { useTransmission } from '../../../hooks/useTransmission';
 import { useBodyWork } from '../../../hooks/useBodyWork';
 import { useCarDetail } from '../../../hooks/useCarDetail';
 import LoadingCar from '../../../components/LoadingCar/LoadingCar';
+import SearchableSelect from '../../../components/SearchableSelect/SearchbleSelect';
 
 function CarRegister() {
     const { id } = useParams();
@@ -76,20 +77,7 @@ function CarRegister() {
         loadingPrice: false
     });
 
-    const POPULAR_BRANDS = [
-        'Volkswagen', 'GM - Chevrolet', 'Fiat', 'Ford', 'Toyota', 'Honda', 'Hyundai',
-        'Renault', 'Nissan', 'Peugeot', 'Citroën', 'Jeep', 'BMW', 'Mercedes-Benz',
-        'Audi', 'Mitsubishi', 'Suzuki', 'Kia', 'Volvo', 'Land Rover'
-    ];
-
     const OPTIONS = {
-        carTypes: [
-            { name: 'Utilitário' },
-            { name: 'Sedan' },
-            { name: 'SUV' },
-            { name: 'Hatchback' },
-            { name: 'Coupe' }
-        ],
         directions: [
             { name: 'Hidráulica' },
             { name: 'Elétrica' },
@@ -334,26 +322,22 @@ function CarRegister() {
             vehicleStatus: formData.vehicleStatus,
             acceptsExchange: formData.acceptsExchange,
             description: formData.description,
-            opcionais: JSON.stringify(formData.optionalFeatures)
+            opcionais: JSON.stringify(formData.optionalFeatures),
+            publish_olx: true
         };
-
         Object.keys(dataToSend).forEach(key => {
             if (dataToSend[key] !== null && dataToSend[key] !== undefined && dataToSend[key] !== '') {
                 formDataToSend.append(key, dataToSend[key]);
             }
         });
-
         try {
             let result;
-            setLoading(true);
-
+            setLoading(true)
             if (isEditMode) {
-                // PUT para edição
                 result = await Api.put(`cars/${id}`, formDataToSend, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
             } else {
-                // POST para criação
                 result = await Api.post('cars', formDataToSend, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
@@ -397,6 +381,48 @@ function CarRegister() {
         setFormData(prev => ({ ...prev, car_images: [] }));
     };
 
+    const removeImageAtIndex = (index) => {
+        const fileToRemove = formData.car_images[index];
+
+        if (!fileToRemove) return;
+
+        // 1. Atualizar o state primeiro
+        const updatedImages = formData.car_images.filter((_, i) => i !== index);
+        setFormData(prev => ({ ...prev, car_images: updatedImages }));
+
+        // 2. Atualizar o tamanho total
+        if (fileToRemove?.size) {
+            setTotalSize(prevSize => prevSize - fileToRemove.size);
+        }
+
+        // 3. Sincronizar o FileUpload de forma mais inteligente
+        if (fileUploadRef.current) {
+            try {
+                // Encontrar o arquivo no FileUpload e removê-lo
+                const fileUploadFiles = fileUploadRef.current.getFiles();
+                const fileIndex = fileUploadFiles.findIndex(file =>
+                    file.name === fileToRemove.name && file.size === fileToRemove.size
+                );
+
+                if (fileIndex !== -1) {
+                    // Simular a remoção usando a API interna do PrimeReact
+                    const fileToRemoveFromUpload = fileUploadFiles[fileIndex];
+
+                    // Criar um mock do evento de remoção
+                    const mockProps = {
+                        onRemove: () => {
+                            console.log('Arquivo removido do FileUpload');
+                        }
+                    };
+
+                    // Usar a função onTemplateRemove
+                    onTemplateRemove(fileToRemoveFromUpload, mockProps.onRemove);
+                }
+            } catch (error) {
+                console.warn('Erro ao sincronizar FileUpload:', error);
+            }
+        }
+    };
     // ================== TEMPLATES ==================
 
     const headerTemplate = (options) => {
@@ -405,22 +431,20 @@ function CarRegister() {
         const formatedValue = fileUploadRef?.current?.formatSize(totalSize) || '0 B';
 
         return (
-            <div className={className} style={{ backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 1rem', marginTop: '1rem' }}>
+            <div className={className} style={{ backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem 1rem', marginTop: '1rem' }}>
                 <div style={{ color: '#f59e0b', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '5px' }}>
                     <i className="pi pi-exclamation-triangle"></i>
                     <span>Lembre-se o máximo de imagens é 8</span>
-                </div>
-                <div className="flex align-items-center gap-3 ml-auto">
-                    <span>{formatedValue} / 1 MB</span>
-                    <ProgressBar value={value} showValue={false} style={{ width: '10rem', height: '12px' }} />
                 </div>
             </div>
         );
     };
 
     const itemTemplate = (file, props) => (
+        // <>
+        // </>
         <div className="flex align-items-center" style={{ padding: '1rem', borderBottom: '1px solid #e5e7eb' }}>
-            <div className="flex align-items-center justify-content-center" style={{ width: '50%' }}>
+            <div className="flex align-items-center justify-content-center" style={{ width: '100%' }}>
                 <img alt={file.name} role="presentation" src={file.objectURL} width={100} height={60} style={{ objectFit: 'cover', borderRadius: '4px' }} />
                 <span className="flex flex-column text-left ml-3">
                     {file.name}
@@ -451,7 +475,7 @@ function CarRegister() {
                 label="Clique para buscar a imagem"
                 className="p-button-outlined mt-3"
                 style={{ borderColor: '#6b7280', color: '#6b7280' }}
-                onClick={() => console.log(fileUploadRef?.current)}
+                onClick={() => fileUploadRef?.current?.getFiles()}
             />
         </div>
     );
@@ -536,7 +560,9 @@ function CarRegister() {
     useEffect(() => {
         fetchFipeBrands();
     }, []);
-
+    useEffect(() => {
+        console.log(fileUploadRef)
+    }, [fileUploadRef])
     // ================== RENDER ==================
 
     return (
@@ -583,10 +609,15 @@ function CarRegister() {
                             itemTemplate={itemTemplate}
                             emptyTemplate={emptyTemplate}
                             chooseOptions={{
-                                icon: 'pi pi-fw pi-car_images',
-                                iconOnly: true,
-                                className: 'custom-choose-btn p-button-rounded p-button-outlined',
-                                style: { display: 'none' }
+                                icon: 'pi pi-fw pi-images',
+                                label: 'Escolher Imagens',
+                                iconOnly: false, // ← Mudança aqui
+                                className: 'p-button-outlined',
+                                style: {
+                                    borderColor: '#6b7280',
+                                    color: '#6b7280',
+                                    marginTop: '1rem'
+                                }
                             }}
                             style={{ border: '2px dashed #d1d5db', borderRadius: '8px' }}
                         />
@@ -622,10 +653,7 @@ function CarRegister() {
                                                 height: '24px',
                                                 backgroundColor: '#ef4444'
                                             }}
-                                            onClick={() => {
-                                                const updatedImages = formData.car_images.filter((_, i) => i !== index);
-                                                setFormData(prev => ({ ...prev, car_images: updatedImages }));
-                                            }}
+                                            onClick={() => removeImageAtIndex(index)}
                                         />
                                     </div>
                                 ))}
@@ -641,7 +669,7 @@ function CarRegister() {
                         {/* Marca */}
                         <div className="field">
                             <label>Marca <span style={{ color: 'red' }}>*</span></label>
-                            <GenericSelect
+                            <SearchableSelect
                                 options={fipeData.brands}
                                 value={formData.brand}
                                 onChange={handleBrandChange}
@@ -658,7 +686,7 @@ function CarRegister() {
                         {/* Modelo */}
                         <div className="field">
                             <label>Modelo <span style={{ color: 'red' }}>*</span></label>
-                            <GenericSelect
+                            <SearchableSelect
                                 options={fipeData.models}
                                 value={formData.model}
                                 onChange={handleModelChange}
@@ -675,7 +703,7 @@ function CarRegister() {
                         {/* Ano */}
                         <div className="field">
                             <label>Ano <span style={{ color: 'red' }}>*</span></label>
-                            <GenericSelect
+                            <SearchableSelect
                                 options={fipeData.years}
                                 value={formData.year}
                                 onChange={handleYearChange}
@@ -707,6 +735,7 @@ function CarRegister() {
                                     <RadioButton
                                         inputId="carro-aluguel"
                                         name="carType"
+                                        variant='outlined'
                                         value="ALUGUEL"
                                         onChange={(e) => handleRadioChange('carType', e.value)}
                                         checked={formData.carType === 'ALUGUEL'}
@@ -744,26 +773,6 @@ function CarRegister() {
                             </div>
                             {errors.vehicleCondition && <small className="p-error">{errors.vehicleCondition}</small>}
                         </div>
-
-                        {/* Categoria - Avaliar se vai colocar mesmo */}
-                        {/* <div className="field" style={{ gridColumn: '1 / -1' }}>
-                            <label>Categoria <span style={{ color: 'red' }}>*</span></label>
-                            <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
-                                {OPTIONS.carTypes.map((type) => (
-                                    <div key={type.name} className="flex align-items-center" style={{ marginRight: '1rem' }}>
-                                        <RadioButton
-                                            inputId={`categoria-${type.name}`}
-                                            name="carType"
-                                            value={type.name}
-                                            onChange={(e) => handleRadioChange('carType', e.value)}
-                                            checked={formData.carType === type.name}
-                                        />
-                                        <label htmlFor={`categoria-${type.name}`} className="ml-2">{type.name}</label>
-                                    </div>
-                                ))}
-                            </div>
-                            {errors.carType && <small className="p-error">{errors.carType}</small>}
-                        </div> */}
 
                         {/* Aceita Troca */}
                         <div className="field">
