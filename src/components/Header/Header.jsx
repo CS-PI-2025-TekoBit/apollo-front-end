@@ -3,7 +3,7 @@ import './Header.css'
 import logo from '../../assets/imgs/logomarca.png'
 import { Clock, MagnifyingGlass, Phone, UserCircle, UserCircleGear, WhatsappLogo, Star, Chat } from '@phosphor-icons/react'
 import { useAuth } from '../../hooks/useAuth'
-import { Link } from 'react-router'
+import { Link, NavLink } from 'react-router'
 import Swal from 'sweetalert2'
 export default function Header() {
     const { user, logout } = useAuth()
@@ -28,7 +28,9 @@ export default function Header() {
     return (
         <>
             <header>
-                <img src={logo} alt="Logo da loja apollo veículos" className='img-logo-marca' />
+                <NavLink to='/home'>
+                    <img src={logo} alt="Logo da loja apollo veículos" className='img-logo-marca' />
+                </NavLink>
                 <section className="info">
                     <ul className="numeros">
                         <li className='li-telefone'>
@@ -77,7 +79,7 @@ export default function Header() {
                                     <p>{user.name}</p>
                                 </span>
                                 <div className="dropdown-conteudo">
-                                    <Link to={'/myAccount'} className='dropdown-item'>Minha conta</Link>
+                                    <Link to={`/user/myAccount`} className='dropdown-item'>Minha conta</Link>
                                     {ViewportHeight < 800 && (
                                         <>
                                             <Link to={'/'} className='dropdown-item'>Favoritos</Link>

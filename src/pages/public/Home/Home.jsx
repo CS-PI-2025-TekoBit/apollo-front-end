@@ -121,12 +121,6 @@ export default function Home() {
         aplicarFiltros();
     }, [minYear, maxYear, minPrice, maxPrice, minKm, maxKm]);
 
-    useEffect(() => {
-        if (user?.role === "ROLE_ADMIN") {
-            navigate('/admin/colors')
-        }
-    }, [user])
-
     return (
         <>
             {isLoading === true ?
@@ -134,7 +128,6 @@ export default function Home() {
                     <p>Carregando</p>
                 </> :
                 <>
-                    {user?.role === 'ROLE_ADMIN' && navigate('/admin')}
                     <Header />
                     <main>
                         <div className="container-stock " >

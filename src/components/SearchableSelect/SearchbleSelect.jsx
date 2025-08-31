@@ -111,7 +111,7 @@ export default function SearchableSelect({
         <div className="searchable-select-container" style={styleContainer} ref={containerRef}>
             {label && (
                 <div className="div-label" style={styleLabel}>
-                    <label className="select-label">{label}</label>
+                    <label className="select-label-search">{label}</label>
                 </div>
             )}
 

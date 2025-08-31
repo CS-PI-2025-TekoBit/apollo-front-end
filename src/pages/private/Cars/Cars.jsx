@@ -23,7 +23,6 @@ function Cars() {
     const [layout, setLayout] = useState('list');
     const [loading, setLoading] = useState(false);
     const { cars, isLoading } = useAllCars();
-    console.log(cars);
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 

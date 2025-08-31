@@ -171,7 +171,7 @@ header {
     cursor: pointer;
 }
 
-.dropdown {
+.dropdowns {
     position: relative;
     display: inline-block;
     cursor: pointer;
@@ -227,7 +227,7 @@ header {
     background-color: #3a3a3a;
 }
 
-.dropdown:hover .dropdown-conteudo {
+.dropdowns:hover .dropdown-conteudo {
     display: block;
 }
 

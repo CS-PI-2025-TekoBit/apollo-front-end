@@ -25,6 +25,7 @@ import { useBodyWork } from '../../../hooks/useBodyWork';
 import { useCarDetail } from '../../../hooks/useCarDetail';
 import LoadingCar from '../../../components/LoadingCar/LoadingCar';
 import SearchableSelect from '../../../components/SearchableSelect/SearchbleSelect';
+import CustomFileUpload from '../../../components/CustomFileUpload/CustomFileUpload';
 
 function CarRegister() {
     const { id } = useParams();
@@ -64,6 +65,12 @@ function CarRegister() {
         vehicleStatus: '',
         acceptsExchange: '',
         description: '',
+
+        vehicleTag: '',
+        motorPower: '',
+        motorPowerCode: null,
+
+
         optionalFeatures: []
     });
 
@@ -84,6 +91,20 @@ function CarRegister() {
             { name: 'Mecânica' },
             { name: 'Eletro-hidráulica' }
         ],
+        motorPower: [
+            { name: '1.0', motorPowerCode: 1 },
+            { name: '1.2', motorPowerCode: 2 },
+            { name: '1.3', motorPowerCode: 3 },
+            { name: '1.4', motorPowerCode: 4 },
+            { name: '1.5', motorPowerCode: 5 },
+            { name: '1.6', motorPowerCode: 6 },
+            { name: '1.7', motorPowerCode: 7 },
+            { name: '1.8', motorPowerCode: 8 },
+            { name: '1.9', motorPowerCode: 9 },
+            { name: '2.0 - 2.9', motorPowerCode: 10 },
+            { name: '3.0 - 3.9', motorPowerCode: 11 },
+            { name: '4.0 ou mais', motorPowerCode: 12 },
+        ]
     };
 
     // ================== FUNÇÕES DA API FIPE ==================
@@ -222,8 +243,13 @@ function CarRegister() {
     };
 
     const handleImageUpload = (event) => {
-        const files = Array.from(event.files);
-        setFormData(prev => ({ ...prev, car_images: files }));
+        const newFiles = Array.from(event.files);
+
+        setFormData(prev => {
+            const existingImages = prev.car_images.filter(img => img.id_image);
+            const newImages = [...existingImages, ...newFiles];
+            return { ...prev, car_images: newImages };
+        });
     };
 
     const handleClearFields = () => {
@@ -273,11 +299,15 @@ function CarRegister() {
             direction: 'Campo direção é obrigatório',
             fuel: 'Campo combustível é obrigatório',
             bodywork: 'Campo carroceria é obrigatório',
-            vehicleStatus: 'Campo status é obrigatório'
+            vehicleStatus: 'Campo status é obrigatório',
+            acceptsExchange: 'Campo aceita troca é obrigatório',
+            licensePlateEnd: 'Campo final de placa é obrigatório',
+            vehicleTag: 'O campo placa é obrigatório',
+            description: 'O campo descrição é obrigatório'
         };
 
         Object.keys(requiredFields).forEach(field => {
-            if (field === 'car_images' && (!formData[field] || formData[field].length === 0)) {
+            if (field === 'car_images' && (!formData[field] || formData[field].length === 0) && !isEditMode) {
                 newErrors[field] = requiredFields[field];
             } else if (field !== 'car_images' && !formData[field]) {
                 console.log("erro", field)
@@ -298,8 +328,18 @@ function CarRegister() {
         const yearFormate = formData.year ? formData.year.split(' ')[0] : '';
         const formDataToSend = new FormData();
 
-        if (formData.car_images && formData.car_images.length > 0) {
-            formData.car_images.forEach((image, index) => {
+        // Separar imagens novas das existentes
+        const newImages = formData.car_images.filter(image => !image.id_image);
+        const existingImageIds = formData.car_images
+            .filter(image => image.id_image)
+            .map(image => image.id_image);
+
+        console.log('Imagens novas a serem enviadas:', newImages);
+        console.log('IDs das imagens existentes:', existingImageIds);
+
+        // Adicionar apenas as novas imagens ao FormData
+        if (newImages && newImages.length > 0) {
+            newImages.forEach((image) => {
                 formDataToSend.append(`car_images`, image);
             });
         }
@@ -322,9 +362,15 @@ function CarRegister() {
             vehicleStatus: formData.vehicleStatus,
             acceptsExchange: formData.acceptsExchange,
             description: formData.description,
-            opcionais: JSON.stringify(formData.optionalFeatures),
+            opcionais: formData.optionalFeatures ? JSON.stringify(formData?.optionalFeatures) : null,
             publish_olx: true
         };
+
+        // Se for edição e tiver imagens existentes
+        if (isEditMode && existingImageIds.length > 0) {
+            dataToSend.existing_image_ids = JSON.stringify(existingImageIds);
+        }
+
         Object.keys(dataToSend).forEach(key => {
             if (dataToSend[key] !== null && dataToSend[key] !== undefined && dataToSend[key] !== '') {
                 formDataToSend.append(key, dataToSend[key]);
@@ -338,6 +384,7 @@ function CarRegister() {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
             } else {
+                console.log("enviando esses dados", formDataToSend)
                 result = await Api.post('cars', formDataToSend, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
@@ -362,11 +409,12 @@ function CarRegister() {
 
     const onTemplateSelect = (e) => {
         let _totalSize = totalSize;
-        Object.keys(e.files).forEach((key) => {
-            _totalSize += e.files[key].size || 0;
+        e.files.forEach((file) => {
+            _totalSize += file.size || 0;
         });
         setTotalSize(_totalSize);
-        handleImageUpload(e);
+
+        handleImageUpload({ files: e.files });
     };
 
     const onTemplateRemove = (file, callback) => {
@@ -378,51 +426,16 @@ function CarRegister() {
 
     const onTemplateClear = () => {
         setTotalSize(0);
-        setFormData(prev => ({ ...prev, car_images: [] }));
-    };
 
-    const removeImageAtIndex = (index) => {
-        const fileToRemove = formData.car_images[index];
+        const existingImages = formData.car_images.filter(img => img.id_image);
+        setFormData(prev => ({ ...prev, car_images: existingImages }));
 
-        if (!fileToRemove) return;
-
-        // 1. Atualizar o state primeiro
-        const updatedImages = formData.car_images.filter((_, i) => i !== index);
-        setFormData(prev => ({ ...prev, car_images: updatedImages }));
-
-        // 2. Atualizar o tamanho total
-        if (fileToRemove?.size) {
-            setTotalSize(prevSize => prevSize - fileToRemove.size);
-        }
-
-        // 3. Sincronizar o FileUpload de forma mais inteligente
         if (fileUploadRef.current) {
-            try {
-                // Encontrar o arquivo no FileUpload e removê-lo
-                const fileUploadFiles = fileUploadRef.current.getFiles();
-                const fileIndex = fileUploadFiles.findIndex(file =>
-                    file.name === fileToRemove.name && file.size === fileToRemove.size
-                );
-
-                if (fileIndex !== -1) {
-                    // Simular a remoção usando a API interna do PrimeReact
-                    const fileToRemoveFromUpload = fileUploadFiles[fileIndex];
-
-                    // Criar um mock do evento de remoção
-                    const mockProps = {
-                        onRemove: () => {
-                            console.log('Arquivo removido do FileUpload');
-                        }
-                    };
-
-                    // Usar a função onTemplateRemove
-                    onTemplateRemove(fileToRemoveFromUpload, mockProps.onRemove);
-                }
-            } catch (error) {
-                console.warn('Erro ao sincronizar FileUpload:', error);
-            }
+            fileUploadRef.current.clear();
         }
     };
+
+
     // ================== TEMPLATES ==================
 
     const headerTemplate = (options) => {
@@ -441,25 +454,8 @@ function CarRegister() {
     };
 
     const itemTemplate = (file, props) => (
-        // <>
-        // </>
-        <div className="flex align-items-center" style={{ padding: '1rem', borderBottom: '1px solid #e5e7eb' }}>
-            <div className="flex align-items-center justify-content-center" style={{ width: '100%' }}>
-                <img alt={file.name} role="presentation" src={file.objectURL} width={100} height={60} style={{ objectFit: 'cover', borderRadius: '4px' }} />
-                <span className="flex flex-column text-left ml-3">
-                    {file.name}
-                    <small>{new Date().toLocaleDateString()}</small>
-                </span>
-            </div>
-            <Tag value={props.formatSize} severity="warning" className="px-3 py-2" />
-            <Button
-                type="button"
-                icon="pi pi-times"
-                className="p-button-outlined p-button-rounded p-button-danger ml-auto"
-                onClick={() => onTemplateRemove(file, props.onRemove)}
-                style={{ backgroundColor: '#ef4444', borderColor: '#ef4444', color: 'white' }}
-            />
-        </div>
+        <>
+        </>
     );
 
     const emptyTemplate = () => (
@@ -472,10 +468,14 @@ function CarRegister() {
             </span>
             <span style={{ fontSize: '1em', color: '#9ca3af' }}>OU</span>
             <Button
+                type="button"
                 label="Clique para buscar a imagem"
                 className="p-button-outlined mt-3"
                 style={{ borderColor: '#6b7280', color: '#6b7280' }}
-                onClick={() => fileUploadRef?.current?.getFiles()}
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }}
             />
         </div>
     );
@@ -488,7 +488,7 @@ function CarRegister() {
             console.log("carro", car)
 
             setFormData({
-                car_images: [],
+                car_images: car.images,
                 brand: car?.brand || '',
                 brand_code: '',
                 model: car?.model || null,
@@ -560,9 +560,6 @@ function CarRegister() {
     useEffect(() => {
         fetchFipeBrands();
     }, []);
-    useEffect(() => {
-        console.log(fileUploadRef)
-    }, [fileUploadRef])
     // ================== RENDER ==================
 
     return (
@@ -596,7 +593,22 @@ function CarRegister() {
                 <form>
                     {/* Upload de Imagens */}
                     <div style={{ marginBottom: '2rem' }}>
-                        <FileUpload
+                        <CustomFileUpload
+                            ref={fileUploadRef}
+                            name="car_images[]"
+                            multiple
+                            accept="image/*"
+                            customUpload
+                            auto
+                            onSelect={onTemplateSelect}
+                            onError={onTemplateClear}
+                            onClear={onTemplateClear}
+                            headerTemplate={headerTemplate}
+                            itemTemplate={null}
+                            emptyTemplate={emptyTemplate}
+                        />
+                        {errors.car_images && <small className="p-error">{errors.car_images}</small>}
+                        {/* <FileUpload
                             ref={fileUploadRef}
                             name="car_images[]"
                             multiple
@@ -609,52 +621,64 @@ function CarRegister() {
                             itemTemplate={itemTemplate}
                             emptyTemplate={emptyTemplate}
                             chooseOptions={{
-                                icon: 'pi pi-fw pi-images',
-                                label: 'Escolher Imagens',
-                                iconOnly: false, // ← Mudança aqui
-                                className: 'p-button-outlined',
-                                style: {
-                                    borderColor: '#6b7280',
-                                    color: '#6b7280',
-                                    marginTop: '1rem'
-                                }
+                                icon: 'pi pi-fw pi-car_images',
+                                iconOnly: true,
+                                className: 'custom-choose-btn p-button-rounded p-button-outlined',
+                                style: { display: 'none' }
                             }}
                             style={{ border: '2px dashed #d1d5db', borderRadius: '8px' }}
-                        />
-                        {errors.car_images && <small className="p-error">{errors.car_images}</small>}
+                        /> */}
                     </div>
 
                     {/* Preview das Imagens */}
                     <div style={{ marginBottom: '2rem' }}>
                         <h3 style={{ marginBottom: '1rem', fontSize: '18px', fontWeight: 'bold' }}>Listagem das Imagens</h3>
                         {formData.car_images.length > 0 ? (
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '10px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '10px' }}>
                                 {formData.car_images.map((file, index) => (
                                     <div key={index} style={{ position: 'relative' }}>
                                         <img
-                                            src={file.objectURL || URL.createObjectURL(file)}
+                                            src={file.img_url || file?.objectURL || URL?.createObjectURL(file)}
                                             alt={`Preview ${index}`}
                                             style={{
                                                 width: '100%',
-                                                height: '80px',
+                                                height: 'auto',
                                                 objectFit: 'cover',
                                                 borderRadius: '4px',
                                                 border: '2px solid #e5e7eb'
                                             }}
                                         />
-                                        <Button
-                                            icon="pi pi-times"
-                                            className="p-button-rounded p-button-danger p-button-sm"
-                                            style={{
-                                                position: 'absolute',
-                                                top: '-8px',
-                                                right: '-8px',
-                                                width: '24px',
-                                                height: '24px',
-                                                backgroundColor: '#ef4444'
-                                            }}
-                                            onClick={() => removeImageAtIndex(index)}
-                                        />
+                                        {!file.id_image && (
+                                            <Button
+                                                type='button'
+                                                icon="pi pi-times"
+                                                className="p-button-rounded p-button-danger p-button-sm"
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-8px',
+                                                    right: '-8px',
+                                                    width: '24px',
+                                                    height: '24px',
+                                                    backgroundColor: '#ef4444'
+                                                }}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    const updatedImages = formData.car_images.filter((_, i) => i !== index);
+                                                    setFormData(prev => ({ ...prev, car_images: updatedImages }));
+
+
+                                                    if (fileUploadRef.current) {
+                                                        fileUploadRef.current.removeFile(index);
+                                                    }
+
+                                                    const removedFile = formData.car_images[index];
+                                                    if (removedFile && removedFile.size) {
+                                                        setTotalSize(prevSize => prevSize - removedFile.size);
+                                                    }
+                                                }}
+                                            />
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -960,6 +984,20 @@ function CarRegister() {
                             {errors.vehicleStatus && <small className="p-error">{errors.vehicleStatus}</small>}
                         </div>
                         <div className="field">
+                            <label>Placa <span style={{ color: 'red' }}>*</span></label>
+                            <InputText
+                                placeholder='Ex: 1'
+                                label='Placa'
+                                maxLength={7}
+                                value={formData.vehicleTag}
+                                onChange={(e) => {
+                                    setFormData({ ...formData, vehicleTag: e.target.value || null })
+                                }}
+                                style={{ width: '100%' }}
+                            />
+                            {errors.vehicleTag && <small className="p-error">{errors.vehicleTag}</small>}
+                        </div>
+                        <div className="field">
                             <label>Final de placa <span style={{ color: 'red' }}>*</span></label>
                             <InputNumber
                                 placeholder='Ex: 1'
@@ -971,10 +1009,27 @@ function CarRegister() {
                                 onValueChange={(e) => setFormData({ ...formData, licensePlateEnd: e.value || null })}
                                 style={{ width: '100%' }}
                             />
+                            {errors.licensePlateEnd && <small className="p-error">{errors.licensePlateEnd}</small>}
+                        </div>
+
+                        <div className="field">
+                            <label>Potência do motor</label>
+                            <SearchableSelect
+                                options={OPTIONS.motorPower}
+                                value={formData.motorPower}
+                                onChange={(e) => {
+                                    handleSelectChange('motorPower', e.target.value)
+                                }}
+                                placeholder={"Selecione a potência"}
+                                styleContainer={{ width: '100%', marginTop: '0px', gap: '0.1rem' }}
+                                styleSelect={{ width: '100%', borderRadius: '4px', border: '1px solid rgba(0, 0, 0, 0.38)', padding: '0.75rem' }}
+                                styleLabel={{ marginBottom: '0px' }}
+                            />
                         </div>
 
                         <div className="field" style={{ gridColumn: '1 / -1' }}>
-                            <label htmlFor="description" style={{ marginBottom: '1rem', display: 'block', fontWeight: 'bold' }}>Descrição</label>
+                            {errors.description && <small className="p-error">{errors.description}</small>}
+                            <label htmlFor="description" style={{ marginBottom: '1rem', display: 'block', fontWeight: 'bold' }}>Descrição <span style={{ color: 'red' }}>*</span></label>
                             <InputTextarea id="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={5} cols={30} style={{ width: '100%' }} />
                         </div>
                         <div className="field" style={{ gridColumn: '1 / -1' }}>

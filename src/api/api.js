@@ -9,7 +9,7 @@ const api = axios.create({
         "Content-Type": "application/json",
     },
 });
-
+api.defaults.withCredentials = true;
 const getTokenFromCookie = () => {
     const cookies = document.cookie.split("; ");
     for (const cookie of cookies) {
