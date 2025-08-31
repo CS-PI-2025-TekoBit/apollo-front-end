@@ -166,7 +166,7 @@ export default function Editar(){
             <Header />
             <div className="editar-container">
                 <form className="cards-wrapper" onSubmit={handleSubmit}>
-                    <div className="card">
+                    <div className="card-edit">
                         <div className="titulo">
                             <h2>Dados da minha conta</h2>
                             <p>Campos com asterisco (*) são obrigatórios</p>
@@ -256,7 +256,7 @@ export default function Editar(){
                         {errors.confirmarSenha && <span className="register-error">{errors.confirmarSenha}</span>}
                     </div>
 
-                    <div className="card">
+                    <div className="card-edit">
                         <div className="titulo">
                             <h2>Meu endereço e contato</h2>
                             <p>Campos com asterisco (*) são obrigatórios</p>

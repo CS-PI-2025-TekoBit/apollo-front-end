@@ -26,14 +26,14 @@ export default function CarDetail() {
     const [errors, setErrors] = useState({})
     const ViewportHeight = window.innerHeight;
     const settings = {
-        infinite: true,
+        infinite: car?.images.length > 2 ? true : false,
         speed: 1000,
         slidesToShow: 3,
         slidesToScroll: 1,
         arrows: true,
     };
     const settings_mobile = {
-        infinite: true,
+        infinite: car?.images.length > 2 ? true : false,
         speed: 1000,
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -103,6 +103,14 @@ export default function CarDetail() {
         }
         return chunks;
     };
+    const safeParseJSON = (jsonString) => {
+        try {
+            return JSON.parse(jsonString);
+        } catch (error) {
+            console.error("Erro ao fazer JSON.parse:", error);
+            return [];
+        }
+    };
     return (
         <>
             < Header />
@@ -120,10 +128,11 @@ export default function CarDetail() {
                             <div className="container-car-detail">
                                 <div className="spacing-imgs">
                                     <Slider {...settings}>
-                                        {car?.imgs.map((url, index) => (
+                                        {car.images?.map((img, index) => (
                                             <div key={index}>
+                                                {console.log("img", img)}
                                                 <img
-                                                    src={`${url}`}
+                                                    src={`${img.img_url}`}
                                                     alt={`Slide ${index + 1}`}
                                                     className="car-detail-img"
                                                 />
@@ -135,21 +144,12 @@ export default function CarDetail() {
                                     <div className="left-side-car-detail">
                                         <section>
                                             <div className="title-with-highlight">
-                                                <h1 className="car-title">
-                                                    {car?.mark} <span className="title-color">{car?.model}</span>
+                                                <h1 className="car-title" style={{ margin: 0 }}>
+                                                    {car.brand} <span className="title-color">{car.model.split(" ")[0]}</span>
                                                 </h1>
-                                                {
-                                                    car?.highlights && (
-                                                        <span className="highlight-button">
-                                                            <h3>
-                                                                Em destaque
-                                                            </h3>
-                                                        </span>
-                                                    )
-                                                }
                                             </div>
                                             <h3 className="car-description">
-                                                {car?.motors + ' ' + car?.traction + ' ' + car?.fuel}
+                                                {car.model + ' ' + car.transmission + ' ' + car.fuel}
                                             </h3>
                                         </section>
                                         <section>
@@ -165,7 +165,7 @@ export default function CarDetail() {
                                                         </tr>
                                                         <tr>
                                                             <td>{car?.year}</td>
-                                                            <td>{car?.kilometers}</td>
+                                                            <td>{car?.mileage}</td>
                                                             <td>{car?.transmission}</td>
                                                             <td>{car?.bodywork}</td>
                                                         </tr>
@@ -177,7 +177,7 @@ export default function CarDetail() {
                                                         </tr>
                                                         <tr>
                                                             <td>{car?.fuel}</td>
-                                                            <td>{car?.final_plate}</td>
+                                                            <td>{car?.licensePlateEnd}</td>
                                                             <td>{car?.color}</td>
                                                             <td>{car?.trade ? "Sim" : "Não"}</td>
                                                         </tr>
@@ -186,7 +186,7 @@ export default function CarDetail() {
                                                             <th>Direção</th>
                                                         </tr>
                                                         <tr>
-                                                            <td>{car?.blindage ? "Sim" : "Não"}</td>
+                                                            <td>{car?.armored ? "Sim" : "Não"}</td>
                                                             <td>{car?.direction || "Não informado"}</td>
                                                         </tr>
                                                     </tbody>
@@ -204,7 +204,11 @@ export default function CarDetail() {
                                         <section>
                                             <h1>Itens do veículo</h1>
                                             <div className="items-table">
-                                                {chunkArray(car.items, 4).map((row, rowIndex) => (
+                                                {console.log(car)}
+                                                {chunkArray(
+                                                    car?.opcionais && car?.opcionais?.length > 0 ? safeParseJSON(car?.opcionais) : [],
+                                                    4
+                                                ).map((row, rowIndex) => (
                                                     <div key={rowIndex} className="items-row">
                                                         {row.map((item, colIndex) => (
                                                             <div key={colIndex} className="item-cell">
@@ -226,20 +230,20 @@ export default function CarDetail() {
                                         </section>
                                     </div>
                                     <div className="right-side-car-detail">
-                                        <section>
+                                        <section style={{ margin: 0 }}>
                                             <h1 className="car-detail-price">
-                                                {car?.price?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                                                {car?.vehiclePrice?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                             </h1>
                                             <p className="car-detail-price-description">
-                                                Valor à vista
+                                                {car.carType === "VENDA" ? "Valor à vista" : "Valor por dia"}
                                             </p>
                                             <hr className="car-detail-divider-right-side" />
                                             <h2 className="car-detail-vendor">
                                                 Envie uma mensagem ao vendedor
                                             </h2>
-                                            <a href={`http://wa.me/5500000000?text=Olá, gostaria de saber se o veículo ${car?.model} na cor ${car?.color} ainda esta disponível ? `} className="button-whats">
+                                            <a href={`http://wa.me/5500000000?text=Olá, gostaria de saber se o veículo ${car?.model} na cor ${car?.color} ainda esta disponível ? `} className="button-whats" >
                                                 <img src={IMG} alt="" />
-                                                <div className="whats">
+                                                <div className="whats" >
                                                     <p>
                                                         Fale conosco pelo
                                                     </p>
@@ -281,7 +285,8 @@ export default function CarDetail() {
                             <Maps />
                             <BotaoWhatsApp />
                         </>
-                    )}
+                    )
+                    }
                 </div >
             ) : (
                 isLoading ? (
@@ -295,10 +300,10 @@ export default function CarDetail() {
                         <div className="container-car-detail">
                             <div className="spacing-imgs">
                                 <Slider {...settings_mobile}>
-                                    {car?.imgs.map((url, index) => (
+                                    {car?.images.map((img, index) => (
                                         <div key={index}>
                                             <img
-                                                src={`${url}`}
+                                                src={`${img.img_url}`}
                                                 alt={`Slide ${index + 1}`}
                                                 className="car-detail-img"
                                             />
@@ -308,13 +313,13 @@ export default function CarDetail() {
                             </div>
                             <section className="car-detail-info-1-mobile">
                                 <h1 className="car-title">
-                                    {car?.mark} <span className="title-color">{car?.model}</span>
+                                    {car?.brand} <span className="title-color">{car?.model.split(" ")[0]}</span>
                                 </h1>
                                 <h3 className="car-description">
-                                    {car?.motors + ' ' + car?.traction + ' ' + car?.fuel}
+                                    {car?.model + ' ' + car?.traction + ' ' + car?.fuel}
                                 </h3>
                                 <h3 className="car-detail-price">
-                                    {car?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                                    {car?.vehiclePrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                 </h3>
                                 <p className="car-detail-price-description">
                                     Valor à vista
@@ -360,7 +365,7 @@ export default function CarDetail() {
                                     <div class="item ">
                                         <h1>Kilometros</h1>
                                         <p>
-                                            {car?.kilometers}
+                                            {car?.milage}
                                         </p>
                                     </div>
                                     <div class="item-esquerdo">
@@ -385,7 +390,7 @@ export default function CarDetail() {
                                     <div className="item">
                                         <h1>Final de placa</h1>
                                         <p>
-                                            {car?.final_plate}
+                                            {car?.licensePlateEnd}
                                         </p>
                                     </div>
                                     <div className="item-esquerdo">
@@ -403,7 +408,7 @@ export default function CarDetail() {
                                     <div className="item-esquerdo">
                                         <h1>Blindagem ? </h1>
                                         <p>
-                                            {car?.blindage ? 'Sim' : 'Não'}
+                                            {car?.armored ? 'Sim' : 'Não'}
                                         </p>
                                     </div>
                                     <div className="item">
@@ -417,11 +422,11 @@ export default function CarDetail() {
                             <section>
                                 <h1>Itens do veículo</h1>
                                 <div className="items-table-mobile">
-                                    {car.items.map((item, index) => (
+                                    {/* {car?.items.map((item, index) => (
                                         <div key={index} className="item-cell-mobile">
                                             {item}
                                         </div>
-                                    ))}
+                                    ))} */}
                                 </div>
                             </section>
                             <hr className="car-detail-divider divider-2" />

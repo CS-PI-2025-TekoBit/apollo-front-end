@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTransmission } from '../../../hooks/useTransmission';
 import Api from '../../../api/api';
+import { InputText } from 'primereact/inputtext';
 
 function Transmission() {
     const { transmission, isLoading } = useTransmission();
@@ -41,7 +42,7 @@ function Transmission() {
                                 pageName: `023 - Edição de Transmissão`,
                                 pageTitle: 'Editar Transmissão',
                                 labelNameForm: 'Nome da Transmissão',
-                                routeEdit: '/transmission/edit',
+                                routeEdit: '/transmissions/edit',
                                 initialData: {
                                     name: rowData.name,
                                     status: rowData.status,
@@ -73,7 +74,7 @@ function Transmission() {
                             if (result.isConfirmed) {
                                 try {
                                     // QUANDO USAR BACKEND ------------------------------------------------
-                                    const response = await Api.delete(`/transmission/delete/${rowData.id_transmission}`);
+                                    const response = await Api.delete(`/transmissions/delete/${rowData.id_transmission}`);
                                     if (response.status === 200) {
                                         await queryClient.invalidateQueries(['transmissions']);
                                         toast.success(`Transmissão ${rowData.name} excluída com sucesso!`);
@@ -113,8 +114,8 @@ function Transmission() {
                 <section className="content-list">
                     <div className="search-and-include">
                         <div className="search">
-                            <input type="text" placeholder="Pesquisar" />
-                            <Button icon={<Search size={20} color='white' />} iconPos='left' className="button-search" />
+                            <InputText type="text" placeholder="Pesquisar" style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} />
+                            <Button icon={<Search size={22} color='white' />} iconPos='left' className="button-search" />
                         </div>
                         <div className="include">
                             <NavLink to="/admin/transmission/register">
@@ -129,7 +130,7 @@ function Transmission() {
                     </div>
                     <div className="card espacing-table" style={{ width: '100%' }}>
                         <DataTable value={transmission} tableStyle={{ width: '100%' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                            <Column field="id_transmition" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} ></Column>
+                            <Column field="id_transmission" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} ></Column>
                             <Column header="Nome da Transmissão" field='name' headerClassName='header-table' align={'center'} ></Column>
                             <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} ></Column>
                             <Column field="status" header="Status" body={statusBodyTemplate} headerClassName='header-table' align={'center'} ></Column>

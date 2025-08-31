@@ -1,0 +1,107 @@
+/* Reset específico para componentes PrimeReact */
+.p-component,
+.p-component *,
+.p-component *::before,
+.p-component *::after {
+    box-sizing: border-box !important;
+}
+
+/* Calendar específico */
+.p-calendar {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.p-datepicker-header {
+    margin: 0 !important;
+    padding: 0.5rem !important;
+}
+
+.p-calendar .p-inputtext {
+    margin: 0 !important;
+    padding: 0.75rem !important;
+    width: 100% !important;
+    border: 1px solid rgba(0, 0, 0, 0.38) !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+}
+
+.p-calendar .p-datepicker {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* FileUpload */
+.p-fileupload {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.p-fileupload .p-button {
+    margin: 0.25rem !important;
+    padding: 0.5rem 1rem !important;
+}
+
+
+
+/* Dropdown/Select */
+.p-dropdown {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+.p-component * {
+    margin: 0 !important;
+}
+
+.p-dropdown .p-inputtext {
+    margin: 0 !important;
+    padding: 0.75rem !important;
+}
+
+/* InputText */
+.p-inputtext {
+    margin: 0 !important;
+    padding: 0.75rem !important;
+    border: 1px solid rgba(0, 0, 0, 0.38) !important;
+    /* border-radius: 4px !important; */
+}
+
+/* RadioButton */
+.p-radiobutton {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Toast */
+.p-toast {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ProgressBar */
+.p-progressbar {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Tag */
+.p-tag {
+    margin: 0 !important;
+    padding: 0.5rem !important;
+}
+
+/* Correção específica para o Calendar quebrado */
+.p-calendar-w-btn {
+    width: 100% !important;
+}
+
+.p-calendar-w-btn .p-inputtext {
+    width: calc(100% - 2.5rem) !important;
+}
+
+.p-calendar .p-button {
+    width: 2.5rem !important;
+    margin-left: 0 !important;
+}

@@ -1,20 +1,16 @@
 import { Palette } from '@phosphor-icons/react';
 import { Search } from 'lucide-react';
 import { Button } from 'primereact/button';
-import React from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import GenericLoader from '../../../components/GenericLoader/GenericLoader';
 import { useColors } from '../../../hooks/useColors';
-import { Edit } from 'lucide-react';
-import { Delete } from 'lucide-react';
-import { XCircle } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router';
-import GenericRegister from '../../../components/GenericRegister/GenericRegister';
 import Api from '../../../api/api';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { useQueryClient } from '@tanstack/react-query';
+import { InputText } from 'primereact/inputtext';
 
 function Colors() {
     const { colors, isLoading } = useColors();
@@ -112,8 +108,8 @@ function Colors() {
                 <section className="content-list">
                     <div className="search-and-include">
                         <div className="search">
-                            <input type="text" placeholder="Pesquisar" />
-                            <Button icon={<Search size={20} color='white' />} iconPos='left' className="button-search" />
+                            <InputText type="text" placeholder="Pesquisar" style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} />
+                            <Button icon={<Search size={22} color='white' />} iconPos='left' className="button-search" />
                         </div>
                         <div className="include">
                             <NavLink to="/admin/colors/register">
