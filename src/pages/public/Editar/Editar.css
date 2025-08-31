@@ -1,0 +1,250 @@
+.cards-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    margin-top: 3rem;
+}
+
+.card {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    min-width: 400px;
+    align-items: center;
+    justify-self: center;
+}
+
+.titulo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80%;
+    margin-bottom: 2vh;
+}
+
+.input-form {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.input-form label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.input-form .icon {
+    position: absolute;
+    top: 70%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.input-form input {
+    width: 100%;
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.row {
+    display: flex;
+    gap: 1rem;
+}
+
+.row-exclusiva {
+    display: flex;
+    gap: 1rem;
+    width: 80%;
+}
+
+.actions {
+    grid-column: 2;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    flex-shrink: 0;
+    width: auto;
+}
+
+.salvar {
+    background-color: #5c7252;
+    color: white;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.deletar {
+    background-color: #d32f2f;
+    color: white;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-card {
+    background: #111;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+    width: 300px;
+}
+
+.modal-warning {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.modal-actions {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.full-width {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.input-error {
+    border: 2px solid red;
+    background-color: #2e2e2e;
+    color: white;
+    outline: none;
+}
+
+.input-error::placeholder {
+    color: #bbb;
+}
+
+.input-delete {
+    border: 2px solid red;
+    background-color: #2e2e2e;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    width: 100%;
+    outline: none;
+    margin-top: 15px;
+}
+
+.input-delete::placeholder {
+    color: #bbb;
+}
+
+.delete-error {
+    color: red;
+    margin-top: 6px;
+    font-size: 14px;
+}
+
+.btn.deletar {
+    background-color: red;
+    color: white;
+    border: 2px solid red;
+}
+
+.btn.deletar.disabled {
+    background-color: #2e2e2e;
+    color: red;
+    border: 2px solid red;
+    cursor: not-allowed;
+}
+
+.field-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.register-error {
+    margin-top: 4px;
+    font-size: 14px;
+    color: red;
+    text-align: left;
+    padding-left: 2.5rem;
+}
+
+.field-wrapper .register-error {
+    margin-left: -1%;
+}
+
+@media (max-width: 500px) {
+    .row-exclusiva {
+        width: 90%;
+    }
+
+    .titulo h2 {
+        font-size: 1em;
+    }
+
+    .titulo p {
+        font-size: 0.90em;
+    }
+
+    .salvar {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    .deletar {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    .card {
+        min-width: auto;
+        width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    .cards-wrapper {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+
+    .actions {
+        grid-column: 1;
+        justify-content: flex-end;
+    }
+}

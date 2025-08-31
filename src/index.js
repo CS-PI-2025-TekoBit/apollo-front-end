@@ -25,6 +25,7 @@ import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Editar from './pages/public/Editar/Editar';
 const client = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -38,6 +39,7 @@ root.render(
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/myAccount" element={<Editar />} />
                 <Route path='/carros/:id' element={<CarDetail />} />
                 <Route element={<PrivateRoute allowedRoles={['ROLE_ADMIN']} />}>
                   <Route path="/admin/*" element={<AdminLayout />}>

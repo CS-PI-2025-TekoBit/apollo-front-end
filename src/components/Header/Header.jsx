@@ -77,7 +77,7 @@ export default function Header() {
                                     <p>{user.name}</p>
                                 </span>
                                 <div className="dropdown-conteudo">
-                                    <Link to={'/user'} className='dropdown-item'>Minha conta</Link>
+                                    <Link to={'/myAccount'} className='dropdown-item'>Minha conta</Link>
                                     {ViewportHeight < 800 && (
                                         <>
                                             <Link to={'/'} className='dropdown-item'>Favoritos</Link>
