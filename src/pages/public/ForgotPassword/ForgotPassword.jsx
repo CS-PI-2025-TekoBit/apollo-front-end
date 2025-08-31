@@ -36,7 +36,7 @@ function ForgotPassword() {
         setErro('');
 
         try {
-            const response = await Api.post(`/forgot-password/verifyMail/${email}`);
+            const response = await Api.post(`/forgot-password/verifyMail/${email}`, null);
             
             if (response.status === 200) {
                 toast.success('Email de redefinição enviado com sucesso!');
