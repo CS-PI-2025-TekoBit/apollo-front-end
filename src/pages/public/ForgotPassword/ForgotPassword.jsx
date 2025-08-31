@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import './ForgotPassword.css';
 import { At } from '@phosphor-icons/react';
-import logo from '../../../assets/imgs/logomarca.png'
+import logo from '../../../assets/imgs/logomarca.png';
+import Api from '../../../api/api';
 
 function ForgotPassword() {
     const [email, setEmail] = useState('');
@@ -33,6 +34,20 @@ function ForgotPassword() {
         }
 
         setErro('');
+
+        try {
+            const response = await Api.post(`/forgot-password/verifyMail/${email}`);
+            
+            if (response.status === 200) {
+                toast.success('Email de redefinição enviado com sucesso!');
+            } else {
+                toast.error('Erro ao enviar email. Tente novamente.');
+            }
+        } catch (error) {
+            toast.error('Erro na comunicação com o servidor.');
+        } finally {
+            setEnviando(false);
+        }
     };
 
     return (
@@ -41,7 +56,7 @@ function ForgotPassword() {
                 <img src={logo} alt="Apollo" className="forgot-logo" />
 
                 <h1>Esqueci Minha Senha</h1>
-                <p>informe seu email para receber a definição de senha</p>
+                <p>Informe seu email para receber a redefinição de senha</p>
 
                 <form onSubmit={handleSubmit}>
                     <div className="input-form">
