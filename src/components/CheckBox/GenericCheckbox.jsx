@@ -19,8 +19,8 @@ export default function GenericCheckbox({
                         name={`condition-${option.id}`}
                         id={`condition-${option.id}`}
                         value={option.value}
-                        checked={checkedValues?.includes(option.id) || false}
-                        onChange={() => onChange(label, option.id)}
+                        checked={checkedValues?.includes(option.name) || false}
+                        onChange={() => onChange(label, option.name)}
                         className="checkbox"
                     />
                     <span className="checkmark"></span>

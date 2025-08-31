@@ -1,20 +1,16 @@
 import { Car } from '@phosphor-icons/react';
 import { Search } from 'lucide-react';
 import { Button } from 'primereact/button';
-import React from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import GenericLoader from '../../../components/GenericLoader/GenericLoader';
 import { useBodyWork } from '../../../hooks/useBodyWork';
-import { Edit } from 'lucide-react';
-import { Delete } from 'lucide-react';
-import { XCircle } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router';
-import GenericRegister from '../../../components/GenericRegister/GenericRegister';
-import Api from '../../../api/api';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { useQueryClient } from '@tanstack/react-query';
+import { InputText } from 'primereact/inputtext';
+import Api from '../../../api/api';
 
 function Bodywork() {
     const { bodyWork, isLoading } = useBodyWork();
@@ -39,7 +35,7 @@ function Bodywork() {
                     onClick={() =>
                         navigate('/admin/bodywork/register', {
                             state: {
-                                id: rowData.id_colors,
+                                id: rowData.id_bodywork,
                                 pageName: `021 - Edição de corroceria`,
                                 pageTitle: 'Editar Corroceria',
                                 labelNameForm: 'Nome da Corroceria',
@@ -73,8 +69,20 @@ function Bodywork() {
                             cancelButtonText: 'Cancelar'
                         }).then(async (result) => {
                             if (result.isConfirmed) {
-                                toast.success(`Carroceria ${rowData.name} excluída com sucesso!`);
-                                return
+                                try {
+                                    const response = await Api.delete(`/bodywork/delete/${rowData.id_bodywork}`);
+                                    if (response.status === 200) {
+                                        await queryClient.invalidateQueries(['bodyWork']);
+                                        toast.success(`Carroceria ${rowData.name} excluída com sucesso!`);
+                                        return
+                                    } else {
+                                        toast.error(`Erro ao excluir carroceria. Tente novamente. ${response.error}`);
+                                        return
+                                    }
+                                } catch (error) {
+                                    toast.error(`Erro ao excluir carroceria. Tente novamente. ${error.message}`);
+                                    return
+                                }
                             }
                         })
                     }
@@ -102,8 +110,8 @@ function Bodywork() {
                 <section className="content-list">
                     <div className="search-and-include">
                         <div className="search">
-                            <input type="text" placeholder="Pesquisar" />
-                            <Button icon={<Search size={20} color='white' />} iconPos='left' className="button-search" />
+                            <InputText type="text" placeholder="Pesquisar" style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} />
+                            <Button icon={<Search size={22} color='white' />} iconPos='left' className="button-search" />
                         </div>
                         <div className="include">
                             <NavLink to="/admin/bodywork/register">
@@ -118,7 +126,7 @@ function Bodywork() {
                     </div>
                     <div className="card espacing-table" style={{ width: '100%' }}>
                         <DataTable value={bodyWork} tableStyle={{ width: '100%' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                            <Column field="id_bodyWork" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} ></Column>
+                            <Column field="id_bodywork" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} ></Column>
                             <Column header="Nome da Corroceria" field='name' headerClassName='header-table' align={'center'} ></Column>
                             <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} ></Column>
                             <Column field="status" header="Status" body={statusBodyTemplate} headerClassName='header-table' align={'center'} ></Column>

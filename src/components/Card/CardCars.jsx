@@ -9,7 +9,7 @@ export default function Card(
         imgs = "",
         mark = "",
         price = "",
-        traction = "",
+        transmission = "",
         year = "",
         kilometers = "",
         disableSlideImgs = false,
@@ -29,10 +29,10 @@ export default function Card(
             <NavLink to={`/carros/${id}`} className="card-cars">
                 {!disableSlideImgs ? (
                     <Slider {...settings}>
-                        {imgs.map((url, index) => (
+                        {imgs.map((img, index) => (
                             <div key={index}>
                                 <img
-                                    src={`${url}`}
+                                    src={`${img?.img_url}`}
                                     alt={`Slide ${index + 1}`}
                                     className="card-img"
                                 />
@@ -41,20 +41,21 @@ export default function Card(
                     </Slider>
                 ) : (
                     <img
-                        src={`${imgs[0]}`}
+                        src={`${imgs[0]?.img_url}`}
                         alt="First Slide"
                         className="card-img"
                     />
                 )}
 
                 <div className="txt-card-cars">
-                    <h1 className="titulo-card-cars">{mark} {name}</h1>
-                    <p className="valor-card-cars"><span>Preço: </span>{price}</p>
+                    <h1 className="titulo-card-cars">{mark} {name.split(" ")[0]}</h1>
                     <p className="marca-card-cars"><span>Marca: </span>{mark}</p>
-                    <p className="tracao-card-cars"><span>Tração: </span>{traction}</p>
+                    <p className="tracao-card-cars"><span>Transmissão: </span>{transmission}</p>
                     <p className="ano-card-cars"><span>Ano: </span>{year}</p>
                     <p className="km-card-cars"><span>KM: </span>{kilometers}</p>
-                    <div className="flex">
+                    <p className="valor-card-cars">
+                        {price?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>
+                    <div className="btn-detalhes">
                         <button to={`/carros/${id}`} className="botao-card-cars">Ver Detalhes</button>
                     </div>
                 </div>

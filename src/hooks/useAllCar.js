@@ -1,13 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import carros from '../data/car.json';
+import Api from '../api/api';
 
 const fetchData = async () => {
-    const response = await new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({ data: carros.data });
-        }, 100);
-    });
-    return response.data;
+    const response = await Api.get("/cars");
+    return response.data.data;
 };
 
 export function useAllCars() {

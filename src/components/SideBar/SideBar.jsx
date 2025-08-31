@@ -109,6 +109,7 @@ export default function AppSidebar({ children }) {
                     marginLeft: collapsed ? '60px' : '15rem',
                     transition: 'margin-left 0.3s',
                     width: `auto`,
+
                 }}
             >
                 {children}

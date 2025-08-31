@@ -1,0 +1,55 @@
+.btn {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.btn-generic {
+    width: 167px;
+    height: 40px;
+    border-radius: 7px;
+    color: #FFF;
+    text-align: center;
+    font-family: Alexandria;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
+
+.btn-generic:hover {
+    cursor: pointer;
+}
+
+.btn-generic:active {
+    opacity: 0.8;
+}
+
+.btn-clean {
+    background: #E9BE00;
+}
+
+.btn-clean:hover {
+    background: #D8A800;
+}
+
+.btn-cancel {
+    background: #AC1A06;
+}
+
+.btn-cancel:hover {
+    background: #9B1605;
+}
+
+.btn-save {
+    background: #03621C;
+}
+
+.btn-save:hover {
+    background: #035A1B;
+}
