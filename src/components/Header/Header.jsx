@@ -99,15 +99,15 @@ export default function Header() {
                 </div>
             </header>
             <div className="footer-header">
-                <button className='btn-veiculos'>
+                <NavLink to={'/home'} className='btn-veiculos'>
                     <p>Ver estoque de venda</p>
-                </button>
-                <button className='btn-veiculos'>
+                </NavLink>
+                <NavLink to={'/rent'} className='btn-veiculos'>
                     <p>Ver estoque de aluguel</p>
-                </button>
-                <button className='btn-veiculos'>
+                </NavLink>
+                <NavLink to={'/sobre-nos'} className='btn-veiculos'>
                     <p>Sobre nós</p>
-                </button>
+                </NavLink>
 
             </div>
         </>

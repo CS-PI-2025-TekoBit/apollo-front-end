@@ -103,6 +103,14 @@ export default function CarDetail() {
         }
         return chunks;
     };
+    const safeParseJSON = (jsonString) => {
+        try {
+            return JSON.parse(jsonString);
+        } catch (error) {
+            console.error("Erro ao fazer JSON.parse:", error);
+            return [];
+        }
+    };
     return (
         <>
             < Header />
@@ -141,7 +149,7 @@ export default function CarDetail() {
                                                 </h1>
                                             </div>
                                             <h3 className="car-description">
-                                                {car.model + ' ' + car.traction + ' ' + car.fuel}
+                                                {car.model + ' ' + car.transmission + ' ' + car.fuel}
                                             </h3>
                                         </section>
                                         <section>
@@ -196,7 +204,11 @@ export default function CarDetail() {
                                         <section>
                                             <h1>Itens do veículo</h1>
                                             <div className="items-table">
-                                                {/* {chunkArray(car?.items, 4).map((row, rowIndex) => (
+                                                {console.log(car)}
+                                                {chunkArray(
+                                                    car?.opcionais && car?.opcionais?.length > 0 ? safeParseJSON(car?.opcionais) : [],
+                                                    4
+                                                ).map((row, rowIndex) => (
                                                     <div key={rowIndex} className="items-row">
                                                         {row.map((item, colIndex) => (
                                                             <div key={colIndex} className="item-cell">
@@ -213,7 +225,7 @@ export default function CarDetail() {
                                                                     />
                                                                 ))}
                                                     </div>
-                                                ))} */}
+                                                ))}
                                             </div>
                                         </section>
                                     </div>
@@ -223,7 +235,7 @@ export default function CarDetail() {
                                                 {car?.vehiclePrice?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                             </h1>
                                             <p className="car-detail-price-description">
-                                                Valor à vista
+                                                {car.carType === "VENDA" ? "Valor à vista" : "Valor por dia"}
                                             </p>
                                             <hr className="car-detail-divider-right-side" />
                                             <h2 className="car-detail-vendor">

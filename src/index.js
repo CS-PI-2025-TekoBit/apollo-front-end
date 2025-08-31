@@ -29,7 +29,7 @@ import { Provider } from 'react-redux';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Editar from './pages/private/Editar/Editar';
-import UserRoutes from './components/UserRoutes/UserRoutes';
+import Rent from './pages/public/RentCars/Rent';
 const client = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -43,6 +43,7 @@ root.render(
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/Rent" element={<Rent />} />
                 <Route path='/carros/:id' element={<CarDetail />} />
                 <Route element={<PrivateRoute allowedRoles={['ROLE_USER']} />}>
                   <Route path="/user/myAccount" element={<Editar />} />

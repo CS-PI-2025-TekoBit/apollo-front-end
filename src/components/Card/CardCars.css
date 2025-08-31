@@ -5,11 +5,15 @@
     min-width: 16vw;
     max-width: 16vw;
     height: fit-content;
-    background-color: rgb(37, 37, 37);
+    background-color: #fffffc;
     box-shadow: 0px 0px rgba(0, 0, 0, 0.315);
+    border-radius: 8px;
+    border: 2px solid #edecf2;
+
 }
 
 .card-cars img {
+    border-top: 8px;
     width: 100%;
 }
 
@@ -25,20 +29,29 @@
 }
 
 .txt-card-cars h1 {
-    color: white;
-    font-size: 1.5em;
+    color: #2e2d37;
+    font-size: 1.2em;
     margin-bottom: 2%;
 }
 
+.valor-card-cars {
+    margin-top: 10px;
+    color: #2e2d37 !important;
+    font-size: 1.2em !important;
+    font-weight: 700 !important;
+    font-family: 'Figtree', sans-serif !important;
+}
+
 .txt-card-cars p {
-    color: rgb(211, 211, 211);
+    color: #696977;
     font-size: 1.05em;
     margin-bottom: 1%;
 }
 
-.flex {
+
+.btn-detalhes {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
 }
 
@@ -50,10 +63,10 @@
     font-family: 'Alexandria';
     color: white;
     border-style: none;
-    border-radius: 0.5em;
+    border-radius: 0.2em;
     margin-top: 2%;
-    right: 20%;
     cursor: pointer;
+    width: 100%;
 }
 
 .botao-card-cars:hover {

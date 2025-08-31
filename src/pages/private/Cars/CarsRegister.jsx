@@ -328,16 +328,11 @@ function CarRegister() {
         const yearFormate = formData.year ? formData.year.split(' ')[0] : '';
         const formDataToSend = new FormData();
 
-        // Separar imagens novas das existentes
         const newImages = formData.car_images.filter(image => !image.id_image);
         const existingImageIds = formData.car_images
             .filter(image => image.id_image)
             .map(image => image.id_image);
 
-        console.log('Imagens novas a serem enviadas:', newImages);
-        console.log('IDs das imagens existentes:', existingImageIds);
-
-        // Adicionar apenas as novas imagens ao FormData
         if (newImages && newImages.length > 0) {
             newImages.forEach((image) => {
                 formDataToSend.append(`car_images`, image);
@@ -362,14 +357,12 @@ function CarRegister() {
             vehicleStatus: formData.vehicleStatus,
             acceptsExchange: formData.acceptsExchange,
             description: formData.description,
-            opcionais: formData.optionalFeatures ? JSON.stringify(formData?.optionalFeatures) : null,
+            opcionais: formData.optionalFeatures ? formData.optionalFeatures.join(',') : null,
+            motorPower: formData.motorPower,
+            vehicleTag: formData.vehicleTag,
+            id_car: isEditMode ? id : null,
             publish_olx: true
         };
-
-        // Se for edição e tiver imagens existentes
-        if (isEditMode && existingImageIds.length > 0) {
-            dataToSend.existing_image_ids = JSON.stringify(existingImageIds);
-        }
 
         Object.keys(dataToSend).forEach(key => {
             if (dataToSend[key] !== null && dataToSend[key] !== undefined && dataToSend[key] !== '') {
@@ -380,7 +373,7 @@ function CarRegister() {
             let result;
             setLoading(true)
             if (isEditMode) {
-                result = await Api.put(`cars/${id}`, formDataToSend, {
+                result = await Api.post(`cars/${id}`, formDataToSend, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
             } else {
@@ -507,10 +500,11 @@ function CarRegister() {
                 vehicleStatus: car?.vehicleStatus || '',
                 acceptsExchange: car?.acceptsExchange || '',
                 description: car?.description || '',
+                motorPower: car?.motorPower || '',
+                vehicleTag: car?.vehicleTag || '',
                 optionalFeatures: Array.isArray(car?.opcionais) ? car.opcionais : []
             });
 
-            // Buscar dados da FIPE quando tiver marca
             if (car?.brand && fipeData.brands.length > 0) {
                 const brandFound = fipeData.brands.find(brand => brand.name === car.brand);
                 if (brandFound) {
@@ -608,26 +602,6 @@ function CarRegister() {
                             emptyTemplate={emptyTemplate}
                         />
                         {errors.car_images && <small className="p-error">{errors.car_images}</small>}
-                        {/* <FileUpload
-                            ref={fileUploadRef}
-                            name="car_images[]"
-                            multiple
-                            accept="image/*"
-                            customUpload
-                            onSelect={onTemplateSelect}
-                            onError={onTemplateClear}
-                            onClear={onTemplateClear}
-                            headerTemplate={headerTemplate}
-                            itemTemplate={itemTemplate}
-                            emptyTemplate={emptyTemplate}
-                            chooseOptions={{
-                                icon: 'pi pi-fw pi-car_images',
-                                iconOnly: true,
-                                className: 'custom-choose-btn p-button-rounded p-button-outlined',
-                                style: { display: 'none' }
-                            }}
-                            style={{ border: '2px dashed #d1d5db', borderRadius: '8px' }}
-                        /> */}
                     </div>
 
                     {/* Preview das Imagens */}

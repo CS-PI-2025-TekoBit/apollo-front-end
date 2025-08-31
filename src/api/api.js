@@ -36,8 +36,8 @@ api.interceptors.request.use(
 );
 
 const Api = {
-    get: async (route) => {
-        return api.get(route);
+    get: async (route, params) => {
+        return api.get(route, params);
     },
     post: async (route, data, config) => {
         return api.post(route, data, config);

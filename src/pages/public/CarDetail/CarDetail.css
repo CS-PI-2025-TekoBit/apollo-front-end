@@ -245,10 +245,10 @@
 
 .car-detail-price {
     color: #000000;
-    font-family: Poppins;
+    font-family: 'Figtree', sans-serif;
     font-size: 48px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 600;
     line-height: normal;
 }
 

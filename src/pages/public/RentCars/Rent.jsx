@@ -5,7 +5,7 @@ import Header from '../../../components/Header/Header'
 import Footer from '../../../components/Footer/Footer'
 import Maps from '../../../components/Maps/Maps'
 import BotaoWhatsApp from '../../../components/BotaoWhatsApp/BotaoWhatsApp'
-import './Home.css'
+import './Rent.css'
 import filter_active from '../../../assets/filter_1.svg'
 import filter_deactivate from '../../../assets/filter_2.svg'
 import { useFilters } from '../../../hooks/useFilters'
@@ -119,7 +119,7 @@ export default function Home() {
         if (selectedMotor) params.motor = selectedMotor;
         if (selectedColor) params.color = selectedColor;
 
-        params.carType = "VENDA";
+        params.carType = "ALUGUEL";
 
         Object.keys(checkboxStates).forEach((key) => {
             if (checkboxStates[key].length > 0) {
@@ -141,7 +141,7 @@ export default function Home() {
         setTimeout(() => {
             const params = montarParametros();
             setFilterParams(params);
-        }, 50);
+        }, 500);
     }, [minYear, maxYear, minPrice, maxPrice, minKm, maxKm, selectedMark, selectedModel, selectedMotor, selectedColor, checkboxStates, acceptsTrade, hasArmor]);
 
     return (
@@ -153,7 +153,7 @@ export default function Home() {
                 <>
                     <Header />
                     <main>
-                        <h3 className='header-title'>Carros para venda</h3>
+                        <h3 className='header-title'>Carros para Aluguel</h3>
                         <div className="container-stock " >
                             <div className="filter-opening-mobile">
                                 <button className='filter-button' onClick={() => setFilterActive(!filterActive)}>

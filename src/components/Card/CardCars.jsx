@@ -9,7 +9,7 @@ export default function Card(
         imgs = "",
         mark = "",
         price = "",
-        traction = "",
+        transmission = "",
         year = "",
         kilometers = "",
         disableSlideImgs = false,
@@ -48,13 +48,14 @@ export default function Card(
                 )}
 
                 <div className="txt-card-cars">
-                    <h1 className="titulo-card-cars">{mark} {name.split(" ")[0] + " " + name.split(" ")[2]}</h1>
-                    <p className="valor-card-cars"><span>Preço: </span> {price?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>
+                    <h1 className="titulo-card-cars">{mark} {name.split(" ")[0]}</h1>
                     <p className="marca-card-cars"><span>Marca: </span>{mark}</p>
-                    <p className="tracao-card-cars"><span>Tração: </span>{traction}</p>
+                    <p className="tracao-card-cars"><span>Transmissão: </span>{transmission}</p>
                     <p className="ano-card-cars"><span>Ano: </span>{year}</p>
                     <p className="km-card-cars"><span>KM: </span>{kilometers}</p>
-                    <div className="flex">
+                    <p className="valor-card-cars">
+                        {price?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>
+                    <div className="btn-detalhes">
                         <button to={`/carros/${id}`} className="botao-card-cars">Ver Detalhes</button>
                     </div>
                 </div>
