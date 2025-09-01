@@ -130,7 +130,6 @@ export default function CarDetail() {
                                     <Slider {...settings}>
                                         {car.images?.map((img, index) => (
                                             <div key={index}>
-                                                {console.log("img", img)}
                                                 <img
                                                     src={`${img.img_url}`}
                                                     alt={`Slide ${index + 1}`}
@@ -204,7 +203,6 @@ export default function CarDetail() {
                                         <section>
                                             <h1>Itens do veículo</h1>
                                             <div className="items-table">
-                                                {console.log(car)}
                                                 {chunkArray(
                                                     car?.opcionais && car?.opcionais?.length > 0 ? safeParseJSON(car?.opcionais) : [],
                                                     4

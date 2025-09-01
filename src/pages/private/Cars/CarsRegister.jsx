@@ -310,7 +310,6 @@ function CarRegister() {
             if (field === 'car_images' && (!formData[field] || formData[field].length === 0) && !isEditMode) {
                 newErrors[field] = requiredFields[field];
             } else if (field !== 'car_images' && !formData[field]) {
-                console.log("erro", field)
                 newErrors[field] = requiredFields[field];
             }
         });
@@ -377,7 +376,6 @@ function CarRegister() {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
             } else {
-                console.log("enviando esses dados", formDataToSend)
                 result = await Api.post('cars', formDataToSend, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
@@ -478,7 +476,6 @@ function CarRegister() {
 
     useEffect(() => {
         if (car && isEditMode) {
-            console.log("carro", car)
 
             setFormData({
                 car_images: car.images,
@@ -528,7 +525,7 @@ function CarRegister() {
                                                     );
 
                                                     if (yearFound) {
-                                                        console.log("Ano encontrado:", yearFound.name);
+
                                                         setFormData(prev => ({
                                                             ...prev,
                                                             year: yearFound.name
