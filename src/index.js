@@ -10,6 +10,8 @@ import './primereact-override.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PrivateRoute } from './components/PrivateRoutes/PrivateRoutes';
 import Login from './pages/public/Login/Login';
+import ForgotPassword from './pages/public/ForgotPassword/ForgotPassword';
+import ResetPassword from './pages/public/ResetPassword/ResetPassword';
 import Register from './pages/public/Register/Register';
 import AuthContextProvider from './context/AuthContex';
 import { ToastContainer } from 'react-toastify';
@@ -41,6 +43,8 @@ root.render(
             <QueryClientProvider client={client}>
               <Routes>
                 <Route path="/" element={<Login />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/Rent" element={<Rent />} />
