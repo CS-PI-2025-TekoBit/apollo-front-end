@@ -4,12 +4,12 @@ const API_URL = process.env.REACT_APP_URL_BACK_END;
 
 const api = axios.create({
     baseURL: API_URL,
-    timeout: 10000,
+    timeout: 6000000,
     headers: {
         "Content-Type": "application/json",
     },
 });
-
+api.defaults.withCredentials = true;
 const getTokenFromCookie = () => {
     const cookies = document.cookie.split("; ");
     for (const cookie of cookies) {
@@ -36,11 +36,11 @@ api.interceptors.request.use(
 );
 
 const Api = {
-    get: async (route) => {
-        return api.get(route);
+    get: async (route, params) => {
+        return api.get(route, params);
     },
-    post: async (route, data) => {
-        return api.post(route, data);
+    post: async (route, data, config) => {
+        return api.post(route, data, config);
     },
     put: async (route, data) => {
         return api.put(route, data);

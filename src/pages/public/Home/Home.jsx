@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import GenericChoice from '../../../components/Choice/GenericChoice'
 import GenericCheckbox from '../../../components/CheckBox/GenericCheckbox'
 import Header from '../../../components/Header/Header'
@@ -6,20 +6,20 @@ import Footer from '../../../components/Footer/Footer'
 import Maps from '../../../components/Maps/Maps'
 import BotaoWhatsApp from '../../../components/BotaoWhatsApp/BotaoWhatsApp'
 import './Home.css'
-import filter_active from '../../../assets/filter_1.svg';
-import filter_deactivate from '../../../assets/filter_2.svg';
-import { useAllCars } from '../../../hooks/useAllCar'
+import filter_active from '../../../assets/filter_1.svg'
+import filter_deactivate from '../../../assets/filter_2.svg'
 import { useFilters } from '../../../hooks/useFilters'
-import { useAuth } from '../../../hooks/useAuth';
 import Card from '../../../components/Card/CardCars'
-import GenericInput from '../../../components/GenericInput/GenericInput';
+import GenericInput from '../../../components/GenericInput/GenericInput'
 import GenericSelect from '../../../components/GenericSelect/GenericSelect'
-import { useNavigate } from 'react-router'
+import notFound from '../../../assets/not_found.png'
+import { useSalesCarFilter } from '../../../hooks/useSalesCarFilter'
+
 export default function Home() {
-    const { cars } = useAllCars()
+    const [filterParams, setFilterParams] = useState({});
+    const { cars } = useSalesCarFilter(filterParams)
     const { filtros, isLoading } = useFilters()
-    const { user } = useAuth()
-    const navigate = useNavigate()
+
     const [filterActive, setFilterActive] = useState(false);
     const [acceptsTrade, setAcceptsTrade] = useState(null);
     const [hasArmor, setHasArmor] = useState(null);
@@ -28,17 +28,27 @@ export default function Home() {
         "Direção": [],
         "Combustível": [],
         "Carroceria": [],
-        "Carros": [] //novos e usados
+        "Carros": []
     });
-
     const novoUsado = [{
         "id": "1",
-        "name": "Novos"
+        "name": "NOVO"
     },
     {
         "id": "2",
-        "name": "Usados"
+        "name": "USADO"
     }]
+    const [minYear, setMinYear] = useState('');
+    const [maxYear, setMaxYear] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const [minKm, setMinKm] = useState('');
+    const [maxKm, setMaxKm] = useState('');
+
+    const [selectedMark, setSelectedMark] = useState('');
+    const [selectedModel, setSelectedModel] = useState('');
+    const [selectedMotor, setSelectedMotors] = useState('');
+    const [selectedColor, setSelectedColor] = useState('');
 
     const handleCheckboxChange = (label, optionId) => {
         setCheckboxStates((prev) => {
@@ -53,15 +63,11 @@ export default function Home() {
                 ...prev,
                 [label]: newSelections
             };
-            console.log('Checkbox States:', updatedStates);
             return updatedStates;
         });
     };
 
-    const [selectedMark, setSelectedMark] = useState('');
-    const [selectedModel, setSelectedModel] = useState('');
-    const [selectedMotor, setSelectedMotors] = useState('');
-    const [selectedColor, setSelectedColor] = useState('');
+
 
     const filteredModels = filtros?.models.filter(model => model.mark === selectedMark);
 
@@ -81,50 +87,62 @@ export default function Home() {
     const handleColorChange = (e) => {
         setSelectedColor(e.target.value);
     };
-
-    const [minYear, setMinYear] = useState('');
-    const [maxYear, setMaxYear] = useState('');
-    const [minPrice, setMinPrice] = useState('');
-    const [maxPrice, setMaxPrice] = useState('');
-    const [minKm, setMinKm] = useState('');
-    const [maxKm, setMaxKm] = useState('');
-
-    function aplicarFiltros() {
-        const yearMin = Number(minYear);
-        const yearMax = Number(maxYear);
-
-        const priceMin = Number(minPrice);
-        const priceMax = Number(maxPrice);
-
-        const kmMin = Number(minKm);
-        const kmMax = Number(maxKm);
-
-        const filtrosFinal = {
-            year: {
-                min: yearMin >= 0 ? yearMin : null,
-                max: yearMax >= yearMin && yearMax >= 0 ? yearMax : null,
-            },
-            price: {
-                min: priceMin >= 0 ? priceMin : null,
-                max: priceMax >= priceMin && priceMax >= 0 ? priceMax : null,
-            },
-            km: {
-                min: kmMin >= 0 ? kmMin : null,
-                max: kmMax >= kmMin && kmMax >= 0 ? kmMax : null,
-            },
-        };
-
+    const normalizeKey = (key) => {
+        return key
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
     };
+    const getBackendParamName = (key) => {
+        const mapping = {
+            "Câmbio": "transmission",
+            "Direção": "direction",
+            "Combustível": "fuel",
+            "Carroceria": "bodywork"
+        };
+        return mapping[key] || normalizeKey(key);
+    };
+    const montarParametros = () => {
+        const params = {};
 
-    useEffect(() => {
-        aplicarFiltros();
-    }, [minYear, maxYear, minPrice, maxPrice, minKm, maxKm]);
+        if (minYear) params.yearMin = parseInt(minYear);
+        if (maxYear) params.yearMax = parseInt(maxYear);
 
+        if (minPrice) params.priceMin = parseFloat(minPrice);
+        if (maxPrice) params.priceMax = parseFloat(maxPrice);
+
+        if (minKm) params.mileageMin = parseInt(minKm);
+        if (maxKm) params.mileageMin = parseInt(maxKm);
+
+        if (selectedMark) params.brand = selectedMark;
+        if (selectedModel) params.model = selectedModel;
+        if (selectedMotor) params.motor = selectedMotor;
+        if (selectedColor) params.color = selectedColor;
+
+        params.carType = "VENDA";
+
+        Object.keys(checkboxStates).forEach((key) => {
+            if (checkboxStates[key].length > 0) {
+                if (key === "Carros") {
+                    params.vehicleCondition = checkboxStates[key];
+                } else {
+                    const backendParamName = getBackendParamName(key);
+                    params[backendParamName] = checkboxStates[key];
+                }
+            }
+        });
+
+        if (acceptsTrade !== null) params.acceptsTrade = acceptsTrade;
+        if (hasArmor !== null) params.hasArmor = hasArmor;
+
+        return params;
+    };
     useEffect(() => {
-        if (user?.role === "ROLE_ADMIN") {
-            navigate('/admin/colors')
-        }
-    }, [user])
+        setTimeout(() => {
+            const params = montarParametros();
+            setFilterParams(params);
+        }, 50);
+    }, [minYear, maxYear, minPrice, maxPrice, minKm, maxKm, selectedMark, selectedModel, selectedMotor, selectedColor, checkboxStates, acceptsTrade, hasArmor]);
 
     return (
         <>
@@ -133,10 +151,10 @@ export default function Home() {
                     <p>Carregando</p>
                 </> :
                 <>
-                    {user?.role === 'ROLE_ADMIN' && navigate('/admin')}
                     <Header />
                     <main>
-                        <div className="container-stock " style={{ display: 'flex', flexDirection: 'row' }}>
+                        <h3 className='header-title'>Carros para venda</h3>
+                        <div className="container-stock " >
                             <div className="filter-opening-mobile">
                                 <button className='filter-button' onClick={() => setFilterActive(!filterActive)}>
                                     {filterActive ?
@@ -203,8 +221,8 @@ export default function Home() {
                                                     name={`condition-${option.id}`}
                                                     id={`condition-${option.id}`}
                                                     value={option.value}
-                                                    checked={checkboxStates["Carros"]?.includes(option.id) || false}
-                                                    onChange={() => handleCheckboxChange("Carros", option.id)}
+                                                    checked={checkboxStates["Carros"]?.includes(option.name) || false}
+                                                    onChange={() => handleCheckboxChange("Carros", option.name)}
                                                     className="checkbox"
                                                 />
                                                 <span className="checkmark"></span>
@@ -300,19 +318,30 @@ export default function Home() {
 
                             </div>
                             <div className="right-side-stock">
-                                {cars?.map((car) => (
-                                    <Card
-                                        key={car.id_car}
-                                        id={car.id_car}
-                                        name={car.model}
-                                        imgs={car.imgs}
-                                        mark={car.mark}
-                                        price={car.price}
-                                        traction={car.traction}
-                                        year={car.year}
-                                        kilometers={car.kilometers}
-                                    />
-                                ))}
+                                {cars?.length > 0 ? (
+                                    cars.map((car) => (
+                                        <Card
+                                            key={car.id_car}
+                                            id={car.id_car}
+                                            name={car.model}
+                                            imgs={car.images}
+                                            mark={car.brand}
+                                            price={car.vehiclePrice}
+                                            transmission={car.transmission}
+                                            year={car.year}
+                                            kilometers={car.mileage}
+                                            disableSlideImgs={true}
+                                        />
+                                    ))
+                                ) : (
+                                    <div className="not-found-container">
+                                        <img src={notFound} alt="" className='not-found-image' />
+                                        <h1 className='not-found-text'>Nenhum carro encontrado</h1>
+                                        <p className="not-found-description">
+                                            Não encontramos nenhum carro com base nos filtros selecionados, tente novamente com outros filtros ou sem filtros.
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </main>

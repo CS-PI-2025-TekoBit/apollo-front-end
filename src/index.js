@@ -5,16 +5,24 @@ import Home from './pages/public/Home/Home';
 import CarDetail from './pages/public/CarDetail/CarDetail';
 
 import './index.css';
+import './flag.css'
+import './primereact-override.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PrivateRoute } from './components/PrivateRoutes/PrivateRoutes';
 import Login from './pages/public/Login/Login';
+import ForgotPassword from './pages/public/ForgotPassword/ForgotPassword';
+import ResetPassword from './pages/public/ResetPassword/ResetPassword';
 import Register from './pages/public/Register/Register';
 import AuthContextProvider from './context/AuthContex';
 import { ToastContainer } from 'react-toastify';
-import 'primereact/resources/primereact.min.css';
-import "primeicons/primeicons.css";
-import "primeflex/primeflex.css";
-import { PrimeReactProvider } from "primereact/api";
+
+import 'primeicons/primeicons.css';
+import { PrimeReactProvider } from 'primereact/api';
+import 'primeflex/primeflex.css';
+import 'primereact/resources/primereact.css';
+import 'primereact/resources/themes/mdc-light-indigo/theme.css'
+
+
 import { AdminLayout } from './components/AdminLayout/AdminLayout';
 import AdminRoutes from './components/AdminRoutes/AdminRoutes';
 import PageNotFound from './components/PageNotFound/PageNotFound';
@@ -22,6 +30,8 @@ import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Editar from './pages/private/Editar/Editar';
+import Rent from './pages/public/RentCars/Rent';
 const client = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -33,9 +43,16 @@ root.render(
             <QueryClientProvider client={client}>
               <Routes>
                 <Route path="/" element={<Login />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/Rent" element={<Rent />} />
                 <Route path='/carros/:id' element={<CarDetail />} />
+                <Route element={<PrivateRoute allowedRoles={['ROLE_USER']} />}>
+                  <Route path="/user/myAccount" element={<Editar />} />
+                </Route>
+
                 <Route element={<PrivateRoute allowedRoles={['ROLE_ADMIN']} />}>
                   <Route path="/admin/*" element={<AdminLayout />}>
                     <Route path="*" element={<AdminRoutes />} />

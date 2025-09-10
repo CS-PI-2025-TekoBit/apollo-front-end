@@ -8,11 +8,13 @@ export default function GenericSelect({
     placeholder,
     label,
     disabled = false,
+    styleContainer = {},
+    styleSelect = {},
+    styleLabel = {}
 }) {
     return (
-        <div className="select-container">
-            
-            <div className="div-label">
+        <div className="select-container" style={styleContainer}>
+            <div className="div-label" style={styleLabel}>
                 <label htmlFor="select-mark" className="select-label">{label} </label>
             </div>
             <select
@@ -21,6 +23,7 @@ export default function GenericSelect({
                 onChange={onChange}
                 name="select-mark"
                 disabled={disabled}
+                style={styleSelect}
             >
                 <option value="" disabled className="option-placeholder">
                     {placeholder}

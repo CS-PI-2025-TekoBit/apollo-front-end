@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFuel } from '../../../hooks/useFuel';
+import { InputText } from 'primereact/inputtext';
 
 function Fuel() {
     const { fuel, isLoading } = useFuel();
@@ -36,9 +37,7 @@ function Fuel() {
         return (
             <div className="btn-action">
                 <Button
-                    icon={<Edit size={20} weight='fill' color='white' />}
-                    className="btn-edit"
-                    label='Editar'
+                    icon="pi pi-pencil" rounded text severity="warning" aria-label="Edit"
                     onClick={() =>
                         navigate('/admin/fuel/register', {
                             state: {
@@ -56,9 +55,8 @@ function Fuel() {
                     }
                 />
                 <Button
-                    icon={<XCircle size={20} weight='fill' color='white' />}
-                    className="btn-delete"
-                    label='Excluir'
+                    icon='pi pi-trash'
+                    rounded text severity="danger" aria-label="Cancel"
                     onClick={() => {
                         Swal.fire({
                             title: 'Excluir Combustível',
@@ -100,8 +98,9 @@ function Fuel() {
             </div>
         );
     }
-
-
+    const statusBodyTemplate = (rowData) => {
+        return rowData.status === 'active' ? "Ativo" : "Inativo";
+    }
     return (
         isLoading ? (
             <GenericLoader />
@@ -117,8 +116,8 @@ function Fuel() {
                 <section className="content-list">
                     <div className="search-and-include">
                         <div className="search">
-                            <input type="text" placeholder="Pesquisar" />
-                            <Button icon={<Search size={20} color='white' />} iconPos='left' className="button-search" />
+                            <InputText type="text" placeholder="Pesquisar" style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} />
+                            <Button icon={<Search size={22} color='white' />} iconPos='left' className="button-search" />
                         </div>
                         <div className="include">
                             <NavLink to="/admin/fuel/register">
@@ -131,13 +130,14 @@ function Fuel() {
                             </NavLink>
                         </div>
                     </div>
-                    <div className="card espacing-table">
+                    <div className="card espacing-table" style={{ width: '100%' }}>
                         {fuel && fuel.length === 0 ? <p>Nenhum combustível encontrado.</p> : (
-                            <DataTable value={fuel} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                                <Column field="id_fuel" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
-                                <Column header="Nome do Combustível" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                                <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                                <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                            <DataTable value={fuel} size='large' tableStyle={{ width: '100%' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines stripedRows >
+                                <Column field="id_fuel" headerClassName='header-table' sortable header="Código" headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} ></Column>
+                                <Column header="Nome do Combustível" headerClassName='header-table' sortable field='name' align={'center'} ></Column>
+                                <Column field="dt_created" headerClassName='header-table' header="Data de Cadastro" body={dtCadBodyTemplate} align={'center'} ></Column>
+                                <Column field="status" headerClassName='header-table' header="Status" body={statusBodyTemplate} align={'center'} ></Column>
+                                <Column header="Ações" headerClassName='header-table' body={actionBodyTemplate} headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} ></Column>
                             </DataTable>
                         )}
                     </div>

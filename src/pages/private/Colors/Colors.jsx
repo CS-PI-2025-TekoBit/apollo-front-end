@@ -1,20 +1,16 @@
 import { Palette } from '@phosphor-icons/react';
 import { Search } from 'lucide-react';
 import { Button } from 'primereact/button';
-import React from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import GenericLoader from '../../../components/GenericLoader/GenericLoader';
 import { useColors } from '../../../hooks/useColors';
-import { Edit } from 'lucide-react';
-import { Delete } from 'lucide-react';
-import { XCircle } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router';
-import GenericRegister from '../../../components/GenericRegister/GenericRegister';
 import Api from '../../../api/api';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { useQueryClient } from '@tanstack/react-query';
+import { InputText } from 'primereact/inputtext';
 
 function Colors() {
     const { colors, isLoading } = useColors();
@@ -34,30 +30,24 @@ function Colors() {
     const actionBodyTemplate = (rowData) => {
         return (
             <div className="btn-action">
+                <Button icon="pi pi-pencil" rounded text severity="warning" aria-label="Edit" onClick={() =>
+                    navigate('/admin/colors/register', {
+                        state: {
+                            id: rowData.id_color,
+                            pageName: `021 - Edição de cor`,
+                            pageTitle: 'Editar Cor',
+                            labelNameForm: 'Nome da Cor',
+                            routeEdit: '/colors/edit',
+                            initialData: {
+                                name: rowData.name,
+                                status: rowData.status,
+                            }
+                        },
+                    })
+                } />
                 <Button
-                    icon={<Edit size={20} weight='fill' color='white' />}
-                    className="btn-edit"
-                    label='Editar'
-                    onClick={() =>
-                        navigate('/admin/colors/register', {
-                            state: {
-                                id: rowData.id_color,
-                                pageName: `021 - Edição de cor`,
-                                pageTitle: 'Editar Cor',
-                                labelNameForm: 'Nome da Cor',
-                                routeEdit: '/colors/edit',
-                                initialData: {
-                                    name: rowData.name,
-                                    status: rowData.status,
-                                }
-                            },
-                        })
-                    }
-                />
-                <Button
-                    icon={<XCircle size={20} weight='fill' color='white' />}
-                    className="btn-delete"
-                    label='Excluir'
+                    icon='pi pi-trash'
+                    rounded text severity="danger" aria-label="Cancel"
                     onClick={() => {
                         Swal.fire({
                             title: 'Excluir cor',
@@ -99,7 +89,9 @@ function Colors() {
             </div>
         );
     }
-
+    const statusBodyTemplate = (rowData) => {
+        return rowData.status === 'active' ? "Ativo" : "Inativo";
+    }
 
     return (
         isLoading ? (
@@ -116,8 +108,8 @@ function Colors() {
                 <section className="content-list">
                     <div className="search-and-include">
                         <div className="search">
-                            <input type="text" placeholder="Pesquisar" />
-                            <Button icon={<Search size={20} color='white' />} iconPos='left' className="button-search" />
+                            <InputText type="text" placeholder="Pesquisar" style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} />
+                            <Button icon={<Search size={22} color='white' />} iconPos='left' className="button-search" />
                         </div>
                         <div className="include">
                             <NavLink to="/admin/colors/register">
@@ -131,18 +123,20 @@ function Colors() {
                         </div>
                     </div>
 
-                    <div className="card espacing-table">
+                    <div className="carda espacing-table" style={{ width: '100%' }}>
                         {colors && colors.length === 0 ? (
                             <div className="no-data">Nenhuma cor encontrada</div>
                         ) : (
-                            <DataTable value={colors} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                                <Column field="id_color" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
-                                <Column header="Nome da Cor" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                                <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                                <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                            <DataTable value={colors} size='large' tableStyle={{ width: '100%' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines stripedRows >
+                                <Column field="id_color" headerClassName='header-table' sortable header="Código" headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} ></Column>
+                                <Column header="Nome da Cor" headerClassName='header-table' sortable field='name' align={'center'} ></Column>
+                                <Column field="dt_created" headerClassName='header-table' header="Data de Cadastro" body={dtCadBodyTemplate} align={'center'} ></Column>
+                                <Column field="status" headerClassName='header-table' header="Status" body={statusBodyTemplate} align={'center'} ></Column>
+                                <Column header="Ações" headerClassName='header-table' body={actionBodyTemplate} headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} ></Column>
                             </DataTable>
                         )}
                     </div>
+
                 </section>
             </main>
         )

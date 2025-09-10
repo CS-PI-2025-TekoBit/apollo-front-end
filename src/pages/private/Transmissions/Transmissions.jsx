@@ -12,6 +12,8 @@ import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTransmission } from '../../../hooks/useTransmission';
+import Api from '../../../api/api';
+import { InputText } from 'primereact/inputtext';
 
 function Transmission() {
     const { transmission, isLoading } = useTransmission();
@@ -32,9 +34,7 @@ function Transmission() {
         return (
             <div className="btn-action">
                 <Button
-                    icon={<Edit size={20} weight='fill' color='white' />}
-                    className="btn-edit"
-                    label='Editar'
+                    icon="pi pi-pencil" rounded text severity="warning" aria-label="Edit"
                     onClick={() =>
                         navigate('/admin/Transmission/register', {
                             state: {
@@ -42,7 +42,7 @@ function Transmission() {
                                 pageName: `023 - Edição de Transmissão`,
                                 pageTitle: 'Editar Transmissão',
                                 labelNameForm: 'Nome da Transmissão',
-                                routeEdit: '/transmission/edit',
+                                routeEdit: '/transmissions/edit',
                                 initialData: {
                                     name: rowData.name,
                                     status: rowData.status,
@@ -52,9 +52,8 @@ function Transmission() {
                     }
                 />
                 <Button
-                    icon={<XCircle size={20} weight='fill' color='white' />}
-                    className="btn-delete"
-                    label='Excluir'
+                    icon='pi pi-trash'
+                    rounded text severity="danger" aria-label="Cancel"
                     onClick={() => {
                         Swal.fire({
                             title: 'Excluir Transmissão',
@@ -75,11 +74,11 @@ function Transmission() {
                             if (result.isConfirmed) {
                                 try {
                                     // QUANDO USAR BACKEND ------------------------------------------------
-                                    const response = await Api.delete(`/transmission/delete/${rowData.id_transmission}`);
+                                    const response = await Api.delete(`/transmissions/delete/${rowData.id_transmission}`);
                                     if (response.status === 200) {
                                         await queryClient.invalidateQueries(['transmissions']);
-                                    toast.success(`Transmissão ${rowData.name} excluída com sucesso!`);
-                                    return
+                                        toast.success(`Transmissão ${rowData.name} excluída com sucesso!`);
+                                        return
                                     } else {
                                         toast.error(`Erro ao excluir transmissão. Tente novamente. ${response.error}`);
                                         return
@@ -96,7 +95,9 @@ function Transmission() {
             </div>
         );
     }
-
+    const statusBodyTemplate = (rowData) => {
+        return rowData.status === 'active' ? "Ativo" : "Inativo";
+    }
 
     return (
         isLoading ? (
@@ -113,8 +114,8 @@ function Transmission() {
                 <section className="content-list">
                     <div className="search-and-include">
                         <div className="search">
-                            <input type="text" placeholder="Pesquisar" />
-                            <Button icon={<Search size={20} color='white' />} iconPos='left' className="button-search" />
+                            <InputText type="text" placeholder="Pesquisar" style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} />
+                            <Button icon={<Search size={22} color='white' />} iconPos='left' className="button-search" />
                         </div>
                         <div className="include">
                             <NavLink to="/admin/transmission/register">
@@ -127,12 +128,14 @@ function Transmission() {
                             </NavLink>
                         </div>
                     </div>
-                    <div className="card espacing-table">
-                        <DataTable value={transmission} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                            <Column field="id_transmission" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
-                            <Column header="Nome da Transmissão" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
+                    <div className="card espacing-table" style={{ width: '100%' }}>
+                        <DataTable value={transmission} tableStyle={{ width: '100%' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
+                            <Column field="id_transmission" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} ></Column>
+                            <Column header="Nome da Transmissão" field='name' headerClassName='header-table' align={'center'} ></Column>
+                            <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} ></Column>
+                            <Column field="status" header="Status" body={statusBodyTemplate} headerClassName='header-table' align={'center'} ></Column>
+
+                            <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} ></Column>
                         </DataTable>
                     </div>
                 </section>

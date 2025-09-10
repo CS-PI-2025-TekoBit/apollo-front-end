@@ -197,11 +197,11 @@
         },
         {
             "id": "4",
-            "name": "Sedã"
+            "name": "Sedan"
         },
         {
             "id": "5",
-            "name": "Hatch"
+            "name": "Hatchback"
         },
         {
             "id": "6",
@@ -209,7 +209,7 @@
         },
         {
             "id": "7",
-            "name": "Pick-up"
+            "name": "Pickup"
         }
     ]
 }

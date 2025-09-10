@@ -6,7 +6,7 @@ import logo from '../../assets/imgs/logomarca.png';
 import Swal from 'sweetalert2';
 import './SideBar.css';
 
-import { Car, Gear, CaretDoubleRight, CaretDoubleLeft, SignOut, SteeringWheel, CarProfile, Palette, Engine } from '@phosphor-icons/react';
+import { Car, Gear, CaretDoubleRight, CaretDoubleLeft, SignOut, SteeringWheel, CarProfile, Palette, Engine, Speedometer } from '@phosphor-icons/react';
 import { ListBullets } from '@phosphor-icons/react/dist/ssr';
 import { Fuel } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -23,6 +23,7 @@ export default function AppSidebar({ children }) {
     const isActive = (path) => location.pathname.includes(path);
 
     const menuItems = [
+        { label: collapsed ? '' : `Olá, ${user?.name.split(' ')[0]}`, icon: <Speedometer weight='fill' size={collapsed ? 27 : 25} color={isActive('/admin/home') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/home') },
         { label: collapsed ? '' : 'Carros', icon: <CarProfile weight='fill' size={collapsed ? 27 : 25} color={isActive('/admin/cars') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/cars') },
         { label: collapsed ? '' : 'Cores', icon: <Palette weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/colors') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/colors') },
         { label: collapsed ? '' : 'Motores', icon: <Engine weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/motors') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/motors') },
@@ -42,8 +43,8 @@ export default function AppSidebar({ children }) {
             confirmButtonText: 'Sair',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
-        if (result.isConfirmed) {
-        logout()
+            if (result.isConfirmed) {
+                logout()
             }
         })
     }
@@ -57,7 +58,7 @@ export default function AppSidebar({ children }) {
                 style={{
                     width: collapsed ? '60px' : '15rem',
                     transition: 'width 0.3s',
-                    zIndex: 1000,
+                    zIndex: 1,
                     pointerEvents: 'auto',
                 }}
             >
@@ -108,7 +109,8 @@ export default function AppSidebar({ children }) {
                 style={{
                     marginLeft: collapsed ? '60px' : '15rem',
                     transition: 'margin-left 0.3s',
-                    width: `calc(100% - ${collapsed ? '60px' : '15rem'})`,
+                    width: `auto`,
+
                 }}
             >
                 {children}
