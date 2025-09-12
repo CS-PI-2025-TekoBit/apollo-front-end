@@ -1,0 +1,78 @@
+/* Fundo principal */
+.dashboard {
+    background-color: #2c2c2c;
+    color: white;
+    min-height: 100vh;
+    padding: 20px 40px;
+    font-family: Arial, sans-serif;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.subtitulo {
+    color: #bdbdbd;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.data-hora {
+    text-align: right;
+    font-size: 14px;
+    color: #bdbdbd;
+}
+
+/* Cards */
+.cards {
+    display: flex;
+    gap: 20px;
+}
+
+.card {
+    flex: 1;
+    border-radius: 8px;
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.card .titulo {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    font-size: 28px;
+    margin: 0;
+}
+
+.card .unidades {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Cores específicas */
+.verde {
+    background-color: #155f2d;
+}
+
+.roxo {
+    background-color: #3a0c5d;
+}
+
+.amarelo {
+    background-color: #8d8d22;
+}

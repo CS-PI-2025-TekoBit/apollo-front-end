@@ -15,10 +15,12 @@ import SteeringRegister from '../../pages/private/Steering/SteeringRegister';
 import Transmission from '../../pages/private/Transmissions/Transmissions';
 import TransmissionRegister from '../../pages/private/Transmissions/TransmissionRegister';
 import CarRegister from '../../pages/private/Cars/CarsRegister';
+import Dashboard from '../../pages/private/Dashboard/Dashboard';
 
 const AdminRoutes = () => {
     return (
         <Routes>
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path="cars" element={<Cars />} />
             <Route path="motors" element={<Motors />} />
             <Route path="motors/register" element={<MotorsRegister />} />
