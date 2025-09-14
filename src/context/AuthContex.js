@@ -19,10 +19,6 @@ function AuthContextProvider({ children }) {
         }
     };
 
-    const clearAuth = () => {
-        setUser(null);
-    };
-
     useEffect(() => {
         const checkAuth = async () => {
             const userData = await getUserData();

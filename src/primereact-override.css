@@ -53,6 +53,12 @@
 
 .p-component * {
     margin: 0 !important;
+
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+    padding: 0.75rem 0.75rem !important;
+    font-size: 14px !important;
 }
 
 .p-dropdown .p-inputtext {

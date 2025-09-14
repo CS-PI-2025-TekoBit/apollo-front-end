@@ -1,7 +1,4 @@
-import React from 'react';
 import './PageNotFound.css';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
 import pagenotfound from '../../assets/imgs/404.png';
 import { NavLink } from 'react-router';
 import { House } from '@phosphor-icons/react';

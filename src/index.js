@@ -16,9 +16,9 @@ import Register from './pages/public/Register/Register';
 import AuthContextProvider from './context/AuthContex';
 import { ToastContainer } from 'react-toastify';
 
+import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
 import { PrimeReactProvider } from 'primereact/api';
-import 'primeflex/primeflex.css';
 import 'primereact/resources/primereact.css';
 import 'primereact/resources/themes/mdc-light-indigo/theme.css'
 

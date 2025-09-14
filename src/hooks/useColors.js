@@ -12,8 +12,6 @@ export function useColors() {
     const query = useQuery({
         queryFn: fetchData,
         queryKey: ['colors'],
-        refetchInterval: 20000,
-        staleTime: 1000 * 60 * 5,
     });
 
     return {

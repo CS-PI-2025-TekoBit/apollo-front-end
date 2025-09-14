@@ -10,8 +10,6 @@ export function useBodyWork() {
     const query = useQuery({
         queryFn: fetchData,
         queryKey: ['bodyWork'],
-        refetchInterval: 20000,
-        staleTime: 1000 * 60 * 5,
     });
 
     return {
