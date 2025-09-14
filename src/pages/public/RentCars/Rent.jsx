@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import GenericChoice from '../../../components/Choice/GenericChoice'
 import GenericCheckbox from '../../../components/CheckBox/GenericCheckbox'
 import Header from '../../../components/Header/Header'
@@ -87,13 +87,14 @@ export default function Home() {
     const handleColorChange = (e) => {
         setSelectedColor(e.target.value);
     };
-    const normalizeKey = (key) => {
+    const normalizeKey = useCallback((key) => {
         return key
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
             .toLowerCase();
-    };
-    const getBackendParamName = (key) => {
+    }, []);
+
+    const getBackendParamName = useCallback((key) => {
         const mapping = {
             "Câmbio": "transmission",
             "Direção": "direction",
@@ -101,8 +102,8 @@ export default function Home() {
             "Carroceria": "bodywork"
         };
         return mapping[key] || normalizeKey(key);
-    };
-    const montarParametros = () => {
+    }, [normalizeKey]);
+    const montarParametros = useCallback(() => {
         const params = {};
 
         if (minYear) params.yearMin = parseInt(minYear);
@@ -136,13 +137,13 @@ export default function Home() {
         if (hasArmor !== null) params.hasArmor = hasArmor;
 
         return params;
-    };
+    }, [minYear, maxYear, minPrice, maxPrice, minKm, maxKm, selectedMark, selectedModel, selectedMotor, selectedColor, checkboxStates, acceptsTrade, hasArmor, getBackendParamName]);
     useEffect(() => {
         setTimeout(() => {
             const params = montarParametros();
             setFilterParams(params);
         }, 500);
-    }, [minYear, maxYear, minPrice, maxPrice, minKm, maxKm, selectedMark, selectedModel, selectedMotor, selectedColor, checkboxStates, acceptsTrade, hasArmor]);
+    }, [montarParametros]);
 
     return (
         <>
