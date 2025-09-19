@@ -6,7 +6,7 @@ import logo from '../../assets/imgs/logomarca.png';
 import Swal from 'sweetalert2';
 import './SideBar.css';
 
-import { Car, Gear, CaretDoubleRight, CaretDoubleLeft, SignOut, SteeringWheel, CarProfile, Palette, Engine } from '@phosphor-icons/react';
+import { Car, Gear, CaretDoubleRight, CaretDoubleLeft, SignOut, SteeringWheel, CarProfile, Palette, Engine, User } from '@phosphor-icons/react';
 import { ListBullets } from '@phosphor-icons/react/dist/ssr';
 import { Fuel } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -30,6 +30,7 @@ export default function AppSidebar({ children }) {
         { label: collapsed ? '' : 'Carrocerias', icon: <Car weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/bodywork') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/bodywork') },
         { label: collapsed ? '' : 'Transmissões', icon: <Gear weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/transmission') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/transmission') },
         { label: collapsed ? '' : 'Direções', icon: <SteeringWheel weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/steering') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/steering') },
+        { label: collapsed ? '' : 'Usuários', icon: <User weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/users') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/users') },
     ];
     const handleLogout = () => {
         Swal.fire({
