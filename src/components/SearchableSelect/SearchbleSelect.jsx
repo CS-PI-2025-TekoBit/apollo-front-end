@@ -21,11 +21,8 @@ export default function SearchableSelect({
     const containerRef = useRef(null);
     const searchInputRef = useRef(null);
 
-    // Processar opções (igual ao GenericSelect original)
     const processedOptions = React.useMemo(() => {
         if (!options || !Array.isArray(options)) return [];
-
-        // Se tem estrutura com models
         if (options[0]?.models) {
             return options[0].models.map((model, index) => ({
                 id: index,
@@ -33,16 +30,12 @@ export default function SearchableSelect({
                 value: model
             }));
         }
-
-        // Estrutura normal
         return options.map((option, index) => ({
             id: option.id || index,
             name: option.name || option,
             value: option.name || option
         }));
     }, [options]);
-
-    // Filtrar opções baseado na busca
     useEffect(() => {
         if (!searchTerm.trim()) {
             setFilteredOptions(processedOptions);
@@ -54,7 +47,6 @@ export default function SearchableSelect({
         }
     }, [searchTerm, processedOptions]);
 
-    // Fechar dropdown ao clicar fora
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (containerRef.current && !containerRef.current.contains(event.target)) {
@@ -67,7 +59,6 @@ export default function SearchableSelect({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // Focar no input quando abrir
     useEffect(() => {
         if (isOpen && searchInputRef.current) {
             searchInputRef.current.focus();

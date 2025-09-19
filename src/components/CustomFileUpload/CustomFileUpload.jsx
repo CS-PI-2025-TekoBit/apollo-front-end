@@ -1,5 +1,4 @@
-import React, { useRef, useState, useImperativeHandle, forwardRef } from 'react';
-import { Button } from 'primereact/button';
+import { useRef, useState, useImperativeHandle, forwardRef } from 'react';
 import './CustomFileUpload.css';
 
 const CustomFileUpload = forwardRef(({
