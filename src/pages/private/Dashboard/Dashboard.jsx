@@ -4,18 +4,24 @@ import { useAuth } from '../../../hooks/useAuth'
 import SalesComparison from '../../../components/SalesComparison/SalesComparison'; // ajuste o caminho se necessário
 
 function Dashboard() {
-    const { user } = useAuth()
+    const atual = new Date();
+    const dataAtual = atual.toLocaleDateString("pt-BR");
+    const horaAtual = atual.toLocaleTimeString("pt-BR");
+    const { user } = useAuth();
     return (
         <div className="dashboard">
             {/* Header */}
             <div className="header">
+                <h2>Bem-vindo, <br />{user.name}</h2>
+            </div>
+            
+            <div className="secao">
                 <div>
-                    <h2>Bem-vindo, <br />{user.name}</h2>
                     <p className="subtitulo">Estatística gerais</p>
                 </div>
                 <div className="data-hora">
-                    <p>28/02/2025</p>
-                    <p>09:00:15</p>
+                    <p>{dataAtual}</p>
+                    <p>{horaAtual}</p>
                 </div>
             </div>
 
@@ -42,9 +48,10 @@ function Dashboard() {
 
             {/* Gráfico */}
             <div className="grafico">
-                <h3>Vendas deste Mês</h3>
-                <SalesComparison />
+                <p>Vendas deste Mês</p>
+                <div><SalesComparison /></div>
             </div>
+
         </div>
     );
 }
