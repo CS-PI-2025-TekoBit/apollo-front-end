@@ -15,7 +15,7 @@
     margin-bottom: 40px;
 }
 
-.secao {
+.estatistica {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -27,7 +27,7 @@
     font-size: 26px;
 }
 
-.secao p {
+.estatistica p {
     margin: 0;
     font-size: 18px;
 }
@@ -92,15 +92,13 @@
 
 /* Bloco do gráfico */
 .grafico {
-    margin-top: 40px;
     background: #2c2c2c;
-    padding: 20px;
     border-radius: 10px;
 }
 
 .grafico p {
-    margin: 0;
-    font-size: 18px;
+    margin: 0 20px 20px 0;
+    font-size: 20px;
     color: #bdbdbd;
 }
 
