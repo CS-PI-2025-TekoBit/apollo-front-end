@@ -3,8 +3,12 @@ import users from '../data/users.json';
 import Api from '../api/api';
 
 const fetchData = async () => {
-    const response = await Api.get('/users/fetch');
-    return response.data.data;
+    const response = await new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({ data: users.users });
+        }, 1000);
+    });
+    return response.data;
 };
 
 export function useUsers() {
