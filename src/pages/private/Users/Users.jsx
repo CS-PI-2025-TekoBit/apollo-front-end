@@ -81,7 +81,6 @@ function Users() {
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 toast.success(`Usuário ${rowData.name} excluído com sucesso!`);
-                                // aqui no futuro você pode chamar uma mutation do react-query para realmente excluir
                             }
                         });
                     }}
