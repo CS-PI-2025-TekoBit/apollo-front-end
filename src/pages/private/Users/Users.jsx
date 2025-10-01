@@ -1,56 +1,68 @@
-import { Gear, Palette } from '@phosphor-icons/react';
+import { Gear } from '@phosphor-icons/react';
 import { Search } from 'lucide-react';
 import { Button } from 'primereact/button';
-import React from 'react';
+import { InputText } from 'primereact/inputtext';
+import Swal from 'sweetalert2';
+import { NavLink, useNavigate } from 'react-router';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import GenericLoader from '../../../components/GenericLoader/GenericLoader';
-import { Edit } from 'lucide-react';
-import { XCircle } from 'lucide-react';
-import { NavLink, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
-import Swal from 'sweetalert2';
-import { useQueryClient } from '@tanstack/react-query';
+
+import GenericLoader from '../../../components/GenericLoader/GenericLoader';
 import { useUsers } from '../../../hooks/useUsers';
-import Api from '../../../api/api';
-import { InputText } from 'primereact/inputtext';
 
 function Users() {
-    const { users, isLoading } = useUsers()
+    const { users, isLoading } = useUsers();
     const navigate = useNavigate();
-    const queryClient = useQueryClient();
-    const dtCadBodyTemplate = (rowData) => {
-        return (
-            rowData.dt_create ? new Date(rowData.dt_create).toLocaleDateString('pt-BR') : 'N/A'
-        );
-    }
+
+    const handleDelete = (user) => {
+        Swal.fire({
+            title: 'Excluir usuário',
+            text: `Tem certeza que deseja excluir o usuário ${user.name}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Excluir',
+            confirmButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                toast.success(`Usuário ${user.name} excluído com sucesso!`);
+            }
+        });
+    };
+
     const actionBodyTemplate = (rowData) => {
         return (
             <div className="btn-action">
                 <Button
-                    icon={<Edit size={20} weight='fill' color='white' />}
-                    className="btn-edit"
-                    label='Editar'
+                    icon="pi pi-pencil"
+                    rounded
+                    text
+                    severity="warning"
+                    aria-label="Edit"
                     onClick={() =>
                         navigate('/admin/users/register', {
                             state: {
-                                id_users: rowData.id_users,
-                                pageName: `022 - Edição de usuário`,
-                                pageTitle: 'Editar usuário',
-                                labelNameForm: 'Nome do usuário',
+                                id: rowData.id,
+                                pageName: `003 - Edição de Usuário`,
+                                pageTitle: 'Editar Usuário',
+                                labelNameForm: 'Nome do Usuário',
                                 routeEdit: '/users/edit',
                                 initialData: {
                                     name: rowData.name,
-                                    status: rowData.status,
-                                }
+                                    email: rowData.email,
+                                    role: rowData.role,
+                                },
                             },
                         })
                     }
                 />
                 <Button
-                    icon={<XCircle size={20} weight='fill' color='white' />}
-                    className="btn-delete"
-                    label='Excluir'
+                    icon="pi pi-trash"
+                    rounded
+                    text
+                    severity="danger"
+                    aria-label="Delete"
                     onClick={() => {
                         Swal.fire({
                             title: 'Excluir usuário',
@@ -62,85 +74,90 @@ function Users() {
                             confirmButtonText: 'Sim, excluir!',
                             reverseButtons: true,
                             focusCancel: true,
-                            focusConfirm: false,
                             customClass: {
-                                popup: 'sweet-alert-zindex'
+                                popup: 'sweet-alert-zindex',
                             },
-                            cancelButtonText: 'Cancelar'
-                        }).then(async (result) => {
+                            cancelButtonText: 'Cancelar',
+                        }).then((result) => {
                             if (result.isConfirmed) {
                                 toast.success(`Usuário ${rowData.name} excluído com sucesso!`);
-                                return
-                                // const result = await Api.delete(`/motors/delete/${rowData.id_motor}`);
-                                // console.log('result', result);
-                                // if (result.status === 200) {
-                                //     toast.success('Motor excluído com sucesso!');
-                                //     await queryClient.invalidateQueries(['motors']);
-                                //     // window.location.reload();
-                                //     return
-                                // } else {
-                                //     toast.error(`Erro ao excluir motor. Tente novamente. ${result.error}`);
-                                //     return
-                                // }
+                                // aqui no futuro você pode chamar uma mutation do react-query para realmente excluir
                             }
-                        })
-                    }
-                    }
+                        });
+                    }}
                 />
             </div>
         );
-    }
-    const statusBodyTemplate = (rowData) => {
-        return rowData.status === 'active' ? "Ativo" : "Inativo";
-    }
-    const rowClassName = (data, index) => {
-        return index % 2 === 0 ? 'even-row' : 'odd-row';
     };
-    return (
-        isLoading ? (
-            <GenericLoader />
-        ) : (
-            <main style={{ position: 'relative', padding: '20px', zIndex: 20000 }} className='w-full'>
-                    {console.log('users', users)}
-                <section className="header-list w-full">
-                    <h3 className="text-header">003 - Listagem de Motores</h3>
-                    <br />
-                </section>
-                <section className="title-page">
-                    <div style={{ padding: '20px' }}> <h1 className='title'> Listagem de Motores</h1></div>
-                </section>
-                <section className="content-list">
-                    <div className="search-and-include">
-                        <div className="search">
-                            <input type="text" placeholder="Pesquisar" />
-                            <Button icon={<Search size={20} color='white' />} iconPos='left' className="button-search" />
-                        </div>
-                        <div className="include">
-                                <NavLink to="/admin/users/register">
-                                <Button
-                                        label="Cadastrar usuário"
-                                    icon={<Gear size={30} weight='fill' />}
-                                    className="button-include"
-                                        onClick={() => console.log('Cadastrar usuário')}
-                                />
-                            </NavLink>
-                        </div>
+
+    const statusBodyTemplate = (rowData) => {
+        return rowData.role === "ROLE_ADMIN" ? "Administrador" : "Usuário";
+    };
+
+    return isLoading ? (
+        <GenericLoader />
+    ) : (
+        <main style={{ position: "relative", padding: "20px", zIndex: 2000 }}>
+            <section className="header-list w-full">
+                <h3 className="text-header">003 - Listagem de Usuários</h3>
+                <br />
+            </section>
+            <section className="title-page">
+                <div style={{ padding: "20px" }}>
+                    <h1 className="title">Listagem de Usuários</h1>
+                </div>
+            </section>
+            <section className="content-list">
+                <div className="search-and-include">
+                    <div className="search">
+                        <InputText
+                            type="text"
+                            placeholder="Pesquisar"
+                            style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+                        />
+                        <Button
+                            icon={<Search size={22} color="white" />}
+                            iconPos="left"
+                            className="button-search"
+                        />
                     </div>
-                    <div className="card espacing-table">
-                            <DataTable value={users} tableStyle={{ minWidth: '108rem', zIndex: 1000, position: 'relative' }} rowClassName={rowClassName} paginator rows={20} responsiveLayout="scroll" showGridlines>
-                            <Column field="id_users" header="Código" headerClassName='header-table' headerStyle={{ borderTopLeftRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
-                                <Column header="Nome do usuário" field='name' headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column field="dt_created" header="Data de Cadastro" body={dtCadBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column field="status" header="Status" body={statusBodyTemplate} headerClassName='header-table' align={'center'} bodyClassName="body-table"></Column>
-                            <Column header="Ações" body={actionBodyTemplate} headerClassName='header-table' headerStyle={{ borderTopRightRadius: '5px' }} align={'center'} bodyClassName="body-table"></Column>
-                        </DataTable>
+                    <div className="include">
+                        <NavLink to="/admin/users/register">
+                            <Button
+                                label="Cadastrar Usuário"
+                                icon={<Gear size={30} weight="fill" />}
+                                className="button-include"
+                            />
+                        </NavLink>
                     </div>
-                </section>
-            </main >
-        )
+                </div>
+
+                <div className="card espacing-table" style={{ width: "100%" }}>
+                    {users && users.length === 0 ? (
+                        <div className="no-data">Nenhum usuário encontrado</div>
+                    ) : (
+                                <DataTable
+                                    value={users}
+                                    paginator
+                                    rows={20}
+                                    responsiveLayout="scroll"
+                                    showGridlines
+                                    stripedRows
+                                    tableStyle={{ width: '100%' }}
+                                    rowClassName={(data, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
+                                >
+                                    <Column field="id" header="Código" headerClassName="header-table" headerStyle={{ borderTopLeftRadius: '5px' }} align="center" />
+                                    <Column field="name" header="Nome" headerClassName="header-table" align="center" />
+                                    <Column field="email" header="E-mail" headerClassName="header-table" align="center" />
+                                    <Column field="role" header="Perfil" body={statusBodyTemplate} headerClassName="header-table" align="center" />
+                                    <Column field="dt_create" header="Data de Cadastro" body={(rowData) => new Date(rowData.dt_create).toLocaleDateString("pt-BR")} headerClassName="header-table" align="center" />
+                                    <Column header="Ações" body={actionBodyTemplate} headerClassName="header-table" headerStyle={{ borderTopRightRadius: '5px' }} align="center" />
+                                </DataTable>
+                    )}
+                </div>
+            </section>
+        </main>
     );
 }
 
 export default Users;
-
-   

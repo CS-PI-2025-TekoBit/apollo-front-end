@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import users from '../data/users.json';
-import Api from '../api/api';
 
 const fetchData = async () => {
     const response = await new Promise((resolve) => {
