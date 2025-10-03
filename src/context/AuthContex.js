@@ -62,7 +62,7 @@ function AuthContextProvider({ children }) {
                         name: userData.name
                     });
                     if (userData.role === 'ROLE_ADMIN' && window.location.pathname === '/') {
-                        window.location.replace('/admin/cars');
+                        window.location.replace('/admin/dashboard');
                     }
                     return { status: true };
                 } else {
