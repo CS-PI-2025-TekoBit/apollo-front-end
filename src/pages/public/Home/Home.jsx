@@ -5,6 +5,7 @@ import Header from '../../../components/Header/Header'
 import Footer from '../../../components/Footer/Footer'
 import Maps from '../../../components/Maps/Maps'
 import BotaoWhatsApp from '../../../components/BotaoWhatsApp/BotaoWhatsApp'
+import Pagination from '../../../components/Pagination/Pagination'
 import './Home.css'
 import filter_active from '../../../assets/filter_1.svg'
 import filter_deactivate from '../../../assets/filter_2.svg'
@@ -16,6 +17,18 @@ import notFound from '../../../assets/not_found.png'
 import { useSalesCarFilter } from '../../../hooks/useSalesCarFilter'
 
 export default function Home() {
+
+    // dentro do componente Home()
+    const [currentPage, setCurrentPage] = useState(1);
+    const carsPerPage = 6; // quantos carros exibir por página
+
+    // lógica para calcular quais carros exibir
+    const indexOfLastCar = currentPage * carsPerPage;
+    const indexOfFirstCar = indexOfLastCar - carsPerPage;
+    const currentCars = cars?.slice(indexOfFirstCar, indexOfLastCar);
+
+    const totalPages = Math.ceil((cars?.length || 0) / carsPerPage);
+
     const [filterParams, setFilterParams] = useState({});
     const { cars } = useSalesCarFilter(filterParams)
     const { filtros, isLoading } = useFilters()
@@ -319,30 +332,40 @@ export default function Home() {
                             </div>
                             <div className="right-side-stock">
                                 {cars?.length > 0 ? (
-                                    cars.map((car) => (
-                                        <Card
-                                            key={car.id_car}
-                                            id={car.id_car}
-                                            name={car.model}
-                                            imgs={car.images}
-                                            mark={car.brand}
-                                            price={car.vehiclePrice}
-                                            transmission={car.transmission}
-                                            year={car.year}
-                                            kilometers={car.mileage}
-                                            disableSlideImgs={true}
+                                    <>
+                                        {currentCars.map((car) => (
+                                            <Card
+                                                key={car.id_car}
+                                                id={car.id_car}
+                                                name={car.model}
+                                                imgs={car.images}
+                                                mark={car.brand}
+                                                price={car.vehiclePrice}
+                                                transmission={car.transmission}
+                                                year={car.year}
+                                                kilometers={car.mileage}
+                                                disableSlideImgs={true}
+                                            />
+                                        ))}
+
+                                        <Pagination
+                                            currentPage={currentPage}
+                                            totalPages={totalPages}
+                                            onPageChange={setCurrentPage}
                                         />
-                                    ))
+                                    </>
                                 ) : (
                                     <div className="not-found-container">
-                                        <img src={notFound} alt="" className='not-found-image' />
-                                        <h1 className='not-found-text'>Nenhum carro encontrado</h1>
+                                        <img src={notFound} alt="" className="not-found-image" />
+                                        <h1 className="not-found-text">Nenhum carro encontrado</h1>
                                         <p className="not-found-description">
-                                            Não encontramos nenhum carro com base nos filtros selecionados, tente novamente com outros filtros ou sem filtros.
+                                            Não encontramos nenhum carro com base nos filtros selecionados,
+                                            tente novamente com outros filtros ou sem filtros.
                                         </p>
                                     </div>
                                 )}
                             </div>
+
                         </div>
                     </main>
                     <Maps />
