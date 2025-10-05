@@ -54,7 +54,7 @@ export default function Header() {
                     </div>
                 </section>
                 <div className="input-container-header">
-                    <MagnifyingGlass size={20} color="#000" weight="regular" className="search-icon" />
+                    <MagnifyingGlass size={20} color="#fff" weight="regular" className="search-icon" />
                     <input
                         type="text"
                         placeholder="Pesquisar...."

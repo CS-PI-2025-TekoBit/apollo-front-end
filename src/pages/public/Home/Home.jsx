@@ -46,9 +46,20 @@ export default function Home() {
     const [selectedMotor, setSelectedMotors] = useState('')
     const [selectedColor, setSelectedColor] = useState('')
 
-    // PAGINAÇÃO
     const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 10
+    const [itemsPerPage, setItemsPerPage] = useState(10)
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        })
+    }
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page)
+        scrollToTop()
+    }
 
     const handleCheckboxChange = (label, optionId) => {
         setCheckboxStates((prev) => {
@@ -136,16 +147,14 @@ export default function Home() {
         setCurrentPage(1)
     }, [filterParams])
 
-    // PAGINAÇÃO - calcula carros da página atual
     const indexOfLastCar = currentPage * itemsPerPage
     const indexOfFirstCar = indexOfLastCar - itemsPerPage
     const currentCars = cars?.slice(indexOfFirstCar, indexOfLastCar)
     const totalPages = Math.ceil((cars?.length || 0) / itemsPerPage)
 
-    // Função para gerar array de páginas com "..."
     const getPageNumbers = () => {
         const pageNumbers = []
-        const maxVisiblePages = 5 // pode ajustar para mais páginas visíveis
+        const maxVisiblePages = 5
         if (totalPages <= maxVisiblePages) {
             for (let i = 1; i <= totalPages; i++) pageNumbers.push(i)
         } else {
@@ -168,7 +177,13 @@ export default function Home() {
                 <>
                     <Header />
                     <main>
-                        <h3 className='header-title'>Carros para venda</h3>
+                        <div className="page-header">
+                            <div className="page-header-content">
+                                <h1 className='header-title'>Carros para Venda</h1>
+                                <p className="header-subtitle">Encontre o veículo ideal para você</p>
+                                <div className="header-divider"></div>
+                            </div>
+                        </div>
                         <div className="container-stock">
                             <div className="filter-opening-mobile">
                                 <button className='filter-button' onClick={() => setFilterActive(!filterActive)}>
@@ -255,34 +270,83 @@ export default function Home() {
                             </div>
                         </div>
 
-                        {/* PAGINAÇÃO */}
                         {cars?.length > 0 && (
-                            <div className="pagination-container" style={{ textAlign: 'center', marginTop: '20px' }}>
-                                <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>{'<'}</button>
-                                {getPageNumbers().map((num, index) =>
-                                    num === '...' ? (
-                                        <span key={index} style={{ margin: '0 5px' }}>...</span>
-                                    ) : (
-                                        <button
-                                            key={index}
-                                            onClick={() => setCurrentPage(num)}
-                                            style={{
-                                                margin: '0 5px',
-                                                fontWeight: '900',
-                                                color: currentPage === num ? '#ffffff' : '#002411',
-                                                backgroundColor: currentPage === num ? '#002411' : 'transparent',
-                                                padding: '8px 14px',
-                                                borderRadius: '4px',
-                                                fontSize: '1.3rem',
-                                                cursor: 'pointer'
+                            <div className="pagination-wrapper">
+                                <div className="pagination-top-bar">
+                                    <div className="pagination-info">
+                                        <span>Mostrando {indexOfFirstCar + 1} - {Math.min(indexOfLastCar, cars.length)} de {cars.length} veículos</span>
+                                    </div>
+                                    <div className="items-per-page-selector">
+                                        <label htmlFor="itemsPerPage">Itens por página:</label>
+                                        <select
+                                            id="itemsPerPage"
+                                            value={itemsPerPage}
+                                            onChange={(e) => {
+                                                setItemsPerPage(Number(e.target.value));
+                                                setCurrentPage(1);
                                             }}
+                                            className="items-per-page-select"
                                         >
-                                            {num}
-                                        </button>
+                                            <option value={5}>5</option>
+                                            <option value={10}>10</option>
+                                            <option value={15}>15</option>
+                                            <option value={20}>20</option>
+                                            <option value={30}>30</option>
+                                            <option value={50}>50</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="pagination-container">
+                                    <button
+                                        className="pagination-nav-btn"
+                                        onClick={() => handlePageChange(1)}
+                                        disabled={currentPage === 1}
+                                        title="Primeira página"
+                                    >
+                                        <span>«</span>
+                                    </button>
+                                    <button
+                                        className="pagination-nav-btn"
+                                        onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+                                        disabled={currentPage === 1}
+                                        title="Página anterior"
+                                    >
+                                        <span>‹</span>
+                                    </button>
 
-                                    )
-                                )}
-                                <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>{'>'}</button>
+                                    <div className="pagination-numbers">
+                                        {getPageNumbers().map((num, index) =>
+                                            num === '...' ? (
+                                                <span key={index} className="pagination-ellipsis">...</span>
+                                            ) : (
+                                                <button
+                                                    key={index}
+                                                    onClick={() => handlePageChange(num)}
+                                                    className={`pagination-page-btn ${currentPage === num ? 'active' : ''}`}
+                                                >
+                                                    {num}
+                                                </button>
+                                            )
+                                        )}
+                                    </div>
+
+                                    <button
+                                        className="pagination-nav-btn"
+                                        onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
+                                        disabled={currentPage === totalPages}
+                                        title="Próxima página"
+                                    >
+                                        <span>›</span>
+                                    </button>
+                                    <button
+                                        className="pagination-nav-btn"
+                                        onClick={() => handlePageChange(totalPages)}
+                                        disabled={currentPage === totalPages}
+                                        title="Última página"
+                                    >
+                                        <span>»</span>
+                                    </button>
+                                </div>
                             </div>
                         )}
 

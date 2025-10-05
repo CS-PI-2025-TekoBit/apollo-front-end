@@ -32,6 +32,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Editar from './pages/private/Editar/Editar';
 import Rent from './pages/public/RentCars/Rent';
+import ScrollToTop from './utils/ScrollToTop';
 const client = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -41,6 +42,7 @@ root.render(
         <Provider store={store}>
           <AuthContextProvider>
             <QueryClientProvider client={client}>
+              <ScrollToTop />
               <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
