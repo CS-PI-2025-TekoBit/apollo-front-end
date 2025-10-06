@@ -4,6 +4,7 @@
             "id": 1,
             "name": "Ariel",
             "email": "ariel@gmail.com",
+            "dt_create": "2023-10-01T12:00:00Z",
             "role": "ROLE_ADMIN",
             "password": "123",
             "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IkFyaWVsIiwicm9sZSI6IlJPTEVfQURNSU4ifQ.LUhRmBCrrgBSk73i6-dgd6GGqlWpmw3NDLQH7ad32Ew"
@@ -12,6 +13,7 @@
             "id": 2,
             "name": "Ali",
             "email": "ali@gmail.com",
+            "dt_create": "2023-11-02T12:00:00Z",
             "role": "ROLE_USER",
             "password": "123",
             "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IkFsaSIsInJvbGUiOiJST0xFX1VTRVIifQ.N9e_3RWx2tKtmBfCanwwFVgIoKQRboARQ6tObiZtt4E"
