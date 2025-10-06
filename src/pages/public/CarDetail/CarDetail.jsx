@@ -204,7 +204,7 @@ export default function CarDetail() {
                                             <h1>Itens do veículo</h1>
                                             <div className="items-table">
                                                 {chunkArray(
-                                                    car?.opcionais && car?.opcionais?.length > 0 ? safeParseJSON(car?.opcionais) : [],
+                                                    car?.opcionais,
                                                     4
                                                 ).map((row, rowIndex) => (
                                                     <div key={rowIndex} className="items-row">

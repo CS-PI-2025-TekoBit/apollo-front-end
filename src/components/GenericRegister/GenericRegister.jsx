@@ -1,8 +1,8 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react';
 import { Button } from 'primereact/button';
-import React, { use, useState } from 'react'
+import { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router';
-import GenericInput from '../GenericInput/GenericInput'
+import GenericInput from '../GenericInput/GenericInput';
 import { RadioButton } from 'primereact/radiobutton';
 import { TrashIcon } from '@phosphor-icons/react';
 import { X } from 'lucide-react';

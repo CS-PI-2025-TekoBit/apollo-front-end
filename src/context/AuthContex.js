@@ -19,10 +19,6 @@ function AuthContextProvider({ children }) {
         }
     };
 
-    const clearAuth = () => {
-        setUser(null);
-    };
-
     useEffect(() => {
         const checkAuth = async () => {
             const userData = await getUserData();
@@ -66,7 +62,7 @@ function AuthContextProvider({ children }) {
                         name: userData.name
                     });
                     if (userData.role === 'ROLE_ADMIN' && window.location.pathname === '/') {
-                        window.location.replace('/admin/cars');
+                        window.location.replace('/admin/dashboard');
                     }
                     return { status: true };
                 } else {
