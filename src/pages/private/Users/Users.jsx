@@ -44,7 +44,7 @@ function Users() {
                         navigate('/admin/users/register', {
                             state: {
                                 id: rowData.id,
-                                pageName: `003 - Edição de Usuário`,
+                                pageName: `008 - Edição de Usuário`,
                                 pageTitle: 'Editar Usuário',
                                 labelNameForm: 'Nome do Usuário',
                                 routeEdit: '/users/edit',

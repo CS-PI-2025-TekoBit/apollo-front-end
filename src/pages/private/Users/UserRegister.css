@@ -1,0 +1,88 @@
+.user-register-container {
+    max-width: 650px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+    color: #1a1a1a;
+}
+
+.user-register-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.user-register-subtitle {
+    color: #0b640b;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.user-register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-register-section {
+    margin-bottom: 25px;
+}
+
+.user-register-row {
+    display: flex;
+    gap: 15px;
+}
+
+.user-register-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-register-error {
+    color: #d33;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.user-register-section label {
+    font-weight: 500;
+    margin-top: 12px;
+}
+
+.user-register-section input[type="text"],
+.user-register-section input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.user-register-section input[type="radio"] {
+    margin-right: 5px;
+}
+
+.user-register-button {
+    margin-top: 15px;
+    background-color: #006400;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+}
+
+.user-register-button:hover {
+    background-color: #008000;
+}
+
+@media (max-width: 600px) {
+    .user-register-row {
+        flex-direction: column;
+    }
+}
