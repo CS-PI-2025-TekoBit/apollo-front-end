@@ -66,10 +66,7 @@ export default function Header() {
                         <Star size={32} weight="regular" />
                         <p>Favoritos</p>
                     </Link>
-                    <Link to='/' className='btn-favorito-mensagem '>
-                        <Chat size={32} weight="regular" />
-                        <p>Mensagens</p>
-                    </Link>
+
 
                     {
                         user ? (
