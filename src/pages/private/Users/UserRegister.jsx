@@ -19,6 +19,7 @@ export default function UserRegister() {
 
     // Função genérica de atualização
     const handleChange = (e) => {
+        console.log('Input changed:', e.target.name, e.target.value); // Adicionado para debug
         const { name, value } = e.target;
         let newValue = value;
 
@@ -61,6 +62,7 @@ export default function UserRegister() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log('Form submitted:', form); // Adicionado para debug
         if (validate()) {
             alert("Usuário cadastrado com sucesso!");
         }

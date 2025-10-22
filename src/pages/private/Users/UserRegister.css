@@ -6,6 +6,9 @@
     border-radius: 10px;
     font-family: Arial, sans-serif;
     color: #1a1a1a;
+    position: relative;
+    z-index: 99999;
+    /* Aumentado para superar a sidebar */
 }
 
 .user-register-title {
@@ -85,4 +88,19 @@
     .user-register-row {
         flex-direction: column;
     }
+}
+
+.user-register-container input,
+.user-register-container textarea,
+.user-register-container select {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 2;
+}
+
+.user-register-container::before,
+.user-register-container::after {
+    pointer-events: none;
+    display: none;
+    content: none;
 }
