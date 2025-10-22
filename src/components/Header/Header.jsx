@@ -102,7 +102,7 @@ export default function Header() {
                 <NavLink to={'/rent'} className='btn-veiculos'>
                     <p>Ver estoque de aluguel</p>
                 </NavLink>
-                <NavLink to={'/sobre-nos'} className='btn-veiculos'>
+                <NavLink to={'/About'} className='btn-veiculos'>
                     <p>Sobre nós</p>
                 </NavLink>
 
