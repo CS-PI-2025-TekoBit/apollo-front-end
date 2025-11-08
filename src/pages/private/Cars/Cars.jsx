@@ -26,6 +26,7 @@ import { useFuel } from '../../../hooks/useFuel';
 import { useTransmission } from '../../../hooks/useTransmission';
 import { useAllCarsFiltered } from '../../../hooks/useAllCarsFiltered';
 import { RadioButton } from 'primereact/radiobutton';
+import ModalOperacao from './ModalOperacao';
 
 function Cars() {
     const [layout, setLayout] = useState('list');
@@ -38,6 +39,10 @@ function Cars() {
     const { bodyWork } = useBodyWork();
     const { fuel } = useFuel();
     const { transmission } = useTransmission();
+    const [modalVisible, setModalVisible] = useState(false);
+    const [tipoOperacao, setTipoOperacao] = useState(0);
+    const [idCar, setIdCar] = useState(null);
+    const [operacaoParaEditar, setOperacaoParaEditar] = useState(null);
 
     const [filters, setFilters] = useState({
         bodyWork: null,
@@ -152,8 +157,25 @@ function Cars() {
                 }
             });
         };
+
+        const abreModalOperacao = (carType, idCar, operacao = null) => {
+            setTipoOperacao(carType === 'VENDA' ? 0 : 1);
+            setIdCar(idCar);
+            setOperacaoParaEditar(operacao);
+            setModalVisible(true);
+        }
+        const carOperation = car.carOperation;
+        let background;
+        if (carOperation) {
+            if (carOperation.tipoOperacao === 0)
+                background = '#bbf7d0';
+            else
+                background = '#fde68a';
+        } else {
+            background = index % 2 === 0 ? '#f3f4f6' : '#ffffff';
+        }
         return (
-            <div className="col-12  hover:bg-cyan-700" key={car.id} style={{ textDecoration: 'none', color: 'inherit' }} to={`/admin/cars/edit/${car.id_car}`}>
+            <div className={`col-12  hover:bg-cyan-700 ${background}`} key={car.id} style={{ textDecoration: 'none', color: 'inherit', backgroundColor: background }} to={`/admin/cars/edit/${car.id_car}`}>
                 <div className={classNames('flex flex-column justify-center xl:flex-row xl:align-items-start p-4 gap-4', { 'border-top-1 surface-border': index !== 0 })}>
                     <NavLink to={`/admin/cars/edit/${car.id_car}`} style={{ textDecoration: 'none', color: 'inherit', flex: 1 }} className="flex flex-row align-items-start gap-3">
                         <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={`${car?.images[0]?.img_url}`} alt={car.name} />
@@ -178,8 +200,25 @@ function Cars() {
                                 <Button icon="pi pi-pencil" rounded severity="warning" aria-label="Edit" className='flex align-items-center justify-content-center'></Button>
                             </NavLink>
                             <Button icon="pi pi-trash" rounded severity="danger" className='flex align-items-center justify-content-center' onClick={(e) => handleDelete(e)}></Button>
-                            <Button icon={<CurrencyDollarSimple size={20} />} rounded severity="success" ></Button>
-                            <Button icon="pi pi-shopping-cart" rounded severity="info" ></Button>
+                            {carOperation ? (
+                                <Button
+                                    icon="pi pi-pencil"
+                                    onClick={() => abreModalOperacao(car.carType, car.id_car, carOperation)}
+                                    rounded
+                                    severity="info"
+                                    tooltip="Editar operação"
+                                    tooltipOptions={{ position: 'top' }}
+                                />
+                            ) : (
+                                <Button
+                                    icon={<CurrencyDollarSimple size={20} />}
+                                    onClick={() => abreModalOperacao(car.carType, car.id_car)}
+                                    rounded
+                                    severity="success"
+                                    tooltip="Cadastrar operação"
+                                    tooltipOptions={{ position: 'top' }}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
@@ -416,9 +455,17 @@ function Cars() {
                                         />
                                     </div>
                                 </div>
+                                <div className="legenda" style={{ marginTop: '50px' }}>
+                                    <span><strong>Legenda:</strong></span>
+                                    <span className='legenda-venda'>Carro Vendido</span>
+                                    <span className='legenda-aluguel'>Carro Alugado</span>
+                                </div>
                             </Panel>
+
+
                         </div>
                     )}
+
 
                     <div className="card espacing-table" style={{ width: '100%' }}>
                         {cars && cars.length === 0 ? (
@@ -448,6 +495,17 @@ function Cars() {
                     </div>
                 </section>
                 <LoadingCar visible={loading} text="Deletando carro..." />
+                <ModalOperacao
+                    visible={modalVisible}
+                    tipoOperacao={tipoOperacao}
+                    onHide={() => {
+                        setModalVisible(false);
+                        setOperacaoParaEditar(null);
+                    }}
+                    onConfirm={() => { }}
+                    id_car={idCar}
+                    operacaoInicial={operacaoParaEditar}
+                />
             </main>
         )
     );
