@@ -1,0 +1,49 @@
+.favorites-content {
+    min-height: 80vh;
+    background: #ffffff;
+    padding: 4vh 8vh;
+}
+
+.favorites-content-mobile {
+    background: #ffffff;
+    padding: 2vh;
+}
+
+.favorites-title {
+    font-family: Poppins;
+    font-size: 36px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 4vh;
+}
+
+.no-favorites-message {
+    font-size: 18px;
+    color: #555;
+    margin-top: 4vh;
+}
+
+/* GRID DE CARROS - mesmo estilo da home */
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3vh;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+    .favorites-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .favorites-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .favorites-title {
+        text-align: center;
+        font-size: 28px;
+    }
+}
