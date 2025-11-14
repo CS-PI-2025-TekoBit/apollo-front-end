@@ -1,7 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router";
 import "./UserRegister.css";
 
 export default function UserRegister() {
+
+    const location = useLocation();
+    const mode = location.state?.mode || "create"; // create ou edit
+    const userToEdit = location.state?.user || null;
+
     const [form, setForm] = useState({
         role: "admin",
         email: "",
@@ -17,13 +23,18 @@ export default function UserRegister() {
 
     const [errors, setErrors] = useState({});
 
-    // Função genérica de atualização
+    // 🔥 Se estiver editando, preenche automaticamente os campos
+    useEffect(() => {
+        if (mode === "edit" && userToEdit) {
+            setForm(userToEdit);
+        }
+    }, [mode, userToEdit]);
+
     const handleChange = (e) => {
-        console.log('Input changed:', e.target.name, e.target.value); // Adicionado para debug
         const { name, value } = e.target;
         let newValue = value;
 
-        // Máscaras manuais
+        // Telefone
         if (name === "phone") {
             newValue = value
                 .replace(/\D/g, "")
@@ -32,6 +43,7 @@ export default function UserRegister() {
                 .slice(0, 15);
         }
 
+        // CEP
         if (name === "cep") {
             newValue = value
                 .replace(/\D/g, "")
@@ -39,10 +51,17 @@ export default function UserRegister() {
                 .slice(0, 9);
         }
 
+        // Estado (UF)
+        if (name === "estado") {
+            newValue = value
+                .replace(/[^A-Za-z]/g, "")
+                .toUpperCase()
+                .slice(0, 2);
+        }
+
         setForm({ ...form, [name]: newValue });
     };
 
-    // Validação
     const validate = () => {
         const newErrors = {};
         if (!form.email || !/\S+@\S+\.\S+/.test(form.email)) {
@@ -62,19 +81,27 @@ export default function UserRegister() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form submitted:', form); // Adicionado para debug
+
         if (validate()) {
-            alert("Usuário cadastrado com sucesso!");
+            if (mode === "edit") {
+                alert("Usuário atualizado com sucesso!");
+            } else {
+                alert("Usuário cadastrado com sucesso!");
+            }
         }
     };
 
     return (
         <div className="user-register-container">
-            <h1 className="user-register-title">Cadastro de usuário</h1>
+            <h1 className="user-register-title">
+                {mode === "edit" ? "Edição de Usuário" : "Cadastro de Usuário"}
+            </h1>
 
             <form className="user-register-form" onSubmit={handleSubmit}>
+
                 <div className="user-register-section">
                     <h3 className="user-register-subtitle">Função no Sistema:</h3>
+
                     <label>
                         <input
                             type="radio"
@@ -85,6 +112,7 @@ export default function UserRegister() {
                         />
                         Admin
                     </label>
+
                     <label>
                         <input
                             type="radio"

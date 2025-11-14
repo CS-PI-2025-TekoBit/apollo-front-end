@@ -31,6 +31,7 @@ function Users() {
         });
     };
 
+    // 🔥 BOTÃO DE EDITAR CORRIGIDO
     const actionBodyTemplate = (rowData) => {
         return (
             <div className="btn-action">
@@ -43,20 +44,25 @@ function Users() {
                     onClick={() =>
                         navigate('/admin/users/register', {
                             state: {
-                                id: rowData.id,
-                                pageName: `008 - Edição de Usuário`,
-                                pageTitle: 'Editar Usuário',
-                                labelNameForm: 'Nome do Usuário',
-                                routeEdit: '/users/edit',
-                                initialData: {
+                                mode: "edit",
+                                user: {
+                                    id: rowData.id,
                                     name: rowData.name,
                                     email: rowData.email,
-                                    role: rowData.role,
-                                },
-                            },
+                                    role: rowData.role === "ROLE_ADMIN" ? "admin" : "cliente",
+                                    phone: rowData.phone || "",
+                                    cep: rowData.cep || "",
+                                    logradouro: rowData.logradouro || "",
+                                    numero: rowData.numero || "",
+                                    bairro: rowData.bairro || "",
+                                    estado: rowData.estado || "",
+                                    cidade: rowData.cidade || "",
+                                }
+                            }
                         })
                     }
                 />
+
                 <Button
                     icon="pi pi-trash"
                     rounded
@@ -101,11 +107,13 @@ function Users() {
                 <h3 className="text-header">003 - Listagem de Usuários</h3>
                 <br />
             </section>
+
             <section className="title-page">
                 <div style={{ padding: "20px" }}>
                     <h1 className="title">Listagem de Usuários</h1>
                 </div>
             </section>
+
             <section className="content-list">
                 <div className="search-and-include">
                     <div className="search">
@@ -120,8 +128,13 @@ function Users() {
                             className="button-search"
                         />
                     </div>
+
                     <div className="include">
-                        <NavLink to="/admin/users/register">
+                        {/* 🔥 NAVEGAÇÃO DO CADASTRO DE USUÁRIO CORRIGIDA */}
+                        <NavLink
+                            to="/admin/users/register"
+                            state={{ mode: "create" }}
+                        >
                             <Button
                                 label="Cadastrar Usuário"
                                 icon={<Gear size={30} weight="fill" />}
@@ -135,23 +148,23 @@ function Users() {
                     {users && users.length === 0 ? (
                         <div className="no-data">Nenhum usuário encontrado</div>
                     ) : (
-                                <DataTable
-                                    value={users}
-                                    paginator
-                                    rows={20}
-                                    responsiveLayout="scroll"
-                                    showGridlines
-                                    stripedRows
-                                    tableStyle={{ width: '100%' }}
-                                    rowClassName={(data, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
-                                >
-                                    <Column field="id" header="Código" headerClassName="header-table" headerStyle={{ borderTopLeftRadius: '5px' }} align="center" />
-                                    <Column field="name" header="Nome" headerClassName="header-table" align="center" />
-                                    <Column field="email" header="E-mail" headerClassName="header-table" align="center" />
-                                    <Column field="role" header="Perfil" body={statusBodyTemplate} headerClassName="header-table" align="center" />
-                                    <Column field="dt_create" header="Data de Cadastro" body={(rowData) => new Date(rowData.dt_create).toLocaleDateString("pt-BR")} headerClassName="header-table" align="center" />
-                                    <Column header="Ações" body={actionBodyTemplate} headerClassName="header-table" headerStyle={{ borderTopRightRadius: '5px' }} align="center" />
-                                </DataTable>
+                        <DataTable
+                            value={users}
+                            paginator
+                            rows={20}
+                            responsiveLayout="scroll"
+                            showGridlines
+                            stripedRows
+                            tableStyle={{ width: '100%' }}
+                            rowClassName={(data, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
+                        >
+                            <Column field="id" header="Código" headerClassName="header-table" headerStyle={{ borderTopLeftRadius: '5px' }} align="center" />
+                            <Column field="name" header="Nome" headerClassName="header-table" align="center" />
+                            <Column field="email" header="E-mail" headerClassName="header-table" align="center" />
+                            <Column field="role" header="Perfil" body={statusBodyTemplate} headerClassName="header-table" align="center" />
+                            <Column field="dt_create" header="Data de Cadastro" body={(rowData) => new Date(rowData.dt_create).toLocaleDateString("pt-BR")} headerClassName="header-table" align="center" />
+                            <Column header="Ações" body={actionBodyTemplate} headerClassName="header-table" headerStyle={{ borderTopRightRadius: '5px' }} align="center" />
+                        </DataTable>
                     )}
                 </div>
             </section>
