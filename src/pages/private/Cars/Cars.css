@@ -176,6 +176,25 @@
     box-shadow: none !important;
 }
 
+.legenda {
+    margin-top: 10px !important;
+    font-size: 14px;
+}
+
+.legenda-venda {
+    background-color: #bbf7d0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: 8px !important;
+}
+
+.legenda-aluguel {
+    background-color: #fde68a;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: 8px !important;
+}
+
 /* Ajuste para telas pequenas */
 @media screen and (max-width: 768px) {
     .search-and-include {
