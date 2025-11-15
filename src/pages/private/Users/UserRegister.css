@@ -1,41 +1,45 @@
 .user-register-container {
     max-width: 650px;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: #f8f8f8;
-    border-radius: 10px;
+    width: 100%;
+    margin: 30px auto;
+    padding: 30px 40px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
     font-family: Arial, sans-serif;
     color: #1a1a1a;
     position: relative;
     z-index: 99999;
-    /* Aumentado para superar a sidebar */
 }
 
 .user-register-title {
     text-align: center;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 700;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .user-register-subtitle {
     color: #0b640b;
-    margin-top: 20px;
-    font-size: 16px;
+    margin-top: 12px;
+    margin-bottom: 8px;
+    font-size: 15px;
 }
 
 .user-register-form {
     display: flex;
     flex-direction: column;
+    gap: 18px;
 }
 
 .user-register-section {
-    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
 }
 
 .user-register-row {
     display: flex;
-    gap: 15px;
+    gap: 10px;
 }
 
 .user-register-group {
@@ -46,42 +50,51 @@
 
 .user-register-error {
     color: #d33;
-    font-size: 13px;
-    margin-top: 4px;
+    font-size: 12px;
+    margin-top: 3px;
 }
 
 .user-register-section label {
     font-weight: 500;
-    margin-top: 12px;
+    margin-bottom: 4px;
 }
 
 .user-register-section input[type="text"],
 .user-register-section input[type="email"] {
     width: 100%;
-    padding: 8px;
-    margin-top: 5px;
+    padding: 7px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 14px;
 }
 
 .user-register-section input[type="radio"] {
-    margin-right: 5px;
+    margin-right: 4px;
 }
 
 .user-register-button {
-    margin-top: 15px;
+    margin-top: 5px;
     background-color: #006400;
     color: white;
-    padding: 10px;
+    padding: 12px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
-    width: 100%;
+    font-size: 16px;
 }
 
 .user-register-button:hover {
     background-color: #008000;
+}
+
+.page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    padding: 20px;
 }
 
 @media (max-width: 600px) {
@@ -100,7 +113,5 @@
 
 .user-register-container::before,
 .user-register-container::after {
-    pointer-events: none;
-    display: none;
-    content: none;
+    display: none !important;
 }
