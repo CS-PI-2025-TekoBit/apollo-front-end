@@ -95,33 +95,35 @@ export default function UserRegister() {
                     <div className="user-register-section">
                         <h3 className="user-register-subtitle">Função no Sistema:</h3>
 
-                        <label>
-                            <input
-                                type="radio"
-                                name="role"
-                                value="admin"
-                                checked={form.role === "admin"}
-                                onChange={handleChange}
-                            />
-                            Admin
-                        </label>
+                        <div className="user-register-checkbox-group">
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="role"
+                                    value="admin"
+                                    checked={form.role === "admin"}
+                                    onChange={handleChange}
+                                />
+                                Admin
+                            </label>
 
-                        <label>
-                            <input
-                                type="radio"
-                                name="role"
-                                value="cliente"
-                                checked={form.role === "cliente"}
-                                onChange={handleChange}
-                            />
-                            Cliente
-                        </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="role"
+                                    value="cliente"
+                                    checked={form.role === "cliente"}
+                                    onChange={handleChange}
+                                />
+                                Cliente
+                            </label>
+                        </div>
                     </div>
 
-                    <div className="user-register-section">
+                    <div className="user-register-section user-data-section">
                         <h3 className="user-register-subtitle">Dados do Usuário:</h3>
 
-                        <label>Email *:</label>
+                        <label>Email <span className="required">*</span>:</label>
                         <input
                             name="email"
                             type="email"
@@ -131,7 +133,7 @@ export default function UserRegister() {
                         />
                         {errors.email && <p className="user-register-error">{errors.email}</p>}
 
-                        <label>Nome *:</label>
+                        <label>Nome <span className="required">*</span>:</label>
                         <input
                             name="name"
                             type="text"
@@ -141,7 +143,7 @@ export default function UserRegister() {
                         />
                         {errors.name && <p className="user-register-error">{errors.name}</p>}
 
-                        <label>Telefone *:</label>
+                        <label>Telefone <span className="required">*</span>:</label>
                         <input
                             name="phone"
                             type="text"
@@ -152,12 +154,12 @@ export default function UserRegister() {
                         {errors.phone && <p className="user-register-error">{errors.phone}</p>}
                     </div>
 
-                    <div className="user-register-section">
+                    <div className="user-register-section user-address-section">
                         <h3 className="user-register-subtitle">Endereço:</h3>
 
                         <div className="user-register-row">
                             <div className="user-register-group">
-                                <label>CEP *:</label>
+                                <label>CEP <span className="required">*</span>:</label>
                                 <input
                                     name="cep"
                                     type="text"
@@ -169,7 +171,7 @@ export default function UserRegister() {
                             </div>
 
                             <div className="user-register-group">
-                                <label>Logradouro *:</label>
+                                <label>Logradouro <span className="required">*</span>:</label>
                                 <input
                                     name="logradouro"
                                     type="text"
@@ -183,7 +185,7 @@ export default function UserRegister() {
 
                         <div className="user-register-row">
                             <div className="user-register-group">
-                                <label>Número *:</label>
+                                <label>Número <span className="required">*</span>:</label>
                                 <input
                                     name="numero"
                                     type="text"
@@ -195,7 +197,7 @@ export default function UserRegister() {
                             </div>
 
                             <div className="user-register-group">
-                                <label>Bairro *:</label>
+                                <label>Bairro <span className="required">*</span>:</label>
                                 <input
                                     name="bairro"
                                     type="text"
@@ -209,7 +211,7 @@ export default function UserRegister() {
 
                         <div className="user-register-row">
                             <div className="user-register-group">
-                                <label>Estado *:</label>
+                                <label>Estado <span className="required">*</span>:</label>
                                 <input
                                     name="estado"
                                     type="text"
@@ -221,7 +223,7 @@ export default function UserRegister() {
                             </div>
 
                             <div className="user-register-group">
-                                <label>Cidade *:</label>
+                                <label>Cidade <span className="required">*</span>:</label>
                                 <input
                                     name="cidade"
                                     type="text"
