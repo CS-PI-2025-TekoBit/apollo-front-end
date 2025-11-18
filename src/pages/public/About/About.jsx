@@ -37,7 +37,7 @@ export default function About() {
                   <Envelope size={14} /> wagner@apolloveiculos.com
                 </p>
                 <p>
-                  <Phone size={14} /> (44) 99999-1111
+                  <Phone size={14} /> (44) 99153-5404
                 </p>
               </div>
             </article>
@@ -53,7 +53,7 @@ export default function About() {
                   <Envelope size={14} /> joseluiz@apolloveiculos.com
                 </p>
                 <p>
-                  <Phone size={14} /> (44) 99999-2222
+                  <Phone size={14} /> (44) 99920-2840
                 </p>
               </div>
             </article>
