@@ -2,8 +2,9 @@ import React from 'react';
 import './CardCars.css';
 import { NavLink } from 'react-router';
 import Slider from 'react-slick';
-import { Star } from "@phosphor-icons/react";             // (NOVO)
-import { useFavorites } from "../../hooks/useFavorites";   // (NOVO)
+import { Heart } from "@phosphor-icons/react"; 
+import { useFavorites } from "../../hooks/useFavorites"; 
+import { toast } from "react-toastify";
 
 export default function Card(
     {
@@ -19,10 +20,13 @@ export default function Card(
     }
 ) {
 
-    const { isFavorite, toggleFavorite } = useFavorites(); // (NOVO)
+    const { isFavorite, toggleFavorite } = useFavorites();
 
-    const handleFavorite = (e) => {                        // (NOVO)
-        e.preventDefault(); // para não abrir a página ao clicar na estrela
+    const handleFavorite = (e) => {
+        e.preventDefault(); 
+        
+        const alreadyFavorite = isFavorite(id);
+
         toggleFavorite({
             id_car: id,
             model: name,
@@ -33,6 +37,12 @@ export default function Card(
             year,
             mileage: kilometers
         });
+
+        if (alreadyFavorite) {
+            toast.info("Removido dos favoritos.");
+        } else {
+            toast.success("Adicionado aos favoritos!");
+        }
     };
 
     const settings = {
@@ -48,12 +58,11 @@ export default function Card(
     return (
         <NavLink to={`/carros/${id}`} className="card-cars">
 
-            {/* ⭐ BOTÃO DE FAVORITO (NOVO) */}
             <button className="favorite-btn" onClick={handleFavorite}>
-                <Star
-                    size={28}
+                <Heart
+                    size={22}
                     weight={isFavorite(id) ? "fill" : "regular"}
-                    color={isFavorite(id) ? "#f3ca27" : "#555"}
+                    color={isFavorite(id) ? "#f32727ff" : "#555"}
                 />
             </button>
 
