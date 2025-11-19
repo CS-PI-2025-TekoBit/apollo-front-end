@@ -66,10 +66,7 @@ export default function Header() {
                         <Star size={32} weight="regular" />
                         <p>Favoritos</p>
                     </Link>
-                    <Link to='/' className='btn-favorito-mensagem '>
-                        <Chat size={32} weight="regular" />
-                        <p>Mensagens</p>
-                    </Link>
+
 
                     {
                         user ? (
@@ -105,7 +102,7 @@ export default function Header() {
                 <NavLink to={'/rent'} className='btn-veiculos'>
                     <p>Ver estoque de aluguel</p>
                 </NavLink>
-                <NavLink to={'/sobre-nos'} className='btn-veiculos'>
+                <NavLink to={'/About'} className='btn-veiculos'>
                     <p>Sobre nós</p>
                 </NavLink>
 
