@@ -16,9 +16,9 @@ import Register from './pages/public/Register/Register';
 import AuthContextProvider from './context/AuthContex';
 import { ToastContainer } from 'react-toastify';
 
+import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
 import { PrimeReactProvider } from 'primereact/api';
-import 'primeflex/primeflex.css';
 import 'primereact/resources/primereact.css';
 import 'primereact/resources/themes/mdc-light-indigo/theme.css'
 
@@ -32,6 +32,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Editar from './pages/private/Editar/Editar';
 import Rent from './pages/public/RentCars/Rent';
+import ScrollToTop from './utils/ScrollToTop';
+import About from './pages/public/About/About';
+import Favorites from "./pages/public/Favorites/Favorites";
 const client = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -41,6 +44,7 @@ root.render(
         <Provider store={store}>
           <AuthContextProvider>
             <QueryClientProvider client={client}>
+              <ScrollToTop />
               <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -48,11 +52,13 @@ root.render(
                 <Route path="/register" element={<Register />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/Rent" element={<Rent />} />
+                <Route path="/About" element={<About />} />
                 <Route path='/carros/:id' element={<CarDetail />} />
                 <Route element={<PrivateRoute allowedRoles={['ROLE_USER']} />}>
                   <Route path="/user/myAccount" element={<Editar />} />
                 </Route>
 
+                <Route path="/favoritos" element={<Favorites />} />
                 <Route element={<PrivateRoute allowedRoles={['ROLE_ADMIN']} />}>
                   <Route path="/admin/*" element={<AdminLayout />}>
                     <Route path="*" element={<AdminRoutes />} />

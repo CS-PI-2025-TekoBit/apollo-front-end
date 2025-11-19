@@ -4,6 +4,20 @@
     gap: 10px;
 }
 
+.radios-group {
+    margin-top: 1rem !important;
+}
+
+.paginator-mod {
+    width: 100% !important;
+    margin-bottom: 10px !important;
+    border: none !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
 .btn-generic {
     width: 167px;
     height: 40px;
@@ -52,4 +66,144 @@
 
 .btn-save:hover {
     background: #035A1B;
+}
+
+.filters-layout-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.filters-cars {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.layout-options {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.filter-panel {
+    margin-bottom: 5px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.filter-panel.active-filters {
+    border-left: 4px solid #22c55e;
+    /* Verde para indicar filtros ativos */
+}
+
+.filter-panel .p-panel-content {
+    padding: 1.25rem;
+    background-color: #f8f9fa;
+}
+
+.filter-panel .p-panel-header {
+    background-color: #f9f9f6;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+    color: #495057;
+}
+
+.search-and-include {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.search {
+    display: flex;
+    flex: 1;
+}
+
+.button-search {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.button-include {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+}
+
+.no-data {
+    padding: 2rem;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+/* Estilo adicional para o layout do DataView */
+.p-dataview .p-dataview-content {
+    background-color: #ffffff;
+}
+
+.p-dataview-grid .p-dataview-content .grid>div {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.p-dataview-grid .p-dataview-content .grid>div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para os inputs de filtros */
+.p-inputtext,
+.p-dropdown,
+.p-multiselect {
+    width: 100%;
+    border-radius: 6px;
+}
+
+.p-dropdown {
+    background-color: #ffffff !important;
+    border: none !important;
+    width: 30% !important;
+}
+
+.p-dropdown:not(.p-disabled).p-focus {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.legenda {
+    margin-top: 10px !important;
+    font-size: 14px;
+}
+
+.legenda-venda {
+    background-color: #bbf7d0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: 8px !important;
+}
+
+.legenda-aluguel {
+    background-color: #fde68a;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: 8px !important;
+}
+
+/* Ajuste para telas pequenas */
+@media screen and (max-width: 768px) {
+    .search-and-include {
+        flex-direction: column;
+    }
+
+    .search,
+    .include {
+        width: 100%;
+        max-width: none;
+    }
 }

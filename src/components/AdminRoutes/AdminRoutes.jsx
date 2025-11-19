@@ -15,10 +15,14 @@ import SteeringRegister from '../../pages/private/Steering/SteeringRegister';
 import Transmission from '../../pages/private/Transmissions/Transmissions';
 import TransmissionRegister from '../../pages/private/Transmissions/TransmissionRegister';
 import CarRegister from '../../pages/private/Cars/CarsRegister';
+import Users from '../../pages/private/Users/Users';
+import UserRegister from '../../pages/private/Users/UserRegister';
+import Dashboard from '../../pages/private/Dashboard/Dashboard';
 
 const AdminRoutes = () => {
     return (
         <Routes>
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path="cars" element={<Cars />} />
             <Route path="motors" element={<Motors />} />
             <Route path="motors/register" element={<MotorsRegister />} />
@@ -32,6 +36,8 @@ const AdminRoutes = () => {
             <Route path="transmission/register" element={<TransmissionRegister />} />
             <Route path="steering" element={<Steering />} />
             <Route path="steering/register" element={<SteeringRegister />} />
+            <Route path="users/" element={<Users />} />
+            <Route path="users/register" element={<UserRegister />} />
             <Route path="/cars/register" element={<CarRegister />} />
             <Route path="/cars/edit/:id" element={<CarRegister />} />
             <Route path="*" element={<PageNotFound />} />

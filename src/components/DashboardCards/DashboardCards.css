@@ -1,0 +1,91 @@
+.cards-dashboard-container {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.card-dashboard {
+    flex: 1;
+    border-radius: 12px;
+    padding: 28px 24px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: left;
+    min-height: 140px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.card-dashboard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    transform: translate(30%, -30%);
+    transition: all 0.3s ease;
+}
+
+.card-dashboard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.card-dashboard:hover::before {
+    transform: translate(30%, -30%) scale(1.2);
+}
+
+.card-dashboard .titulo {
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0 0 16px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.95;
+    line-height: 1.4;
+}
+
+.card-dashboard h3 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.card-dashboard .unidades {
+    font-size: 13px;
+    font-weight: 400;
+    margin: 0;
+    opacity: 0.85;
+    text-transform: lowercase;
+}
+
+.verde {
+    background: linear-gradient(135deg, #1e7e34 0%, #155f2d 100%);
+    border-left: 4px solid #28a745;
+}
+
+.roxo {
+    background: linear-gradient(135deg, #5a1a87 0%, #3a0c5d 100%);
+    border-left: 4px solid #7c3aed;
+}
+
+.amarelo {
+    background: linear-gradient(135deg, #b8b82e 0%, #8d8d22 100%);
+    border-left: 4px solid #ffd700;
+}
+
+@media (max-width: 900px) {
+    .cards {
+        flex-direction: column;
+    }
+}

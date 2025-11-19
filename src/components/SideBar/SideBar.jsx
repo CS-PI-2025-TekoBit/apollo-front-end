@@ -6,24 +6,39 @@ import logo from '../../assets/imgs/logomarca.png';
 import Swal from 'sweetalert2';
 import './SideBar.css';
 
-import { Car, Gear, CaretDoubleRight, CaretDoubleLeft, SignOut, SteeringWheel, CarProfile, Palette, Engine, Speedometer } from '@phosphor-icons/react';
+import {
+    Car,
+    Gear,
+    CaretDoubleRight,
+    CaretDoubleLeft,
+    SignOut,
+    SteeringWheel,
+    CarProfile,
+    Palette,
+    Engine,
+    User,
+    Speedometer
+} from '@phosphor-icons/react';
+
 import { ListBullets } from '@phosphor-icons/react/dist/ssr';
 import { Fuel } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useLocation, useNavigate } from 'react-router';
+
 export default function AppSidebar({ children }) {
     const [collapsed, setCollapsed] = useState(false);
-    const { user, logout } = useAuth()
+    const { user, logout } = useAuth();
     const location = useLocation();
-    const navigateTo = useNavigate()
+    const navigateTo = useNavigate();
+
     const navigate = (path) => {
-        navigateTo(`/admin${path}`)
+        navigateTo(`/admin${path}`);
     };
 
     const isActive = (path) => location.pathname.includes(path);
 
     const menuItems = [
-        { label: collapsed ? '' : `Olá, ${user?.name.split(' ')[0]}`, icon: <Speedometer weight='fill' size={collapsed ? 27 : 25} color={isActive('/admin/home') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/home') },
+        { label: collapsed ? '' : `Olá, ${user?.name.split(' ')[0]}`, icon: <Speedometer weight='fill' size={collapsed ? 27 : 25} color={isActive('/admin/dashboard') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/dashboard') },
         { label: collapsed ? '' : 'Carros', icon: <CarProfile weight='fill' size={collapsed ? 27 : 25} color={isActive('/admin/cars') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/cars') },
         { label: collapsed ? '' : 'Cores', icon: <Palette weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/colors') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/colors') },
         { label: collapsed ? '' : 'Motores', icon: <Engine weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/motors') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/motors') },
@@ -31,7 +46,9 @@ export default function AppSidebar({ children }) {
         { label: collapsed ? '' : 'Carrocerias', icon: <Car weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/bodywork') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/bodywork') },
         { label: collapsed ? '' : 'Transmissões', icon: <Gear weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/transmission') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/transmission') },
         { label: collapsed ? '' : 'Direções', icon: <SteeringWheel weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/steering') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/steering') },
+        { label: collapsed ? '' : 'Usuários', icon: <User weight='fill' size={collapsed ? 25 : 25} color={isActive('/admin/users') ? "#155633" : "white"} />, className: 'text-white', command: () => navigate('/users') },
     ];
+
     const handleLogout = () => {
         Swal.fire({
             title: 'Sair da conta',
@@ -44,17 +61,18 @@ export default function AppSidebar({ children }) {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                logout()
+                logout();
             }
-        })
-    }
+        });
+    };
+
     return (
-        <div >
+        <div>
             <Sidebar
                 showCloseIcon={false}
                 visible={true}
-                onHide={() => { }}
-                className='main-content'
+                onHide={() => {}}
+                className="main-content"
                 style={{
                     width: collapsed ? '60px' : '15rem',
                     transition: 'width 0.3s',
@@ -94,13 +112,10 @@ export default function AppSidebar({ children }) {
                             label={collapsed ? '' : 'Sair'}
                             icon={<SignOut size={25} />}
                             iconPos="left"
-                            onClick={() => handleLogout()}
+                            onClick={handleLogout}
                             className="p-button-text w-full text-white logout-button"
                             style={{ backgroundColor: 'transparent', padding: '0.5rem' }}
                         />
-                        {/* <div className="settings-icon" style={{ textAlign: 'center', padding: '0.5rem' }}>
-                            <Gear size={20} style={{ color: '#ffffff' }} />
-                        </div> */}
                     </div>
                 </div>
             </Sidebar>
@@ -109,8 +124,7 @@ export default function AppSidebar({ children }) {
                 style={{
                     marginLeft: collapsed ? '60px' : '15rem',
                     transition: 'margin-left 0.3s',
-                    width: `auto`,
-
+                    width: 'auto',
                 }}
             >
                 {children}
