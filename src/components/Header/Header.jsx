@@ -62,7 +62,7 @@ export default function Header() {
                     />
                 </div>
                 <div className="buttons-right">
-                    <Link to='/' className='btn-favorito-mensagem ' >
+                    <Link to='/favoritos' className='btn-favorito-mensagem ' >
                         <Star size={32} weight="regular" />
                         <p>Favoritos</p>
                     </Link>

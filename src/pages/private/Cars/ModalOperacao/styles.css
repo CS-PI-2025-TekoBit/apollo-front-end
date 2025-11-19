@@ -1,0 +1,139 @@
+/* Modal Operação Styles */
+.modal-operacao .p-dialog-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.modal-operacao .p-dialog-content {
+    padding: 1.5rem;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Field Styles */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.field label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.field .required {
+    color: #ef4444;
+}
+
+.field input {
+    width: 100%;
+}
+
+/* Price Display */
+.price-display {
+    color: #059669;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Field Row (para campos lado a lado) */
+.field-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+/* Upload Area Styles */
+.upload-area {
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #f9fafb;
+}
+
+.upload-area:hover {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
+}
+
+.upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.upload-content i {
+    color: #6b7280;
+}
+
+.upload-content p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+/* Required Notice */
+.required-notice {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.5rem;
+}
+
+/* Footer Styles */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .field-row {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-operacao {
+        width: 95% !important;
+    }
+}
+
+/* PrimeReact Input Override */
+.modal-operacao .p-inputtext {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.modal-operacao .p-inputtext:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Button Styles */
+.modal-footer .p-button {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    border-radius: 6px;
+}
+
+.modal-footer .p-button-warning {
+    margin-right: auto;
+}

@@ -34,6 +34,7 @@ import Editar from './pages/private/Editar/Editar';
 import Rent from './pages/public/RentCars/Rent';
 import ScrollToTop from './utils/ScrollToTop';
 import About from './pages/public/About/About';
+import Favorites from "./pages/public/Favorites/Favorites";
 const client = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -57,6 +58,7 @@ root.render(
                   <Route path="/user/myAccount" element={<Editar />} />
                 </Route>
 
+                <Route path="/favoritos" element={<Favorites />} />
                 <Route element={<PrivateRoute allowedRoles={['ROLE_ADMIN']} />}>
                   <Route path="/admin/*" element={<AdminLayout />}>
                     <Route path="*" element={<AdminRoutes />} />

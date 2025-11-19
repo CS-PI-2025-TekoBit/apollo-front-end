@@ -1,10 +1,10 @@
-.cards {
+.cards-dashboard-container {
     display: flex;
     gap: 24px;
     margin-bottom: 40px;
 }
 
-.card {
+.card-dashboard {
     flex: 1;
     border-radius: 12px;
     padding: 28px 24px;
@@ -21,7 +21,7 @@
     cursor: pointer;
 }
 
-.card::before {
+.card-dashboard::before {
     content: '';
     position: absolute;
     top: 0;
@@ -34,16 +34,16 @@
     transition: all 0.3s ease;
 }
 
-.card:hover {
+.card-dashboard:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
-.card:hover::before {
+.card-dashboard:hover::before {
     transform: translate(30%, -30%) scale(1.2);
 }
 
-.card .titulo {
+.card-dashboard .titulo {
     font-size: 13px;
     font-weight: 500;
     margin: 0 0 16px 0;
@@ -53,7 +53,7 @@
     line-height: 1.4;
 }
 
-.card h3 {
+.card-dashboard h3 {
     font-size: 42px;
     font-weight: 700;
     margin: 0 0 8px 0;
@@ -61,7 +61,7 @@
     letter-spacing: -1px;
 }
 
-.card .unidades {
+.card-dashboard .unidades {
     font-size: 13px;
     font-weight: 400;
     margin: 0;
