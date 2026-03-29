@@ -4,7 +4,7 @@ import Api from '../api/api';
 
 const fetchData = async () => {
     const response = await Api.get("/steering/fetch");
-    return response.data.data;
+    return response.data;
 };
 
 export function useSteering() {

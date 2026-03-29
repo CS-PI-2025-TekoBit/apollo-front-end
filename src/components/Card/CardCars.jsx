@@ -2,9 +2,6 @@ import React from 'react';
 import './CardCars.css';
 import { NavLink } from 'react-router';
 import Slider from 'react-slick';
-import { Heart } from "@phosphor-icons/react"; 
-import { useFavorites } from "../../hooks/useFavorites"; 
-import { toast } from "react-toastify";
 
 export default function Card(
     {
@@ -19,30 +16,16 @@ export default function Card(
         disableSlideImgs = false,
     }
 ) {
+    const getImageSrc = (img) => {
+        if (!img) return '';
+        if (typeof img === 'string') return img;
+        return img.imgUrl || img.img_url || '';
+    };
 
-    const { isFavorite, toggleFavorite } = useFavorites();
-
-    const handleFavorite = (e) => {
-        e.preventDefault(); 
-        
-        const alreadyFavorite = isFavorite(id);
-
-        toggleFavorite({
-            id_car: id,
-            model: name,
-            brand: mark,
-            images: imgs,
-            vehiclePrice: price,
-            transmission,
-            year,
-            mileage: kilometers
-        });
-
-        if (alreadyFavorite) {
-            toast.info("Removido dos favoritos.");
-        } else {
-            toast.success("Adicionado aos favoritos!");
-        }
+    const formatPrice = (value) => {
+        const numericValue = Number(value);
+        if (Number.isNaN(numericValue)) return 'R$ 0,00';
+        return numericValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
     };
 
     const settings = {
@@ -54,51 +37,42 @@ export default function Card(
         autoplay: true,
         autoplaySpeed: 5000,
     };
-
     return (
-        <NavLink to={`/carros/${id}`} className="card-cars">
+        <>
+            <NavLink to={`/carros/${id}`} className="card-cars">
+                {!disableSlideImgs ? (
+                    <Slider {...settings}>
+                        {imgs.map((img, index) => (
+                            <div key={index}>
+                                <img
+                                    src={getImageSrc(img)}
+                                    alt={`Slide ${index + 1}`}
+                                    className="card-img"
+                                />
+                            </div>
+                        ))}
+                    </Slider>
+                ) : (
+                    <img
+                        src={getImageSrc(imgs?.[0])}
+                        alt="First Slide"
+                        className="card-img"
+                    />
+                )}
 
-            <button className="favorite-btn" onClick={handleFavorite}>
-                <Heart
-                    size={22}
-                    weight={isFavorite(id) ? "fill" : "regular"}
-                    color={isFavorite(id) ? "#f32727ff" : "#555"}
-                />
-            </button>
-
-            {!disableSlideImgs ? (
-                <Slider {...settings}>
-                    {imgs.map((img, index) => (
-                        <div key={index}>
-                            <img
-                                src={`${img?.img_url}`}
-                                alt={`Slide ${index + 1}`}
-                                className="card-img"
-                            />
-                        </div>
-                    ))}
-                </Slider>
-            ) : (
-                <img
-                    src={`${imgs[0]?.img_url}`}
-                    alt="First Slide"
-                    className="card-img"
-                />
-            )}
-
-            <div className="txt-card-cars">
-                <h1 className="titulo-card-cars">{mark} {name.split(" ")[0]}</h1>
-                <p className="marca-card-cars"><span>Marca: </span>{mark}</p>
-                <p className="tracao-card-cars"><span>Transmissão: </span>{transmission}</p>
-                <p className="ano-card-cars"><span>Ano: </span>{year}</p>
-                <p className="km-card-cars"><span>KM: </span>{kilometers}</p>
-                <p className="valor-card-cars">
-                    {price?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
-                </p>
-                <div className="btn-detalhes">
-                    <button to={`/carros/${id}`} className="botao-card-cars">Ver Detalhes</button>
+                <div className="txt-card-cars">
+                    <h1 className="titulo-card-cars">{mark} {name.split(" ")[0]}</h1>
+                    <p className="marca-card-cars"><span>Marca: </span>{mark}</p>
+                    <p className="tracao-card-cars"><span>Transmissão: </span>{transmission}</p>
+                    <p className="ano-card-cars"><span>Ano: </span>{year}</p>
+                    <p className="km-card-cars"><span>KM: </span>{kilometers}</p>
+                    <p className="valor-card-cars">
+                        {formatPrice(price)}</p>
+                    <div className="btn-detalhes">
+                        <button to={`/carros/${id}`} className="botao-card-cars">Ver Detalhes</button>
+                    </div>
                 </div>
-            </div>
-        </NavLink>
-    );
+            </NavLink>
+        </>
+    )
 }

@@ -44,6 +44,19 @@ function Cars() {
     const [idCar, setIdCar] = useState(null);
     const [operacaoParaEditar, setOperacaoParaEditar] = useState(null);
 
+    const getMainImageUrl = (car) => {
+        const firstImage = car?.images?.[0];
+        if (!firstImage) return '';
+        if (typeof firstImage === 'string') return firstImage;
+        return firstImage.imgUrl || firstImage.img_url || '';
+    };
+
+    const getVehiclePrice = (price) => {
+        const numericPrice = Number(price);
+        if (Number.isNaN(numericPrice)) return 'R$ 0,00';
+        return numericPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    };
+
     const [filters, setFilters] = useState({
         bodyWork: null,
         color: null,
@@ -142,7 +155,7 @@ function Cars() {
                 if (willDelete.isConfirmed) {
                     try {
                         setLoading(true);
-                        const result = await Api.delete(`/cars/${car.id_car}`);
+                        const result = await Api.delete(`/cars/${car.idCar}`);
                         if (result.status === 204) {
                             queryClient.invalidateQueries({ queryKey: ['all_cars'] });
                             toast.success('Carro deletado com sucesso!');
@@ -175,20 +188,20 @@ function Cars() {
             background = index % 2 === 0 ? '#f3f4f6' : '#ffffff';
         }
         return (
-            <div className={`col-12  hover:bg-cyan-700 ${background}`} key={car.id} style={{ textDecoration: 'none', color: 'inherit', backgroundColor: background }} to={`/admin/cars/edit/${car.id_car}`}>
+            <div className={`col-12  hover:bg-cyan-700 ${background}`} key={car.idCar || car.id} style={{ textDecoration: 'none', color: 'inherit', backgroundColor: background }} to={`/admin/cars/edit/${car.idCar}`}>
                 <div className={classNames('flex flex-column justify-center xl:flex-row xl:align-items-start p-4 gap-4', { 'border-top-1 surface-border': index !== 0 })}>
-                    <NavLink to={`/admin/cars/edit/${car.id_car}`} style={{ textDecoration: 'none', color: 'inherit', flex: 1 }} className="flex flex-row align-items-start gap-3">
-                        <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={`${car?.images[0]?.img_url}`} alt={car.name} />
+                    <NavLink to={`/admin/cars/edit/${car.idCar}`} style={{ textDecoration: 'none', color: 'inherit', flex: 1 }} className="flex flex-row align-items-start gap-3">
+                        <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={getMainImageUrl(car)} alt={`${car?.brand || ''} ${car?.model || ''}`.trim()} />
                         <div className="flex flex-column sm:flex-row justify-content-start align-items-center flex-1 gap-4">
                             <div className="flex flex-column align-items-center sm:align-items-start gap-1" style={{ width: '50%' }}>
                                 <div className="text-2xl font-bold text-900">{car.brand + ' ' + car.model}</div>
                                 <div className="text-500">Ano: {car.year} Km: {car.mileage}</div>
-                                <div className="text-500">Preço:  {car?.vehiclePrice?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</div>
+                                <div className="text-500">Preço:  {getVehiclePrice(car?.vehiclePrice)}</div>
                                 <div className="text-500">Cor:  {car.color}</div>
                             </div>
                             <div className="flex flex-column align-items-center sm:align-items-start gap-1">
                                 <div className="text-2xl font-bold text-900">Informações do cadastro</div>
-                                <div className="text-500">Data de cadastro: {formatDateTime(car.dt_create)}</div>
+                                <div className="text-500">Data de cadastro: {formatDateTime(car.dtCreate || car.dt_create)}</div>
                                 <div className="text-500">Usuário de cadastro: {car.userName || ''}</div>
                                 <div className="text-500">Tipo de carro:  {car.carType || ''}</div>
                             </div>
@@ -196,14 +209,14 @@ function Cars() {
                     </NavLink>
                     <div className="flex-column align-items-center sm:align-items-end gap-3 h-full ">
                         <div className="flex sm:flex-row align-items-center justify-content-center  gap-3 sm:gap-2">
-                            <NavLink to={`/admin/cars/edit/${car.id_car}`}>
+                            <NavLink to={`/admin/cars/edit/${car.idCar}`}>
                                 <Button icon="pi pi-pencil" rounded severity="warning" aria-label="Edit" className='flex align-items-center justify-content-center'></Button>
                             </NavLink>
                             <Button icon="pi pi-trash" rounded severity="danger" className='flex align-items-center justify-content-center' onClick={(e) => handleDelete(e)}></Button>
                             {carOperation ? (
                                 <Button
                                     icon="pi pi-pencil"
-                                    onClick={() => abreModalOperacao(car.carType, car.id_car, carOperation)}
+                                    onClick={() => abreModalOperacao(car.carType, car.idCar, carOperation)}
                                     rounded
                                     severity="info"
                                     tooltip="Editar operação"
@@ -212,7 +225,7 @@ function Cars() {
                             ) : (
                                 <Button
                                     icon={<CurrencyDollarSimple size={20} />}
-                                    onClick={() => abreModalOperacao(car.carType, car.id_car)}
+                                    onClick={() => abreModalOperacao(car.carType, car.idCar)}
                                     rounded
                                     severity="success"
                                     tooltip="Cadastrar operação"
@@ -228,7 +241,7 @@ function Cars() {
 
     const gridItem = (car) => {
         return (
-            <div className="col-12 sm:col-6 lg:col-12 xl:col-4 p-2" key={car.id}>
+            <div className="col-12 sm:col-6 lg:col-12 xl:col-4 p-2" key={car.idCar || car.id}>
                 <div className="p-4 border-1 surface-border surface-card border-round">
                     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
                         <div className="flex align-items-center gap-2">
@@ -237,11 +250,11 @@ function Cars() {
                         </div>
                     </div>
                     <div className="flex flex-column align-items-center gap-3 py-5">
-                        <img className="w-9 shadow-2 border-round" src={`${car.imgs[0]}`} alt={car.name} />
-                        <div className="text-2xl font-bold">{car.name}</div>
+                        <img className="w-9 shadow-2 border-round" src={getMainImageUrl(car)} alt={`${car?.brand || ''} ${car?.model || ''}`.trim()} />
+                        <div className="text-2xl font-bold">{`${car?.brand || ''} ${car?.model || ''}`.trim()}</div>
                     </div>
                     <div className="flex align-items-center justify-content-between">
-                        <span className="text-2xl font-semibold">${car.price}</span>
+                        <span className="text-2xl font-semibold">{getVehiclePrice(car?.vehiclePrice)}</span>
                         <Button icon="pi pi-shopping-cart" className="p-button-rounded" ></Button>
                         <Button icon="pi pi-shopping-cart" className="p-button-rounded" ></Button>
                         <Button icon="pi pi-shopping-cart" className="p-button-rounded" ></Button>

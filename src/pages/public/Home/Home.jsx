@@ -246,8 +246,8 @@ export default function Home() {
                                 {currentCars?.length > 0 ? (
                                     currentCars.map((car) => (
                                         <Card
-                                            key={car.id_car}
-                                            id={car.id_car}
+                                            key={car.idCar || car.id_car}
+                                            id={car.idCar || car.id_car}
                                             name={car.model}
                                             imgs={car.images}
                                             mark={car.brand}

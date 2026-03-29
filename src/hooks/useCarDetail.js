@@ -6,7 +6,7 @@ import Api from '../api/api';
 const fetch = async (id) => {
     const id_car = parseInt(id);
     const response = await Api.get(`/cars/${id_car}`);
-    return response.data.data;
+    return response.data;
 };
 
 export function useCarDetail(id) {

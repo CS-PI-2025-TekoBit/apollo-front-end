@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import carros from '../data/car.json';
 import Api from '../api/api';
 
 const fetchData = async () => {
     const response = await Api.get("/cars");
-    return response.data.data;
+    return response.data;
 };
 
 export function useAllCars() {

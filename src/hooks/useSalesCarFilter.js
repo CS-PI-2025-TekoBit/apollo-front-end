@@ -5,7 +5,7 @@ import qs from 'qs';
 const fetchData = async (filters) => {
     const queryString = qs.stringify(filters, { arrayFormat: 'repeat' });
     const response = await Api.get(`/cars/search?${queryString}`);
-    return response.data?.data || [];
+    return response.data || [];
 };
 
 export function useSalesCarFilter(filters) {

@@ -84,6 +84,30 @@ function CarRegister() {
         loadingPrice: false
     });
 
+    const isPersistedImage = (image) => {
+        return Boolean(image?.idImage || image?.id_image);
+    };
+
+    const getImageId = (image) => {
+        return image?.idImage || image?.id_image || null;
+    };
+
+    const getImagePreviewSrc = (image) => {
+        if (!image) return '';
+
+        if (typeof image === 'string') return image;
+
+        if (image.imgUrl || image.img_url || image.objectURL) {
+            return image.imgUrl || image.img_url || image.objectURL;
+        }
+
+        if (image instanceof File || image instanceof Blob) {
+            return URL.createObjectURL(image);
+        }
+
+        return '';
+    };
+
     const OPTIONS = {
         directions: [
             { name: 'Hidráulica' },
@@ -246,7 +270,7 @@ function CarRegister() {
         const newFiles = Array.from(event.files);
 
         setFormData(prev => {
-            const existingImages = prev.car_images.filter(img => img.id_image);
+            const existingImages = prev.car_images.filter(isPersistedImage);
             const newImages = [...existingImages, ...newFiles];
             return { ...prev, car_images: newImages };
         });
@@ -327,10 +351,10 @@ function CarRegister() {
         const yearFormate = formData.year ? formData.year.split(' ')[0] : '';
         const formDataToSend = new FormData();
 
-        const newImages = formData.car_images.filter(image => !image.id_image);
+        const newImages = formData.car_images.filter(image => !isPersistedImage(image));
         const existingImageIds = formData.car_images
-            .filter(image => image.id_image)
-            .map(image => image.id_image);
+            .filter(isPersistedImage)
+            .map(getImageId);
 
         if (newImages && newImages.length > 0) {
             newImages.forEach((image) => {
@@ -418,7 +442,7 @@ function CarRegister() {
     const onTemplateClear = () => {
         setTotalSize(0);
 
-        const existingImages = formData.car_images.filter(img => img.id_image);
+        const existingImages = formData.car_images.filter(isPersistedImage);
         setFormData(prev => ({ ...prev, car_images: existingImages }));
 
         if (fileUploadRef.current) {
@@ -478,7 +502,7 @@ function CarRegister() {
         if (car && isEditMode) {
 
             setFormData({
-                car_images: car.images,
+                car_images: Array.isArray(car.images) ? car.images : [],
                 brand: car?.brand || '',
                 brand_code: '',
                 model: car?.model || null,
@@ -609,7 +633,7 @@ function CarRegister() {
                                 {formData.car_images.map((file, index) => (
                                     <div key={index} style={{ position: 'relative' }}>
                                         <img
-                                            src={file.img_url || file?.objectURL || URL?.createObjectURL(file)}
+                                            src={getImagePreviewSrc(file)}
                                             alt={`Preview ${index}`}
                                             style={{
                                                 width: '100%',
@@ -619,7 +643,7 @@ function CarRegister() {
                                                 border: '2px solid #e5e7eb'
                                             }}
                                         />
-                                        {!file.id_image && (
+                                        {!isPersistedImage(file) && (
                                             <Button
                                                 type='button'
                                                 icon="pi pi-times"

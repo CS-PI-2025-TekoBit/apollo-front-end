@@ -3,7 +3,7 @@ import Api from '../api/api';
 
 const fetchData = async () => {
     const response = await Api.get('/bodywork/fetch');
-    return response.data.data;
+    return response.data;
 };
 
 export function useBodyWork() {

@@ -11,7 +11,9 @@ function AuthContextProvider({ children }) {
         try {
             const response = await Api.get('auth/me');
             if (response.status === 200) {
-                return response.data.data;
+                console.log('Resposta do servidor:', response);
+                const userData = response.data?.data ?? response.data;
+                return userData || null;
             }
             return null;
         } catch (error) {
@@ -55,6 +57,7 @@ function AuthContextProvider({ children }) {
 
             if (result.status === 200) {
                 const userData = await getUserData();
+                console.log('Dados do usuário:', userData);
                 if (userData) {
                     setUser({
                         id: userData.id,

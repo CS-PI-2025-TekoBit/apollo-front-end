@@ -4,450 +4,439 @@ import { NavLink, useParams } from "react-router";
 import Slider from "react-slick";
 import './CarDetail.css';
 import IMG from "../../../assets/imgs/Whats.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GenericInput from "../../../components/GenericInput/GenericInput";
 import leftArrow from "../../../assets/left-arrow.svg";
 import { useCarDetail } from "../../../hooks/useCarDetail";
-import { useEffect } from "react";
-import { useAllCars } from '../../../hooks/useAllCar'
 import { useCarsFiltered } from '../../../hooks/useCarsFiltered'
 import BotaoWhatsApp from "../../../components/BotaoWhatsApp/BotaoWhatsApp";
 import GenericLoader from "../../../components/GenericLoader/GenericLoader";
 import Card from "../../../components/Card/CardCars";
 import Maps from "../../../components/Maps/Maps";
+import { CaretLeftIcon } from "@phosphor-icons/react";
+
+
+
 export default function CarDetail() {
     const { id } = useParams();
     const { car, isLoading } = useCarDetail(id);
-    const { others_cars } = useCarsFiltered(car?.mark);
-    const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
-    const [message, setMessage] = useState("")
-    const { all_cars } = useAllCars()
-    const [errors, setErrors] = useState({})
-    const ViewportHeight = window.innerHeight;
-    const settings = {
-        infinite: car?.images.length > 2 ? true : false,
-        speed: 1000,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        arrows: true,
+    const { others_cars } = useCarsFiltered(car?.brand || car?.mark);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
+    const [errors, setErrors] = useState({});
+    const [selectedImg, setSelectedImg] = useState(0);
+    const [galleryOpen, setGalleryOpen] = useState(false);
+    const [formSent, setFormSent] = useState(false);
+
+    const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+
+    const getImageSrc = (img) => {
+        if (!img) return '';
+        if (typeof img === 'string') return img;
+        return img.imgUrl || img.img_url || '';
     };
-    const settings_mobile = {
-        infinite: car?.images.length > 2 ? true : false,
-        speed: 1000,
+
+    const formatCurrency = (value) => {
+        const numericValue = Number(value);
+        if (Number.isNaN(numericValue)) return 'R$ 0,00';
+        return numericValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    };
+
+    const settingsMobile = {
+        infinite: (car?.images?.length || 0) > 1,
+        speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
-        arrows: true,
+        arrows: false,
+        dots: true,
         autoplay: true,
-        autoplaySpeed: 5000,
+        autoplaySpeed: 4000,
     };
-    const settings_others_cars = {
+
+    const settingsOthersCars = {
         infinite: false,
         speed: 500,
-        slidesToShow: others_cars?.length > 10 ? 4 : others_cars?.length,
+        slidesToShow: Math.min(others_cars?.length || 1, 4),
         slidesToScroll: 1,
-        arrows: ViewportHeight <= 800 ? false : true,
+        arrows: true,
         dots: true,
-        autoplay: false,
-        autoplaySpeed: 5000,
         responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 2,
-                },
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 1,
-                },
-            },
+            { breakpoint: 1280, settings: { slidesToShow: 3 } },
+            { breakpoint: 1024, settings: { slidesToShow: 2 } },
+            { breakpoint: 768, settings: { slidesToShow: 1 } },
         ],
-    }
-    useEffect(() => {
-        if (isLoading === false) {
-            setMessage(`Olá, gostaria de saber se o veículo ${car?.model} na cor ${car?.color} continua disponível ?`)
-        }
+    };
 
-    }, [isLoading, car])
+    useEffect(() => {
+        if (!isLoading) {
+            setMessage(`Olá, gostaria de saber se o veículo ${car?.model} na cor ${car?.color} continua disponível?`);
+        }
+    }, [isLoading, car]);
+
+    useEffect(() => { setSelectedImg(0); }, [car]);
 
     const validation = () => {
         const newErros = {};
         if (!name.trim()) newErros.name = "Nome é obrigatório.";
         if (!email.trim()) newErros.email = "E-mail é obrigatório.";
-        else if (!/\S+@\S+\.\S+/.test(email))
-            newErros.email = "E-mail inválido.";
-        if (!message.trim())
-            newErros.message = "Mensagem é obrigatória.";
-
-
+        else if (!/\S+@\S+\.\S+/.test(email)) newErros.email = "E-mail inválido.";
+        if (!message.trim()) newErros.message = "Mensagem é obrigatória.";
         return newErros;
     };
 
     const sendMessage = (e) => {
-
-        e.preventDefault()
-        const errors = validation();
-        if (Object.keys(errors).length) {
-            setErrors(errors);
-            return;
-        }
-        const mes = `${message} at.te ${name}`
+        e.preventDefault();
+        const errs = validation();
+        if (Object.keys(errs).length) { setErrors(errs); return; }
+        const mes = `${message} at.te ${name}`;
         window.location.href = `https://api.whatsapp.com/send?phone=5500000000&text=${encodeURIComponent(mes)}`;
-    }
-    const chunkArray = (array, chunkSize) => {
-        const chunks = [];
-        for (let i = 0; i < array.length; i += chunkSize) {
-            chunks.push(array.slice(i, i + chunkSize));
-        }
-        return chunks;
     };
-    const safeParseJSON = (jsonString) => {
-        try {
-            return JSON.parse(jsonString);
-        } catch (error) {
-            console.error("Erro ao fazer JSON.parse:", error);
-            return [];
-        }
+
+    const specItems = car ? [
+        { label: "Ano", value: car.year },
+        { label: "Quilometragem", value: car.mileage ? `${Number(car.mileage).toLocaleString('pt-br')} km` : "—" },
+        { label: "Câmbio", value: car.transmission },
+        { label: "Carroceria", value: car.bodywork },
+        { label: "Combustível", value: car.fuel },
+        { label: "Final de placa", value: car.licensePlateEnd },
+        { label: "Cor", value: car.color },
+        { label: "Aceita troca", value: car.trade ? "Sim" : "Não" },
+        { label: "Blindagem", value: car.armored ? "Sim" : "Não" },
+        { label: "Direção", value: car.direction || "Não informado" },
+    ] : [];
+
+    const GalleryGrid = () => {
+        const imgs = car?.images || [];
+        const main = imgs[0];
+        const thumbs = imgs.slice(1, 5);
+        const remaining = imgs.length - 5;
+        const isSingle = thumbs.length === 0;
+        return (
+            <div className={`cd-gallery-grid${isSingle ? ' cd-gallery-grid--single' : ''}`}>
+                <div className="cd-gallery-main" onClick={() => setGalleryOpen(true)}>
+                    <img src={getImageSrc(main)} alt={car.model} className="cd-gallery-main-img" />
+                    <span className="cd-gallery-count">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
+                        {imgs.length} fotos
+                    </span>
+                </div>
+                {thumbs.length > 0 && (
+                    <div className="cd-gallery-thumbs">
+                        {thumbs.map((img, i) => {
+                            const isLast = i === thumbs.length - 1 && remaining > 0;
+                            return (
+                                <button key={i} className={`cd-gallery-thumb ${selectedImg === i + 1 ? 'cd-gallery-thumb--active' : ''}`} onClick={() => { setSelectedImg(i + 1); setGalleryOpen(true); }}>
+                                    <img src={getImageSrc(img)} alt={`Vista ${i + 2}`} />
+                                    {isLast && remaining > 0 && (
+                                        <div className="cd-gallery-more">+{remaining}</div>
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        );
     };
-    return (
-        <>
-            < Header />
-            {ViewportHeight > 800 ? (
-                <div className="content">
 
-                    {isLoading ? (
-                        <GenericLoader />
-                    ) : (
-                        <>
-                            <NavLink to="/home" className="back-to-stock">
-                                <img src={leftArrow} alt="Voltar" />
-                                <p>Voltar para o estoque</p>
-                            </NavLink>
-                            <div className="container-car-detail">
-                                <div className="spacing-imgs">
-                                    <Slider {...settings}>
-                                        {car.images?.map((img, index) => (
-                                            <div key={index}>
-                                                <img
-                                                    src={`${img.img_url}`}
-                                                    alt={`Slide ${index + 1}`}
-                                                    className="car-detail-img"
-                                                />
-                                            </div>
-                                        ))}
-                                    </Slider>
-                                </div>
-                                <div className="car-detail-info">
-                                    <div className="left-side-car-detail">
-                                        <section>
-                                            <div className="title-with-highlight">
-                                                <h1 className="car-title" style={{ margin: 0 }}>
-                                                    {car.brand} <span className="title-color">{car.model.split(" ")[0]}</span>
-                                                </h1>
-                                            </div>
-                                            <h3 className="car-description">
-                                                {car.model + ' ' + car.transmission + ' ' + car.fuel}
-                                            </h3>
-                                        </section>
-                                        <section>
+    const Lightbox = () => (
+        <div className="cd-lightbox" onClick={() => setGalleryOpen(false)}>
+            <button className="cd-lightbox-close" onClick={() => setGalleryOpen(false)}>✕</button>
+            <button className="cd-lightbox-nav cd-lightbox-prev" onClick={e => { e.stopPropagation(); setSelectedImg(p => Math.max(0, p - 1)); }}>‹</button>
+            <div className="cd-lightbox-img-wrap" onClick={e => e.stopPropagation()}>
+                <img src={getImageSrc(car?.images?.[selectedImg])} alt={car?.model} className="cd-lightbox-img" />
+                <span className="cd-lightbox-counter">{selectedImg + 1} / {car?.images?.length}</span>
+            </div>
+            <button className="cd-lightbox-nav cd-lightbox-next" onClick={e => { e.stopPropagation(); setSelectedImg(p => Math.min((car?.images?.length || 1) - 1, p + 1)); }}>›</button>
+            {car?.images?.length > 1 && (
+                <div className="cd-lightbox-strip" onClick={e => e.stopPropagation()}>
+                    {car.images.map((img, i) => (
+                        <button key={i} className={`cd-lightbox-strip-btn ${selectedImg === i ? 'active' : ''}`} onClick={() => setSelectedImg(i)}>
+                            <img src={getImageSrc(img)} alt="" />
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
 
-                                            <section>
-                                                <table className="car-details-table">
-                                                    <tbody>
-                                                        <tr>
-                                                            <th>Ano</th>
-                                                            <th>Kilometros</th>
-                                                            <th>Câmbio</th>
-                                                            <th>Carroceria</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>{car?.year}</td>
-                                                            <td>{car?.mileage}</td>
-                                                            <td>{car?.transmission}</td>
-                                                            <td>{car?.bodywork}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Combustível</th>
-                                                            <th>Final de placa</th>
-                                                            <th>Cor</th>
-                                                            <th>Aceita troca?</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>{car?.fuel}</td>
-                                                            <td>{car?.licensePlateEnd}</td>
-                                                            <td>{car?.color}</td>
-                                                            <td>{car?.trade ? "Sim" : "Não"}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Blindagem?</th>
-                                                            <th>Direção</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>{car?.armored ? "Sim" : "Não"}</td>
-                                                            <td>{car?.direction || "Não informado"}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </section>
-                                        </section>
-                                        <hr className="car-detail-divider" />
-                                        <section className="car-detail-description-section">
-                                            <h1>Descrição</h1>
-                                            <p className="car-detail-description">
-                                                {car?.description}
-                                            </p>
-                                        </section>
-                                        <hr className="car-detail-divider" />
-                                        <section>
-                                            <h1>Itens do veículo</h1>
-                                            <div className="items-table">
-                                                {chunkArray(
-                                                    car?.opcionais,
-                                                    4
-                                                ).map((row, rowIndex) => (
-                                                    <div key={rowIndex} className="items-row">
-                                                        {row.map((item, colIndex) => (
-                                                            <div key={colIndex} className="item-cell">
-                                                                {item}
-                                                            </div>
-                                                        ))}
-                                                        {row.length < 4 &&
-                                                            Array(4 - row.length)
-                                                                .fill()
-                                                                .map((_, colIndex) => (
-                                                                    <div
-                                                                        key={`empty-${colIndex}`}
-                                                                        className="item-cell empty"
-                                                                    />
-                                                                ))}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </section>
-                                    </div>
-                                    <div className="right-side-car-detail">
-                                        <section style={{ margin: 0 }}>
-                                            <h1 className="car-detail-price">
-                                                {car?.vehiclePrice?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
-                                            </h1>
-                                            <p className="car-detail-price-description">
-                                                {car.carType === "VENDA" ? "Valor à vista" : "Valor por dia"}
-                                            </p>
-                                            <hr className="car-detail-divider-right-side" />
-                                            <h2 className="car-detail-vendor">
-                                                Envie uma mensagem ao vendedor
-                                            </h2>
-                                            <a href={`http://wa.me/5500000000?text=Olá, gostaria de saber se o veículo ${car?.model} na cor ${car?.color} ainda esta disponível ? `} className="button-whats" >
-                                                <img src={IMG} alt="" />
-                                                <div className="whats" >
-                                                    <p>
-                                                        Fale conosco pelo
-                                                    </p>
-                                                    <h1>
-                                                        WhatsApp
-                                                    </h1>
-                                                </div>
-                                            </a>
-                                            <div className="m-3">
-                                                <GenericInput label={'Nome *'} theme="light" exemple={''} type={'text'} value={name} onChange={(e) => setName(e.target.value)} placeholder={'Nome'} />
-                                                {errors.name && <span className="error">{errors.name}</span>}
-                                                <GenericInput label={'Email *'} theme="light" exemple={''} type={'email'} value={email} onChange={(e) => setEmail(e.target.value)} placeholder={'Email'} />
-                                                {errors.email && <span className="error">{errors.email}</span>}
-                                                <GenericInput label={'Mensagem *'} theme="light" exemple={''} type={'textarea'} value={message} onChange={(e) => setMessage(e.target.value)} placeholder={'Mensagem'} />
-                                                {errors.message && <span className="error">{errors.message}</span>}
-                                            </div>
-                                            <span className="ob-camps">Os campos marcados com <span className="red">*</span> são obrigatórios</span>
-                                            <button className="button-send-message" onClick={(e) => sendMessage(e)}>
-                                                Enviar Mensagem
-                                            </button>
-                                        </section>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="others-cars">
-                                <h1>
-                                    Outros veículos
-                                </h1>
-                                <div className="configure-others-cars" >
-                                    <Slider {...settings_others_cars}>
-                                        {others_cars?.map((car, index) => (
-                                            <div key={car.id} className="configure-others-cars" >
-                                                <Card disableSlideImgs={true} key={car.id_car} id={car.id_car} model={car.model} imgs={car.imgs} mark={car.mark} price={car.price} bodywork={car.bodywork} traction={car.traction} year={car.year} kilometers={car.kilometers} />
-                                            </div>
-                                        ))}
-                                    </Slider>
-                                </div>
-                            </div>
-                            <Maps />
-                            <BotaoWhatsApp />
-                        </>
-                    )
-                    }
-                </div >
-            ) : (
-                isLoading ? (
-                    <GenericLoader />
-                ) : (
-                    <div className="content-mobile">
-                        <NavLink to="/home" className="back-to-stock">
-                            <img src={leftArrow} alt="Voltar" />
-                            <p>Voltar para o estoque</p>
+    const Sidebar = () => (
+        <aside className="cd-sidebar">
+            {/* Preço */}
+            <div className="cd-sidebar-price-block">
+                <div className="cd-sidebar-badge">{car.carType === "VENDA" ? "À Venda" : "Aluguel"}</div>
+                <div className="cd-sidebar-price">{formatCurrency(car?.vehiclePrice)}</div>
+                <div className="cd-sidebar-price-label">{car.carType === "VENDA" ? "Valor à vista" : "Valor por dia"}</div>
+                {car.trade && <span className="cd-sidebar-trade-tag">✓ Aceita troca</span>}
+            </div>
+
+            <div className="cd-sidebar-divider" />
+
+            {/* WhatsApp */}
+            <a href={`https://wa.me/5500000000?text=${encodeURIComponent(`Olá, gostaria de saber se o veículo ${car?.model} na cor ${car?.color} ainda está disponível?`)}`} className="cd-whatsapp-btn">
+                <img src={IMG} alt="WhatsApp" width="24" height="24" />
+                <div>
+                    <span>Fale conosco pelo</span>
+                    <strong>WhatsApp</strong>
+                </div>
+            </a>
+
+            {/* Form */}
+            <div className="cd-sidebar-form-header">Enviar mensagem ao vendedor</div>
+            <div className="cd-sidebar-form">
+                <GenericInput label="Nome *" theme="light" exemple="" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Seu nome" />
+                {errors.name && <span className="cd-error">{errors.name}</span>}
+                <GenericInput label="Email *" theme="light" exemple="" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Seu e-mail" />
+                {errors.email && <span className="cd-error">{errors.email}</span>}
+                <GenericInput label="Mensagem *" theme="light" exemple="" type="textarea" value={message} onChange={e => setMessage(e.target.value)} placeholder="Mensagem" />
+                {errors.message && <span className="cd-error">{errors.message}</span>}
+                <span className="cd-required-note">Campos com <span className="cd-red">*</span> são obrigatórios</span>
+                <button className="cd-send-btn" onClick={sendMessage}>Enviar Mensagem</button>
+            </div>
+        </aside>
+    );
+    const DesktopLayout = () => (
+        <div className="cd-page">
+            {isLoading ? <GenericLoader /> : (
+                <>
+                    {galleryOpen && <Lightbox />}
+
+                    <div className="cd-wrapper">
+                        <NavLink to="/home" className="cd-back">
+                            <CaretLeftIcon size={20} color="#000000" />
+                            Voltar para o estoque
                         </NavLink>
-                        <div className="container-car-detail">
-                            <div className="spacing-imgs">
-                                <Slider {...settings_mobile}>
-                                    {car?.images.map((img, index) => (
-                                        <div key={index}>
-                                            <img
-                                                src={`${img.img_url}`}
-                                                alt={`Slide ${index + 1}`}
-                                                className="car-detail-img"
+
+                        {/* Título acima da galeria (estilo OLX) */}
+                        <div className="cd-page-header">
+                            <div>
+                                <h1 className="cd-page-title">
+                                    {car.brand} <span className="cd-page-title-accent">{car.model?.split(" ")[0]}</span>
+                                </h1>
+                                <p className="cd-page-subtitle">{car.model} · {car.year} · {car.transmission} · {car.fuel}</p>
+                            </div>
+                        </div>
+
+                        {/* Hero: galeria + sidebar */}
+                        <div className="cd-hero">
+                            <div className="cd-main-col">
+                                <GalleryGrid />
+
+                                {/* Thumbnails strip */}
+                                {car?.images?.length > 1 && (
+                                    <div className="cd-thumbs-strip">
+                                        {car.images.map((img, i) => (
+                                            <button key={i} className={`cd-thumb-btn ${selectedImg === i ? 'cd-thumb-active' : ''}`} onClick={() => setSelectedImg(i)}>
+                                                <img src={getImageSrc(img)} alt={`Vista ${i + 1}`} />
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Specs com ícones (estilo OLX/Facebook) */}
+                                <div className="cd-section cd-section--specs">
+                                    <h2 className="cd-section-title">Especificações</h2>
+                                    <div className="cd-specs-grid">
+                                        {specItems.map((s, i) => (
+                                            <div key={i} className="cd-spec-card">
+
+                                                <div>
+                                                    <span className="cd-spec-label">{s.label}</span>
+                                                    <span className="cd-spec-value">{s.value}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Descrição */}
+                                {car.description && (
+                                    <div className="cd-section">
+                                        <h2 className="cd-section-title">Sobre este veículo</h2>
+                                        <p className="cd-description">{car.description}</p>
+                                    </div>
+                                )}
+
+                                {/* Opcionais (estilo chips OLX) */}
+                                {Array.isArray(car?.opcionais) && car.opcionais.length > 0 && (
+                                    <div className="cd-section">
+                                        <h2 className="cd-section-title">Opcionais do veículo</h2>
+                                        <div className="cd-items-grid">
+                                            {car.opcionais.map((item, i) => (
+                                                <span key={i} className="cd-item-tag">
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
+                                                    {item}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            <Sidebar />
+                        </div>
+                    </div>
+
+                    {/* Outros veículos */}
+                    {others_cars?.length > 0 && (
+                        <div className="cd-others">
+                            <div className="cd-wrapper">
+                                <h2 className="cd-section-title">Veículos similares</h2>
+                                <Slider {...settingsOthersCars}>
+                                    {others_cars.map((c, index) => (
+                                        <div key={c.idCar || c.id || index} className="cd-others-card">
+                                            <Card
+                                                disableSlideImgs={true}
+                                                id={c.idCar || c.id_car}
+                                                name={c.model}
+                                                imgs={c.images || c.imgs}
+                                                mark={c.brand || c.mark}
+                                                price={c.vehiclePrice || c.price}
+                                                bodywork={c.bodywork}
+                                                traction={c.traction}
+                                                year={c.year}
+                                                kilometers={c.mileage || c.kilometers}
                                             />
                                         </div>
                                     ))}
                                 </Slider>
                             </div>
-                            <section className="car-detail-info-1-mobile">
-                                <h1 className="car-title">
-                                    {car?.brand} <span className="title-color">{car?.model.split(" ")[0]}</span>
-                                </h1>
-                                <h3 className="car-description">
-                                    {car?.model + ' ' + car?.traction + ' ' + car?.fuel}
-                                </h3>
-                                <h3 className="car-detail-price">
-                                    {car?.vehiclePrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
-                                </h3>
-                                <p className="car-detail-price-description">
-                                    Valor à vista
-                                </p>
-                                <hr className="car-detail-divider-right-side" />
-                                <h2 className="car-detail-vendor">
-                                    Envie uma mensagem ao vendedor
-                                </h2>
-                                <a href={`http://wa.me/55000000000?text=Olá, gostaria de saber se o veículo ${car?.model} na cor ${car?.color} ainda esta disponível ? `} className="button-whats">
-                                    <img src={IMG} alt="" />
-                                    <div className="whats">
-                                        <p>
-                                            Fale conosco pelo
-                                        </p>
-                                        <h1>
-                                            WhatsApp
-                                        </h1>
-                                    </div>
-                                </a>
-                                <div className="m-3">
-                                    <GenericInput label={'Nome'} theme="light" exemple={''} type={'text'} value={name} onChange={(e) => setName(e.target.value)} placeholder={'Nome'} />
-                                    {errors.name && <span className="error">{errors.name}</span>}
-                                    <GenericInput label={'Email'} theme="light" exemple={''} type={'email'} value={email} onChange={(e) => setEmail(e.target.value)} placeholder={'Email'} />
-                                    {errors.email && <span className="error">{errors.email}</span>}
-                                    <GenericInput label={'Mensagem'} theme="light" exemple={''} type={'textarea'} value={message} onChange={(e) => setMessage(e.target.value)} placeholder={'Mensagem'} />
-                                    {errors.message && <span className="error">{errors.message}</span>}
-                                </div>
-                                <button className="button-send-message" onClick={(e) => sendMessage(e)}>
-                                    Enviar Mensagem
-                                </button>
-                            </section>
-                            <hr className="car-detail-divider" />
-                            <section>
-                                <h1 className="resumed">Resumo</h1>
-                                <hr className="car-detail-divider divider-2" />
-                                <div className="container-information-mobile">
-                                    <div class="item-esquerdo">
-                                        <h1>Ano</h1>
-                                        <p>
-                                            {car?.year}
-                                        </p>
-                                    </div>
-                                    <div class="item ">
-                                        <h1>Kilometros</h1>
-                                        <p>
-                                            {car?.milage}
-                                        </p>
-                                    </div>
-                                    <div class="item-esquerdo">
-                                        <h1>Câmbio</h1>
-                                        <p>
-                                            {car?.transmission}
-                                        </p>
-                                    </div>
-                                    <div class="item">
-                                        <h1>Carroceria</h1>
-                                        <p>
-                                            {car?.bodywork}
-                                        </p>
-                                    </div>
-                                    <div className="item-esquerdo">
-                                        <h1>Combustível</h1>
-                                        <p>
-                                            {car?.fuel}
-                                        </p>
+                        </div>
+                    )}
 
-                                    </div>
-                                    <div className="item">
-                                        <h1>Final de placa</h1>
-                                        <p>
-                                            {car?.licensePlateEnd}
-                                        </p>
-                                    </div>
-                                    <div className="item-esquerdo">
-                                        <h1>Cor</h1>
-                                        <p>
-                                            {car?.color}
-                                        </p>
-                                    </div>
-                                    <div className="item">
-                                        <h1>Aceita troca ? </h1>
-                                        <p>
-                                            {car?.trade ? 'Sim' : 'Não'}
-                                        </p>
-                                    </div>
-                                    <div className="item-esquerdo">
-                                        <h1>Blindagem ? </h1>
-                                        <p>
-                                            {car?.armored ? 'Sim' : 'Não'}
-                                        </p>
-                                    </div>
-                                    <div className="item">
-                                        <h1>Direção</h1>
-                                        <p>
-                                            {car?.direction}
-                                        </p>
+                    <Maps />
+                    <BotaoWhatsApp />
+                </>
+            )}
+        </div>
+    );
+
+    /* ────────────────── Mobile layout ────────────────── */
+    const MobileLayout = () => (
+        isLoading ? <GenericLoader /> : (
+            <div className="cd-mobile">
+                <NavLink to="/home" className="cd-back cd-back-mobile">
+                    <img src={leftArrow} alt="" />
+                    Voltar para o estoque
+                </NavLink>
+
+                <Slider {...settingsMobile}>
+                    {car?.images?.map((img, index) => (
+                        <div key={index}>
+                            <img src={getImageSrc(img)} alt={`Slide ${index + 1}`} className="cd-mobile-img" />
+                        </div>
+                    ))}
+                </Slider>
+
+                <div className="cd-mobile-content">
+                    <span className="cd-badge">{car?.carType === "VENDA" ? "À Venda" : "Aluguel"}</span>
+                    <h1 className="cd-title">
+                        {car?.brand}{' '}
+                        <span className="cd-title-accent">{car?.model?.split(" ")[0]}</span>
+                    </h1>
+                    <p className="cd-subtitle">{car?.model} · {car?.transmission} · {car?.fuel}</p>
+
+                    <div className="cd-price-block">
+                        <span className="cd-price">{formatCurrency(car?.vehiclePrice)}</span>
+                        <span className="cd-price-label">{car?.carType === "VENDA" ? "Valor à vista" : "Valor por dia"}</span>
+                    </div>
+
+                    {car?.trade && <span className="cd-mobile-trade-tag">✓ Aceita troca</span>}
+
+                    <div className="cd-divider" />
+
+                    <a href={`https://wa.me/5500000000?text=${encodeURIComponent(`Olá, gostaria de saber se o veículo ${car?.model} na cor ${car?.color} ainda está disponível?`)}`} className="cd-whatsapp-btn">
+                        <img src={IMG} alt="WhatsApp" width="24" height="24" />
+                        <div>
+                            <span>Fale conosco pelo</span>
+                            <strong>WhatsApp</strong>
+                        </div>
+                    </a>
+
+                    <div className="cd-mobile-section">
+                        <h2 className="cd-section-title">Especificações</h2>
+                        <div className="cd-specs-grid cd-specs-mobile">
+                            {specItems.map((s, i) => (
+                                <div key={i} className="cd-spec-card">
+
+                                    <div>
+                                        <span className="cd-spec-label">{s.label}</span>
+                                        <span className="cd-spec-value">{s.value}</span>
                                     </div>
                                 </div>
-                            </section>
-                            <section>
-                                <h1>Itens do veículo</h1>
-                                <div className="items-table-mobile">
-                                    {/* {car?.items.map((item, index) => (
-                                        <div key={index} className="item-cell-mobile">
-                                            {item}
-                                        </div>
-                                    ))} */}
-                                </div>
-                            </section>
-                            <hr className="car-detail-divider divider-2" />
-                            <section>
-                                <div className="others-cars">
-                                    <h1>
-                                        Outros veículos
-                                    </h1>
-                                    <Slider {...settings_others_cars}>
-                                        {others_cars?.map((car, index) => (
-                                            <div key={car.id} className="configure-others-cars" >
-                                                <Card disableSlideImgs={true} key={car.id_car} id={car.id_car} model={car.model} imgs={car.imgs} mark={car.mark} price={car.price} bodywork={car.bodywork} traction={car.traction} year={car.year} kilometers={car.kilometers} />
-                                            </div>
-                                        ))}
-                                    </Slider>
-                                </div>
-                            </section>
+                            ))}
                         </div>
                     </div>
-                )
-            )
-            }
+
+                    {car?.description && (
+                        <div className="cd-mobile-section">
+                            <h2 className="cd-section-title">Sobre este veículo</h2>
+                            <p className="cd-description">{car.description}</p>
+                        </div>
+                    )}
+
+                    {Array.isArray(car?.opcionais) && car.opcionais.length > 0 && (
+                        <div className="cd-mobile-section">
+                            <h2 className="cd-section-title">Opcionais do veículo</h2>
+                            <div className="cd-items-grid">
+                                {car.opcionais.map((item, i) => (
+                                    <span key={i} className="cd-item-tag">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
+                                        {item}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="cd-mobile-section">
+                        <h2 className="cd-section-title">Fale com o vendedor</h2>
+                        <div className="cd-sidebar-form">
+                            <GenericInput label="Nome *" theme="light" exemple="" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Seu nome" />
+                            {errors.name && <span className="cd-error">{errors.name}</span>}
+                            <GenericInput label="Email *" theme="light" exemple="" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Seu e-mail" />
+                            {errors.email && <span className="cd-error">{errors.email}</span>}
+                            <GenericInput label="Mensagem *" theme="light" exemple="" type="textarea" value={message} onChange={e => setMessage(e.target.value)} placeholder="Mensagem" />
+                            {errors.message && <span className="cd-error">{errors.message}</span>}
+                            <button className="cd-send-btn" onClick={sendMessage}>Enviar Mensagem</button>
+                        </div>
+                    </div>
+
+                    {others_cars?.length > 0 && (
+                        <div className="cd-mobile-section">
+                            <h2 className="cd-section-title">Veículos similares</h2>
+                            <Slider {...settingsOthersCars}>
+                                {others_cars.map((c, index) => (
+                                    <div key={c.idCar || c.id || index} className="cd-others-card">
+                                        <Card
+                                            disableSlideImgs={true}
+                                            id={c.idCar || c.id_car}
+                                            name={c.model}
+                                            imgs={c.images || c.imgs}
+                                            mark={c.brand || c.mark}
+                                            price={c.vehiclePrice || c.price}
+                                            bodywork={c.bodywork}
+                                            traction={c.traction}
+                                            year={c.year}
+                                            kilometers={c.mileage || c.kilometers}
+                                        />
+                                    </div>
+                                ))}
+                            </Slider>
+                        </div>
+                    )}
+                </div>
+                <BotaoWhatsApp />
+            </div>
+        )
+    );
+
+    return (
+        <>
+            <Header />
+            {isMobile ? <MobileLayout /> : <DesktopLayout />}
             <Footer />
         </>
-    )
+    );
 }

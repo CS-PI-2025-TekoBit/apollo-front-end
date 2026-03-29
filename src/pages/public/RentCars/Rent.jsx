@@ -116,7 +116,7 @@ export default function Home() {
         if (maxPrice) params.priceMax = parseFloat(maxPrice);
 
         if (minKm) params.mileageMin = parseInt(minKm);
-        if (maxKm) params.mileageMin = parseInt(maxKm);
+        if (maxKm) params.mileageMax = parseInt(maxKm);
 
         if (selectedMark) params.brand = selectedMark;
         if (selectedModel) params.model = selectedModel;
@@ -368,8 +368,8 @@ export default function Home() {
                                 {currentCars?.length > 0 ? (
                                     currentCars.map((car) => (
                                         <Card
-                                            key={car.id_car}
-                                            id={car.id_car}
+                                            key={car.idCar || car.id_car}
+                                            id={car.idCar || car.id_car}
                                             name={car.model}
                                             imgs={car.images}
                                             mark={car.brand}
